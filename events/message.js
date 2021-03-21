@@ -1,6 +1,10 @@
 module.exports = (client, message) => {
 
-    if (message.author.bot || message.channel.type === 'dm') return;
+    if (message.author.id === '822342435941908480') {
+
+    }
+
+    else if (message.author.bot || message.channel.type === 'dm') return;
     //if (message.author.bot || message.channel.type === 'dm') return;
 
     const prefix = client.config.discord.prefix;
