@@ -16,8 +16,8 @@ timedMessage(client)
 const autoPublish = require('./commands/servercmd/weather-commands/auto-publish');
 autoPublish(client)
 
-const weatherAlert = require('./commands/servercmd/weather-commands/weather-alert');
-weatherAlert(client)
+// const weatherAlert = require('./commands/servercmd/weather-commands/weather-alert');
+// weatherAlert(client)
 
 const twitter = require('./commands/servercmd/weather-commands/twitter');
 twitter(client)
