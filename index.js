@@ -9,37 +9,40 @@ client.emotes = client.config.emojis;
 client.commands = new discord.Collection();
 
 
-//Passing through client to admincmd commands
-const timedMessage = require('./commands/admincmd/timedMessage');
+//Passing through client to servercmd commands
+const timedMessage = require('./commands/servercmd/weather-commands/timedMessage');
 timedMessage(client)
 
-const autoPublish = require('./commands/admincmd/auto-publish');
+const autoPublish = require('./commands/servercmd/weather-commands/auto-publish');
 autoPublish(client)
 
-const weatherAlert = require('./commands/admincmd/weather-alert');
+const weatherAlert = require('./commands/servercmd/weather-commands/weather-alert');
 weatherAlert(client)
+
+const twitter = require('./commands/servercmd/weather-commands/twitter');
+twitter(client)
 
 // const testEnabler = require('./commands/admincmd/test');
 // testEnabler(client)
 //---------------------------------------------------------------
 
 
-fs.readdirSync('./commands').forEach(dirs => {
-    const commands = fs.readdirSync(`./commands/${dirs}`).filter(files => files.endsWith('.js'));
+fs.readdirSync('./commands/servercmd').forEach(dirs => {
+    const commands = fs.readdirSync(`./commands/servercmd/${dirs}`).filter(files => files.endsWith('.js'));
 
     for (const file of commands) {
-        const command = require(`./commands/${dirs}/${file}`);
+        const command = require(`./commands/servercmd/${dirs}/${file}`);
         console.log(`Loading command ${file}`);
         client.commands.set(command.name.toLowerCase(), command);
     };
 });
 
 
-fs.readdirSync('./commands/utility').forEach(dirs => {
-    const commands = fs.readdirSync(`./commands/utility/${dirs}`).filter(files => files.endsWith('.js'));
+fs.readdirSync('./commands/maincmd').forEach(dirs => {
+    const commands = fs.readdirSync(`./commands/maincmd/${dirs}`).filter(files => files.endsWith('.js'));
 
     for (const file of commands) {
-        const command = require(`./commands/utility/${dirs}/${file}`);
+        const command = require(`./commands/maincmd/${dirs}/${file}`);
         console.log(`Loading command ${file}`);
         client.commands.set(command.name.toLowerCase(), command);
     };
