@@ -8,59 +8,64 @@ module.exports = {
 
     async execute(client, message, args) {
 
-        // var d = new Date();
-        // localTime = d.getTime();
-        // localOffset = d.getTimezoneOffset() * 60000;
-        // utc = localTime + localOffset;
-
-        // offset = 13;  
-        // bombay = utc + (3600000*offset);
-        // nd = new Date(bombay);
-
-        // console.log(d.getTimezoneOffset())
-        // console.log(d.toLocaleTimeString());
-        // console.log(d.toLocaleString());
-        // console.log(d.toLocaleDateString());
-
         //https://www.metservice.com/publicData/rainRadar/image/Bay-of-Plenty/300K/2021-02-14T21:28:00+13:00.png
         //https://www.metservice.com/publicData/rainRadar/image/Bay-of-Plenty/300K/2021-03-13T13:13:00+13:00.png
 
+        //Find date
         var d = new Date();
         let currentTime = d.toLocaleTimeString();
-        let hours = d.getHours();
-        hours = hours + 13
-        if (hours > 24) hours = hours - 24
-        if (hours === 24) hours = 0
-        let realHours = hours;
-        let minutes = d.getMinutes();
 
-        // if time = pm + 12 if time = am - 12
+        let year = d.getUTCFullYear();
+        let month = d.getUTCMonth() + 1;
+        let date = d.getUTCDate();
+        let hours = d.getUTCHours() + 13;
+        let minutes = d.getUTCMinutes();
 
-        for (var i = 0; i < 9; i++) {
+        let k = 0
 
-            let realMinutes = minutes - i;
-            if (realMinutes < 10) realMinutes = "0" + realMinutes
-            if (realHours === 0) realHours = "0" + realHours  
-            
-            let radarImage = `https://www.metservice.com/publicData/rainRadar/image/Bay-of-Plenty/300K/2021-03-13T${realHours}:${realMinutes}:00+13:00.png`
+        while (k < 11) {
 
-                const radarEmbed = new Discord.MessageEmbed()
-                    .setAuthor(`Bay of Plenty Radar image at ${realHours}:${realMinutes}:00`)
-                    .setColor(0x111111)
-                    .setImage(radarImage) 
+            //Set minutes
+            if (minutes < 10 && minutes >= 0 && minutes.toString().length !== 2) minutes = '0' + minutes
+            if (minutes < 0) {
+                minutes = 59
+                hours = hours - 1
+            } 
 
-                    message.channel.send(radarEmbed)
+            //Set hours
+            if (hours > 23) {
+                hours = hours - 24
+                date = date + 1
+            }
+            if (hours < 10 && hours >= 0 && hours.toString().length !== 2) hours = '0' + hours
 
-            if (realMinutes === 0) realHours = realHours - 1;
-            if (realMinutes === 0) minutes = 60 + i;
+            //Set date
+            if (date < 10 && date >= 0 && date.toString().length !== 2) date = '0' + date
 
-            //  client.on('message', (message) => { 
+            //Set month
+            if (month < 10 && month >= 0 && month.toString().length !== 2) month = '0' + month
 
-            //      let num = 0;
-            //      console.log(message.embeds)
-            //      num = num + 1;
 
-            //  })
+            //Print Image
+            //message.channel.send(```Bay of Plenty Radar image at ${year}-${month}-${date}T${hours}:${minutes}:00```)
+            let radarImage = `https://www.metservice.com/publicData/rainRadar/image/Bay-of-Plenty/300K/${year}-${month}-${date}T${hours}:${minutes}:00+13:00`
+            //message.channel.send(radarImage)
+
+            const radarEmbed = new Discord.MessageEmbed()
+                .setAuthor(`Bay of Plenty Radar image at ${year}-${month}-${date}T${hours}:${minutes}:00`)
+                .setColor(0x111111)
+                .setImage(radarImage)
+
+            message.channel.send(radarEmbed)
+
+            //Loop minutes
+            minutes = minutes - 1;
+            k = k + 1
+
+            //Log message
+            // client.on('message', async (message) => { 
+            //     console.log(message)
+            // })
         }
     }
 }
