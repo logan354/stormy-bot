@@ -23,7 +23,7 @@ module.exports = (client) => {
         //...
         var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
         try {
-            let channel = client.channels.fetch('795173942293692447').then(channel => {
+            let channel = client.channels.fetch('795145677125845062').then(channel => {
                 channel.send('@Me tweeted this at ' + new Date() + ': ' + url)
             }).catch(err => {
                 console.log(err)
