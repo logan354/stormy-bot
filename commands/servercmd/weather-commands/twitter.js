@@ -17,7 +17,7 @@ module.exports = (client) => {
 
 
     //@My Twitter
-    var stream = T.stream('statuses/filter', { follow: ['1347381213372194816'] })
+    var stream = T.stream('statuses/filter', { follow: ['1347381213372194816'], name: ['@MetService'] })
 
     stream.on('tweet', function (tweet) {
         //...
