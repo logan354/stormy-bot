@@ -17,7 +17,7 @@ module.exports = (client) => {
 
 
     //@My Twitter
-    var stream = T.stream('statuses/filter', { follow: ['1347381213372194816'], name: ['@MetService'] })
+    var stream = T.stream('statuses/filter', { follow: ['1347381213372194816'] })
 
     stream.on('tweet', function (tweet) {
         //...
@@ -40,6 +40,8 @@ module.exports = (client) => {
     stream.on('tweet', function (tweet) {
         //...
         var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+
+        if (tweet.user.screen_name === 'MetService') {
         try {
             let channel = client.channels.fetch(metserviceChannel).then(channel => {
                 channel.send(url)
@@ -49,6 +51,7 @@ module.exports = (client) => {
         } catch (error) {
             console.error(error);
         }
+    }
     })
 
 
@@ -58,6 +61,8 @@ module.exports = (client) => {
     stream.on('tweet', function (tweet) {
         //...
         var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+
+        if (tweet.user.screen_name === 'MetServiceWARN') {
         try {
             let channel = client.channels.fetch(metserviceWarnChannel).then(channel => {
                 channel.send(url)
@@ -67,6 +72,7 @@ module.exports = (client) => {
         } catch (error) {
             console.error(error);
         }
+    }
     })
 
 
@@ -76,6 +82,8 @@ module.exports = (client) => {
     stream.on('tweet', function (tweet) {
         //...
         var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+
+        if (tweet.user.screen_name === 'NiwaWeather') {
         try {
             let channel = client.channels.fetch(niwaWeatherChannel).then(channel => {
                 channel.send(url)
@@ -85,6 +93,7 @@ module.exports = (client) => {
         } catch (error) {
             console.error(error);
         }
+    }
     })
 
 
@@ -94,6 +103,8 @@ module.exports = (client) => {
     stream.on('tweet', function (tweet) {
         //...
         var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+
+        if (tweet.user.screen_name === 'WeatherWatchNZ') {
         try {
             let channel = client.channels.fetch(weatherWatchChannel).then(channel => {
                 channel.send(url)
@@ -103,6 +114,7 @@ module.exports = (client) => {
         } catch (error) {
             console.error(error);
         }
+    }
     })
 
 
