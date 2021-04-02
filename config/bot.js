@@ -57,6 +57,6 @@ module.exports = {
 
     discord: {
         token: 'ODIyMzQyNDM1OTQxOTA4NDgw.YFQ4Ew.N4VNUAt1alxh1RqP6ZJZCl1lDpA', //process.env.token
-        prefix: 's!',
+        prefix: '!',
     },
 };
