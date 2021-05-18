@@ -119,19 +119,19 @@ module.exports = (client) => {
 
 
     //track
-    var stream = T.stream('statuses/filter', { follow: ['75957576'], track: ['Heavy Rain Watch'] })
+    // var stream = T.stream('statuses/filter', { follow: ['75957576'], track: ['Heavy Rain Watch'] })
 
-    stream.on('tweet', function (tweet) {
-        //...
-        var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
-        try {
-            let channel = client.channels.fetch('795145677125845062').then(channel => {
-                channel.send('WKATO')
-            }).catch(err => {
-                console.log(err)
-            })
-        } catch (error) {
-            console.error(error);
-        }
-    })
+    // stream.on('tweet', function (tweet) {
+    //     //...
+    //     var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+    //     try {
+    //         let channel = client.channels.fetch('795145677125845062').then(channel => {
+    //             channel.send('WKATO')
+    //         }).catch(err => {
+    //             console.log(err)
+    //         })
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // })
 }
