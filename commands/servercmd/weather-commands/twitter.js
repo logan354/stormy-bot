@@ -16,22 +16,22 @@ module.exports = (client) => {
     })
 
 
-    //@My Twitter
-    var stream = T.stream('statuses/filter', { follow: ['1347381213372194816'] })
+    // //@My Twitter
+    // var stream = T.stream('statuses/filter', { follow: ['1347381213372194816'] })
 
-    stream.on('tweet', function (tweet) {
-        //...
-        var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
-        try {
-            let channel = client.channels.fetch('795145677125845062').then(channel => {
-                channel.send('@Me tweeted this at ' + new Date() + ': ' + url)
-            }).catch(err => {
-                console.log(err)
-            })
-        } catch (error) {
-            console.error(error);
-        }
-    })
+    // stream.on('tweet', function (tweet) {
+    //     //...
+    //     var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+    //     try {
+    //         let channel = client.channels.fetch('795145677125845062').then(channel => {
+    //             channel.send('@Me tweeted this at ' + new Date() + ': ' + url)
+    //         }).catch(err => {
+    //             console.log(err)
+    //         })
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // })
 
 
     //@MetService
@@ -76,46 +76,46 @@ module.exports = (client) => {
     })
 
 
-    //@NiwaWeather
-    var stream = T.stream('statuses/filter', { follow: ['2467228680'] })
+    // //@NiwaWeather
+    // var stream = T.stream('statuses/filter', { follow: ['2467228680'] })
 
-    stream.on('tweet', function (tweet) {
-        //...
-        var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+    // stream.on('tweet', function (tweet) {
+    //     //...
+    //     var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
-        if (tweet.user.screen_name === 'NiwaWeather') {
-        try {
-            let channel = client.channels.fetch(niwaWeatherChannel).then(channel => {
-                channel.send(url)
-            }).catch(err => {
-                console.log(err)
-            })
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    })
+    //     if (tweet.user.screen_name === 'NiwaWeather') {
+    //     try {
+    //         let channel = client.channels.fetch(niwaWeatherChannel).then(channel => {
+    //             channel.send(url)
+    //         }).catch(err => {
+    //             console.log(err)
+    //         })
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+    // })
 
 
-    //@WeatherWatchNZ
-    var stream = T.stream('statuses/filter', { follow: ['60745428'] })
+    // //@WeatherWatchNZ
+    // var stream = T.stream('statuses/filter', { follow: ['60745428'] })
 
-    stream.on('tweet', function (tweet) {
-        //...
-        var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+    // stream.on('tweet', function (tweet) {
+    //     //...
+    //     var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
-        if (tweet.user.screen_name === 'WeatherWatchNZ') {
-        try {
-            let channel = client.channels.fetch(weatherWatchChannel).then(channel => {
-                channel.send(url)
-            }).catch(err => {
-                console.log(err)
-            })
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    })
+    //     if (tweet.user.screen_name === 'WeatherWatchNZ') {
+    //     try {
+    //         let channel = client.channels.fetch(weatherWatchChannel).then(channel => {
+    //             channel.send(url)
+    //         }).catch(err => {
+    //             console.log(err)
+    //         })
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
+    // })
 
 
     //track
