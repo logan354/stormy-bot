@@ -86,9 +86,9 @@ module.exports = {
             if (current.imageUrl === 'http://blob.weather.microsoft.com/static/weather4/en-us/law/46.gif') { weatherEmoji = Met_Snow; client.channels.cache.get('795173942293692447').send("Image 46") } //Checked But Divided
             if (current.imageUrl === 'http://blob.weather.microsoft.com/static/weather4/en-us/law/47.gif') { weatherEmoji = Met_Thunder; client.channels.cache.get('795173942293692447').send("Image 47") } //Checked But Divided
 
-            // if (message.channel.id === '795144435851067392') {
-            //     message.guild.setIcon(weatherEmoji)
-            // }
+             if (message.channel.id === '795144435851067392') {
+                 message.guild.setIcon(weatherEmoji)
+             }
 
             const weatherinfo = new Discord.MessageEmbed()
                 .setDescription(`**${current.skytext}**`)
