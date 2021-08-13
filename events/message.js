@@ -1,11 +1,7 @@
 module.exports = (client, message) => {
+    if (message.author.id === "822342435941908480");
 
-    if (message.author.id === '822342435941908480') {
-
-    }
-
-    else if (message.author.bot || message.channel.type === 'dm') return;
-    //if (message.author.bot || message.channel.type === 'dm') return;
+    else if (message.author.bot || message.channel.type === "dm") return;
 
     const prefix = client.config.discord.prefix;
 
@@ -17,4 +13,4 @@ module.exports = (client, message) => {
     const cmd = client.commands.get(command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
 
     if (cmd) cmd.execute(client, message, args);
-};
+}

@@ -3,6 +3,5 @@ module.exports = async (client) => {
 
     client.user.setActivity(`${client.emotes.cloud_rain} Rain Radar`, {
         type: "WATCHING",
-        url: "https://www.metservice.com/maps-radar/rain/radar?range=300&tab=real-time"
     });
-};
+}
