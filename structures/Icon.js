@@ -1,11 +1,13 @@
-function getDayIcon(query){
+function getIcon(query, type){
     switch(query){
         
     }
 }
 
-function getNightIcon(query){
+function getIconEmoji(query, type){
     switch(query){
         
     }
 }
+
+module.exports = { getIcon, getIconEmoji }

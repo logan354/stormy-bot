@@ -6,6 +6,6 @@ module.exports = {
     utilisation: "{prefix}weather",
 
     execute(client, message, args) {
-        
+
     }
 }

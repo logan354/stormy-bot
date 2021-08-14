@@ -1,3 +1,5 @@
+const { getHourlyForecast } = require("../../structures/API");
+
 module.exports = {
     name: "weather",
     aliases: ["w"],
@@ -6,6 +8,6 @@ module.exports = {
     utilisation: "{prefix}weather",
 
     execute(client, message, args) {
-
+        getHourlyForecast(client, args[0], message.channel.id);
     }
 }

@@ -22,8 +22,8 @@ fs.readdirSync("./commands").forEach(dirs => {
 });
 
 //Loading client events
-const runTime = require("./commands/Server/runTime");
-runTime(client);
+const init = require("./commands/Server/instance");
+init(client);
 
 //Loading message events
 const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
