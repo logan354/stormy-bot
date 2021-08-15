@@ -1,6 +1,6 @@
 const Twit = require("twit");
 
-function reloadTwitter() {
+function reloadTwitter(client) {
     const metserviceChannel = "795144248449040446";
     const metserviceWarnChannel = "801396269360480256";
     const niwaWeatherChannel = "818394869902606386";
