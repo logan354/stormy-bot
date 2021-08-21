@@ -13,14 +13,7 @@ module.exports = {
 
         if (!city) message.channel.send(client.emotes.error + " **Invalid usage:** `" + this.utilisation.replace("{prefix}", client.config.discord.prefix) + "`");
 
-        if (args.length > 2) {
-            for (let i = 1; i < args.length; i++) {
-                if (i < args.length) city += "-" + args[i];
-                else forecastLength = args[i]
-            }
-        }
-
-        if (!forecastLength) forecastLength = 1;
+        if (!forecastLength) forecastLength = 1; 
 
         getForecast(client, city, forecastLength, message.channel.id)
     }
