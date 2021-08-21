@@ -4,13 +4,16 @@ const { reloadTwitter } = require("../../structures/Twitter");
 module.exports = (client) => {
     function getTime() {
         let time = new Date().toLocaleTimeString();
-        let city = "Hamilton";
+        const city = "Hamilton";
+        const dailyForecastChannel = "818392239042461719";
+        const threeDayForecastChannel = "878486808088940564";
+        const fiveDayForecastChannel = "876030637834895420";
 
         if (time === "5:00:00 PM") {
             //-------"6:00:00 AM NZDT"
-            getForecast(client, city, 1, "");
-            getForecast(client, city, 3, "");
-            getForecast(client, city, 5, "");
+            getForecast(client, city, 1, dailyForecastChannel);
+            getForecast(client, city, 3, threeDayForecastChannel);
+            getForecast(client, city, 5, fiveDayForecastChannel);
         }
 
         if (time === "2:00:00 PM" || time === "5:00:00 PM" || time === "8:00:00 PM" || time === "11:00:00 PM" || time === "2:00:00 AM" || time === "5:00:00 AM" || time === "8:00:00 AM" || time === "11:00:00 AM") {
@@ -19,7 +22,7 @@ module.exports = (client) => {
         }
     }
 
-    //reloadTwitter(client);
+    reloadTwitter(client);
 
     client.on("message", message => {
         if (message.channel.id) {

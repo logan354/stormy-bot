@@ -58,7 +58,7 @@ async function getWarnings(client, city, channel) {
             .then(json => {
                 let warning = "";
                 for (let i = 0; i < json.warnings.length; i++) {
-                    warning += `${(i > 0 ? "\n\n" : "") + getIconEmoji(json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji(json.warnings[i].warnLevel)}\nhttps://www.metservice.com/warnings/\n\n${json.warnings[i].editions[0].datum.text}`;
+                    warning += `${(i > 0 ? "\n\n" : "") + getIconEmoji("Warning " + json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji("Warning " + json.warnings[i].warnLevel)}\nhttps://www.metservice.com/warnings/\n\n${json.warnings[i].editions[0].datum.text}`;
                 }
                 client.channels.cache.get(channel).send(warning);
             });
