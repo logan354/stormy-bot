@@ -1,13 +1,27 @@
-const { getDailyForecast } = require("../../structures/API");
+const { getForecast } = require("../../structures/API");
 
 module.exports = {
     name: "forecast",
     aliases: ["f"],
     category: "Weather",
-    description: "Displays the daily forecast for a specified location in New Zealand.",
-    utilisation: "{prefix}forecast",
+    description: "Displays the forecast for a specified location in New Zealand.",
+    utilisation: "{prefix}forecast <location> <length>",
 
     execute(client, message, args) {
-        getDailyForecast(client, args[0], message.channel.id);
+        let city = args[0];
+        let forecastLength = args[1];
+
+        if (!city) message.channel.send(client.emotes.error + " **Invalid usage:** `" + this.utilisation.replace("{prefix}", client.config.discord.prefix) + "`");
+
+        if (args.length > 2) {
+            for (let i = 1; i < args.length; i++) {
+                if (i < args.length) city += "-" + args[i];
+                else forecastLength = args[i]
+            }
+        }
+
+        if (!forecastLength) forecastLength = 1;
+
+        getForecast(client, city, forecastLength, message.channel.id)
     }
 }

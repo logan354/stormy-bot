@@ -11,6 +11,7 @@ const API_OPTIONS = {
     "RISE_TIMES": "riseSet_",
     "POLLEN_LEVELS": "pollen_town_",
     "DAILY_FORECAST": "climateDataDailyTown_{0}_32",
+    "RAIN_RADAR": "rainRadar{0}_2h_7min_300K"
 }
 
 function getIcon(query, type) {
@@ -43,6 +44,12 @@ function getIcon(query, type) {
             return "https://about.metservice.com/assets/img/icon-exp/ic-condition-hail-tiny-2.png";
         case "Frost":
             return "https://about.metservice.com/assets/img/icon-exp/ic-condition-frost-tiny.png";
+        case "Warning yellow":
+            return "https://about.metservice.com/assets/Uploads/_resampled/resizedimage8888-General-Watch.png";
+        case "Warning orange":
+            return "https://about.metservice.com/assets/Uploads/_resampled/resizedimage9079-General-Warning.png";
+        case "Warning red":
+            return "https://about.metservice.com/assets/Uploads/_resampled/resizedimage8980-General-Severe-Warning.png";
     }
 }
 
@@ -76,6 +83,12 @@ function getIconEmoji(query, type) {
             return "<:Hail:876238436149911582>";
         case "Frost":
             return "<:Frost:876238435642404905>";
+        case "Warning yellow":
+            return "<:Watch:878485283316842556>";
+        case "Warning orange":
+            return "<:OrangeWarning:878485283396534313>";
+        case "Warning red":
+            return "<:RedWarning:878485282947731488>";
     }
 }
 
