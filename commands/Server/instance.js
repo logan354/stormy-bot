@@ -22,7 +22,7 @@ module.exports = (client) => {
         }
     }
 
-    reloadTwitter(client);
+    //reloadTwitter(client);
 
     client.on("message", message => {
         if (message.channel.id) {
