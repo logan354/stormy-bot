@@ -2,7 +2,7 @@ const { getHourlyForecast, getForecast, checkWarnings } = require("../../structu
 const { reloadTwitter } = require("../../structures/Twitter");
 
 module.exports = async (client) => {
-    const city = "Invercargill";
+    const city = "Hamilton";
     const warningChannel = "878486900686606366";
     const dailyForecastChannel = "818392239042461719";
     const threeDayForecastChannel = "878486808088940564";
@@ -46,5 +46,5 @@ module.exports = async (client) => {
     });
 
     setInterval(getTime, 1000);
-    setInterval(initWarning, 10000);
+    //setInterval(initWarning, 10000);
 }
