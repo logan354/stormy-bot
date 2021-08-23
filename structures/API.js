@@ -53,6 +53,7 @@ async function getForecast(client, city, outlook, channel) {
                         if (json.days[i].dow === outlook || json.days[i].dowTLA === outlook) forecast += body(i);
                     }
                 }
+
                 if (forecast === title) return client.channels.cache.get(channel).send(client.emotes.error + "**Error:** `Invalid outlook`");
 
                 client.channels.cache.get(channel).send(forecast);
@@ -75,12 +76,17 @@ async function getWarnings(client, city, channel) {
                 const title = `${getIconEmoji("Warning red")} **Warning(s) for ${json.locationName}** ${getIconEmoji("Warning red")}\nhttps://www.metservice.com/warnings/`
                 const body = (i) => { return `\n\n${getIconEmoji("Warning " + json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji("Warning " + json.warnings[i].warnLevel)}\n\n${json.warnings[i].editions[0].datum.text}`; }
                 let warning = title;
+                let extention = "";
 
                 for (let i = 0; i < json.warnings.length; i++) {
-                    warning += body(i);
+                    if (warning.length + body(i).length < 2000) warning += body(i);
+                    else extention += body(i);
                 }
+
                 if (warning === title) return client.channels.cache.get(channel).send(warning += "\n\nNo warnings for this region");
+
                 client.channels.cache.get(channel).send(warning);
+                if (extention) client.channels.cache.get(channel).send(extention);
             });
     } catch (ex) {
         if (ex.name === "FetchError" && ex.type === "invalid-json") return client.channels.cache.get(channel).send(client.emotes.error + "**Error:** `Invalid location`");
@@ -92,7 +98,6 @@ async function getWarnings(client, city, channel) {
 }
 
 async function getRadarImage(client, region, channel) {
-    let radarRegions = [];
     let parseAPI_OPTION = API_OPTIONS.RAIN_RADAR.replace("{0}", region);
 
     try {
@@ -116,4 +121,8 @@ async function getRadarImage(client, region, channel) {
     }
 }
 
-module.exports = { getHourlyForecast, getForecast, getWarnings, getRadarImage }
+async function checkWarnings(client, city, channel) {
+    
+}
+
+module.exports = { getHourlyForecast, getForecast, getWarnings, getRadarImage, checkWarnings }
