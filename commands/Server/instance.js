@@ -1,4 +1,6 @@
-const { getHourlyForecast, getForecast, checkWarnings } = require("../../structures/API");
+const fetch = require("node-fetch");
+const { METSERVICE_BASE, API_OPTIONS, getIconEmoji } = require("../../structures/Database");
+const { getHourlyForecast, getForecast } = require("../../structures/API");
 const { reloadTwitter } = require("../../structures/Twitter");
 
 module.exports = async (client) => {
@@ -8,6 +10,7 @@ module.exports = async (client) => {
     const threeDayForecastChannel = "878486808088940564";
     const fiveDayForecastChannel = "876030637834895420";
     const hourlyForecastChannel = "795144435851067392";
+    let savedWarning = "";
 
     function getTime() {
         let time = new Date().toLocaleTimeString();
@@ -25,6 +28,36 @@ module.exports = async (client) => {
         }
     }
 
+    async function checkWarnings() {
+        try {
+            await fetch(METSERVICE_BASE + API_OPTIONS.WARNINGS + city)
+                .then(res => res.json())
+                .then(json => {
+                    const title = `${getIconEmoji("Warning red")} **Warning(s) for ${json.locationName}** ${getIconEmoji("Warning red")}\nhttps://www.metservice.com/warnings/ @everyone`
+                    const body = (i) => { return `\n\n${getIconEmoji("Warning " + json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji("Warning " + json.warnings[i].warnLevel)}\n\n${json.warnings[i].editions[0].datum.text}`; }
+                    let warning = title;
+                    let extention = "";
+
+                    for (let i = 0; i < json.warnings.length; i++) {
+                        if (warning.length + body(i).length < 2000) warning += body(i);
+                        else extention += body(i);
+                    }
+
+                    if (warning += extention === savedWarning || warning === title) return;
+
+                    client.channels.cache.get(warningChannel).send(warning);
+                    if (extention) client.channels.cache.get(warningChannel).send(extention);
+                    savedWarning = warning += extention
+                });
+        } catch (ex) {
+            if (ex.name === "FetchError" && ex.type === "invalid-json") return client.channels.cache.get(warningChannel).send(client.emotes.error + "**Error:** `Invalid location`");
+            else {
+                console.log(ex);
+                return client.channels.cache.get(warningChannel).send(client.emotes.error + "**Unexpected Error**");
+            }
+        }
+    }
+
     reloadTwitter(client);
 
     client.on("message", message => {
@@ -34,4 +67,5 @@ module.exports = async (client) => {
     });
 
     setInterval(getTime, 1000);
+    setInterval(checkWarnings, 10000);
 }

@@ -52,9 +52,14 @@ async function getForecast(client, city, outlook, channel) {
             .then(res => res.json())
             .then(json => {
                 let isNum = false;
+                //Checks if outlook is a number
                 if (!isNaN(parseInt(outlook))) isNum = true;
+                else {
+                    //Else converts the outlook into the correct format
+                    outlook = outlook.charAt(0).toUpperCase() + outlook.slice(1).toLowerCase();
+                }
 
-                let title = `${getIconEmoji("Fine")} **${isNum ? outlook + " Day" : outlook} Weather Outlook for ${json.locationIPS}** ${getIconEmoji("Fine")}\nhttps://www.metservice.com/towns-cities/locations/hamilton`;
+                let title = `${getIconEmoji("Fine")} **${isNum ? outlook + " Day" : outlook} Weather Outlook for ${json.locationIPS.charAt(0).toUpperCase() + json.locationIPS.slice(1).toLowerCase()}** ${getIconEmoji("Fine")}\nhttps://www.metservice.com/towns-cities/locations/hamilton`;
                 const body = (i) => { return `\n\n${getIconEmoji(json.days[i].forecastWord)} **${i > 0 ? json.days[i].dowTLA : "Today"}** ${json.days[i].date} | High: ${json.days[i].max}°, Low: ${json.days[i].min}°${!json.days[i].partDayData ? "\n" : `\n| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmoji(json.days[i].partDayData.overnight.forecastWord, json.days[i].partDayData.overnight.iconType)}       |      ${getIconEmoji(json.days[i].partDayData.morning.forecastWord, json.days[i].partDayData.morning.iconType)}      |        ${getIconEmoji(json.days[i].partDayData.afternoon.forecastWord, json.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmoji(json.days[i].partDayData.evening.forecastWord, json.days[i].partDayData.evening.iconType)}     |\n\n`}${json.days[i].forecast}\n*Issued: ${json.days[i].issuedAt.split(" ")[0]} ${json.days[i].dowTLA}, ${json.days[i].issuedAt.split(" ")[1]} ${json.days[i].issuedAt.split(" ")[2]}*\n\nSunrise: ${json.days[i].riseSet.sunRise}, Sunset: ${json.days[i].riseSet.sunSet}`; }
                 let forecast = title;
                 let extention = "";
@@ -105,7 +110,7 @@ async function getWarnings(client, city, channel) {
                     else extention += body(i);
                 }
 
-                if (warning === title) return client.channels.cache.get(channel).send(warning += "\n\nNo warnings for this region");
+                if (warning === title) warning += "\n\nNo warnings for this region";
 
                 client.channels.cache.get(channel).send(warning);
                 if (extention) client.channels.cache.get(channel).send(extention);
@@ -150,8 +155,4 @@ async function getRadarImage(client, region, channel) {
     }
 }
 
-async function checkWarnings(client, city, channel) {
-    
-}
-
-module.exports = { getHourlyForecast, getForecast, getWarnings, getRadarImage, checkWarnings }
+module.exports = { getHourlyForecast, getForecast, getWarnings, getRadarImage }

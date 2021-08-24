@@ -8,11 +8,11 @@ module.exports = {
         prefix: "!",
 
         //Invite
-        invite: "",
+        invite: "https://discord.com/oauth2/authorize?client_id=822342435941908480&scope=bot&permissions=379912",
 
         //Logos
-        logo: "",
-        smallLogo: "",
+        logo: "https://cdn.discordapp.com/emojis/879598918919393310.png?v=1",
+        smallLogo: "https://cdn.discordapp.com/emojis/879598918919393310.png?v=1",
     },
 
     emojis: {
