@@ -1,6 +1,13 @@
 const fetch = require("node-fetch");
 const { METSERVICE_BASE, API_OPTIONS, getIcon, getIconEmoji } = require("./Database");
 
+/**
+ * Gets hourly forecast
+ * @param {object} client Discord.js client object
+ * @param {string} city Input city
+ * @param {string} channel Discord channel id
+ * @returns {Promise}
+ */
 async function getHourlyForecast(client, city, channel) {
     try {
         await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_OBS + city)
@@ -31,6 +38,14 @@ async function getHourlyForecast(client, city, channel) {
     }
 }
 
+/**
+ * Gets forecast
+ * @param {object} client Discord.js client object
+ * @param {string} city Input city
+ * @param {string | number} outlook Input outlook
+ * @param {string} channel Discord channel id
+ * @returns {Promise}
+ */
 async function getForecast(client, city, outlook, channel) {
     try {
         await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_FORECAST + city)
@@ -39,8 +54,8 @@ async function getForecast(client, city, outlook, channel) {
                 let isNum = false;
                 if (!isNaN(parseInt(outlook))) isNum = true;
 
-                let title = `${getIconEmoji(json.days[0].forecastWord)} **${isNum ? outlook + " Day" : outlook} Weather Outlook for ${json.locationIPS}** ${getIconEmoji(json.days[0].forecastWord)}\nhttps://www.metservice.com/towns-cities/locations/hamilton`;
-                const body = (i) => { return `\n\n${getIconEmoji(json.days[i].forecastWord)} **${i > 0 ? json.days[i].dowTLA : "Today"}** ${json.days[i].date} | High: ${json.days[i].max}°, Low: ${json.days[i].min}°${i > 2 ? "\n" : `\n| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmoji(json.days[i].partDayData.overnight.forecastWord, json.days[i].partDayData.overnight.iconType)}       |      ${getIconEmoji(json.days[i].partDayData.morning.forecastWord, json.days[i].partDayData.morning.iconType)}      |        ${getIconEmoji(json.days[i].partDayData.afternoon.forecastWord, json.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmoji(json.days[i].partDayData.evening.forecastWord, json.days[i].partDayData.evening.iconType)}     |\n\n`}${json.days[i].forecast}\n*Issued: ${json.days[i].issuedAt.split(" ")[0]} ${json.days[i].dowTLA}, ${json.days[i].issuedAt.split(" ")[1]} ${json.days[i].issuedAt.split(" ")[2]}*\n\nSunrise: ${json.days[i].riseSet.sunRise}, Sunset: ${json.days[i].riseSet.sunSet}`; }
+                let title = `${getIconEmoji("Fine")} **${isNum ? outlook + " Day" : outlook} Weather Outlook for ${json.locationIPS}** ${getIconEmoji("Fine")}\nhttps://www.metservice.com/towns-cities/locations/hamilton`;
+                const body = (i) => { return `\n\n${getIconEmoji(json.days[i].forecastWord)} **${i > 0 ? json.days[i].dowTLA : "Today"}** ${json.days[i].date} | High: ${json.days[i].max}°, Low: ${json.days[i].min}°${!json.days[i].partDayData ? "\n" : `\n| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmoji(json.days[i].partDayData.overnight.forecastWord, json.days[i].partDayData.overnight.iconType)}       |      ${getIconEmoji(json.days[i].partDayData.morning.forecastWord, json.days[i].partDayData.morning.iconType)}      |        ${getIconEmoji(json.days[i].partDayData.afternoon.forecastWord, json.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmoji(json.days[i].partDayData.evening.forecastWord, json.days[i].partDayData.evening.iconType)}     |\n\n`}${json.days[i].forecast}\n*Issued: ${json.days[i].issuedAt.split(" ")[0]} ${json.days[i].dowTLA}, ${json.days[i].issuedAt.split(" ")[1]} ${json.days[i].issuedAt.split(" ")[2]}*\n\nSunrise: ${json.days[i].riseSet.sunRise}, Sunset: ${json.days[i].riseSet.sunSet}`; }
                 let forecast = title;
                 let extention = "";
 
@@ -68,6 +83,13 @@ async function getForecast(client, city, outlook, channel) {
     }
 }
 
+/**
+ * Gets warnings
+ * @param {object} client Discord.js client object
+ * @param {string} city Input city
+ * @param {string} channel Discord channel id
+ * @returns {Promise}
+ */
 async function getWarnings(client, city, channel) {
     try {
         await fetch(METSERVICE_BASE + API_OPTIONS.WARNINGS + city)
@@ -97,6 +119,13 @@ async function getWarnings(client, city, channel) {
     }
 }
 
+/**
+ * Gets radar image
+ * @param {object} client Discord.js client object
+ * @param {string} region Input region
+ * @param {string} channel Discord channel id
+ * @returns {Promise}
+ */
 async function getRadarImage(client, region, channel) {
     let parseAPI_OPTION = API_OPTIONS.RAIN_RADAR.replace("{0}", region);
 

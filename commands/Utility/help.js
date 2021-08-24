@@ -7,7 +7,7 @@ module.exports = {
 
     execute(client, message, args) {
         if (!args[0]) {
-            const public = message.client.commands.filter(x => x.category == "Track").map((x) => "`" + x.name + "`").join(", "); //./commands/Public
+            const public = message.client.commands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`").join(", "); //./commands/Public
             const utility = message.client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`").join(", "); //./commands/Utility         
             
             message.channel.send({
@@ -15,7 +15,7 @@ module.exports = {
                     color: "BLACK",
                     title: "Help Panel",
                     fields: [
-                        { name: "<:PartlyCloudy:876238435885658134> **Weather**", value: "\n" + public },
+                        { name: "<:Fine:876238436112138331> **Weather**", value: "\n" + public },
                         { name: client.emotes.utility + " **Utility**", value: "\n" + utility }
                     ],
                     thumbnail: { url: client.config.discord.smallLogo }
