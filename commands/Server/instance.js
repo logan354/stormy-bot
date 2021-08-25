@@ -66,6 +66,6 @@ module.exports = async (client) => {
         }
     });
 
-    setInterval(getTime, 1000);
-    setInterval(checkWarnings, 10000);
+    setInterval(getTime, 1000); //1 second
+    setInterval(checkWarnings, 60000); //1 minute
 }

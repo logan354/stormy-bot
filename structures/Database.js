@@ -14,6 +14,31 @@ const API_OPTIONS = {
     "RAIN_RADAR": "rainRadar{0}_2h_7min_300K"
 }
 
+const validLocations = [
+    "Kaitaia",
+    "Whangarei",
+    "Auckland",
+    "Hamilton",
+    "Tauranga",
+    "Rotorua",
+    "Gisborne",
+    "New-Plymouth",
+    "Taupo",
+    "Palmerston-North",
+    "Napier",
+    "Masterton",
+    "Wellington",
+    "Nelson",
+    "Blenheim",
+    "Westport",
+    "Christchurch",
+    "Franz-Josef",
+    "Timaru",
+    "Queenstown",
+    "Dunedin",
+    "Invercargill"
+];
+
 function getIcon(query, type) {
     switch (query) {
         case "Fine":
@@ -92,4 +117,4 @@ function getIconEmoji(query, type) {
     }
 }
 
-module.exports = { METSERVICE_BASE, API_OPTIONS, getIcon, getIconEmoji }
+module.exports = { METSERVICE_BASE, API_OPTIONS, validLocations, getIcon, getIconEmoji }
