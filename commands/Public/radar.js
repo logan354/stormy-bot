@@ -5,7 +5,7 @@ module.exports = {
     aliases: ["r"],
     category: "Weather",
     description: "Displays the current radar image for a specified location in New Zealand.",
-    utilisation: "{prefix}weather <location>",
+    utilisation: "{prefix}radar <location>",
 
     execute(client, message, args) {
         let city = args[0];

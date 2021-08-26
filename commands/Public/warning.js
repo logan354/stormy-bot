@@ -1,11 +1,11 @@
 const { getWarnings } = require("../../structures/API")
 
 module.exports = {
-    name: "warnings",
+    name: "warning",
     aliases: ["warn"],
     category: "Weather",
     description: "Displays the current Metservice issued warnings for a specified location in New Zealand.",
-    utilisation: "{prefix}weather <location>",
+    utilisation: "{prefix}warning <location>",
 
     execute(client, message, args) {
         let city = args[0];

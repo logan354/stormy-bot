@@ -34,7 +34,7 @@ module.exports = async (client) => {
                 .then(res => res.json())
                 .then(json => {
                     const title = `${getIconEmoji("Warning red")} **Warning(s) for ${json.locationName}** ${getIconEmoji("Warning red")}\nhttps://www.metservice.com/warnings/ @everyone`
-                    const body = (i) => { return `\n\n${getIconEmoji("Warning " + json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji("Warning " + json.warnings[i].warnLevel)}\n\n${json.warnings[i].editions[0].datum.text}`; }
+                    const body = (i) => { return `\n\n${getIconEmoji("Warning " + json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji("Warning " + json.warnings[i].warnLevel)}\n${json.warnings[i].editions[0].datum.text}`; }
                     let warning = title;
                     let extention = "";
 
