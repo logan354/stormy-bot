@@ -33,7 +33,7 @@ module.exports = async (client) => {
             await fetch(METSERVICE_BASE + API_OPTIONS.WARNINGS + city)
                 .then(res => res.json())
                 .then(json => {
-                    const title = `${getIconEmoji("Warning red")} **Warning(s) for ${json.locationName}** ${getIconEmoji("Warning red")}\nhttps://www.metservice.com/warnings/ @everyone`
+                    const title = `${getIconEmoji("Warning red")} **Warning(s) for ${json.locationName}** ${getIconEmoji("Warning red")}\nhttps://www.metservice.com/warnings/ @everyone`;
                     const body = (i) => { return `\n\n${getIconEmoji("Warning " + json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji("Warning " + json.warnings[i].warnLevel)}\n${json.warnings[i].editions[0].datum.text}`; }
                     let warning = title;
                     let extention = "";
@@ -47,7 +47,7 @@ module.exports = async (client) => {
 
                     client.channels.cache.get(warningChannel).send(warning);
                     if (extention) client.channels.cache.get(warningChannel).send(extention);
-                    savedWarning = warning += extention
+                    savedWarning = warning += extention;
                 });
         } catch (ex) {
             if (ex.name === "FetchError" && ex.type === "invalid-json") return client.channels.cache.get(warningChannel).send(client.emotes.error + "**Error:** `Invalid location`");

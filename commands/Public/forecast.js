@@ -19,6 +19,6 @@ module.exports = {
             }
         }
 
-        getForecast(client, city, outlook, message.channel.id)
+        getForecast(client, city, outlook, message.channel.id);
     }
 }

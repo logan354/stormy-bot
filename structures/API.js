@@ -59,7 +59,7 @@ async function getForecast(client, city, outlook, channel) {
                     outlook = outlook.charAt(0).toUpperCase() + outlook.slice(1).toLowerCase();
                 }
 
-                let title = `${getIconEmoji("Fine")} **${isNum ? outlook + " Day" : outlook} Weather Outlook for ${json.locationIPS.toLowerCase().split(" ").map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(" ")}** ${getIconEmoji("Fine")}\nhttps://www.metservice.com/towns-cities/locations/hamilton`;
+                const title = `${getIconEmoji("Fine")} **${isNum ? outlook + " Day" : outlook} Weather Outlook for ${json.locationIPS.toLowerCase().split(" ").map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(" ")}** ${getIconEmoji("Fine")}\nhttps://www.metservice.com/towns-cities/locations/hamilton`;
                 const body = (i) => { return `\n\n${getIconEmoji(json.days[i].forecastWord)} **${i > 0 ? json.days[i].dowTLA : "Today"}** ${json.days[i].date} | High: ${json.days[i].max}°, Low: ${json.days[i].min}°${!json.days[i].partDayData ? "\n" : `\n| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmoji(json.days[i].partDayData.overnight.forecastWord, json.days[i].partDayData.overnight.iconType)}       |      ${getIconEmoji(json.days[i].partDayData.morning.forecastWord, json.days[i].partDayData.morning.iconType)}      |        ${getIconEmoji(json.days[i].partDayData.afternoon.forecastWord, json.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmoji(json.days[i].partDayData.evening.forecastWord, json.days[i].partDayData.evening.iconType)}     |\n\n`}${json.days[i].forecast}\n*Issued: ${json.days[i].issuedAt.split(" ")[0]} ${json.days[i].dowTLA}, ${json.days[i].issuedAt.split(" ")[1]} ${json.days[i].issuedAt.split(" ")[2]}*`; }
                 let forecast = title;
                 let extention = "";
@@ -100,7 +100,7 @@ async function getWarnings(client, city, channel) {
         await fetch(METSERVICE_BASE + API_OPTIONS.WARNINGS + city)
             .then(res => res.json())
             .then(json => {
-                const title = `${getIconEmoji("Warning red")} **Warning(s) for ${json.locationName}** ${getIconEmoji("Warning red")}\nhttps://www.metservice.com/warnings/`
+                const title = `${getIconEmoji("Warning red")} **Warning(s) for ${json.locationName}** ${getIconEmoji("Warning red")}\nhttps://www.metservice.com/warnings/`;
                 const body = (i) => { return `\n\n${getIconEmoji("Warning " + json.warnings[i].warnLevel)} **${json.warnings[i].name}** ${getIconEmoji("Warning " + json.warnings[i].warnLevel)}\n${json.warnings[i].editions[0].datum.text}`; }
                 let warning = title;
                 let extention = "";
