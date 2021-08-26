@@ -15,14 +15,14 @@ module.exports = async (client) => {
     function getTime() {
         let time = new Date().toLocaleTimeString();
 
-        if (time === "5:00:00 PM") {
+        if (time === "6:00:00 PM") {
             //-------"6:00:00 AM NZDT"
             getForecast(client, city, 1, dailyForecastChannel);
             getForecast(client, city, 3, threeDayForecastChannel);
             getForecast(client, city, 5, fiveDayForecastChannel);
         }
 
-        if (time === "2:00:00 PM" || time === "5:00:00 PM" || time === "8:00:00 PM" || time === "11:00:00 PM" || time === "2:00:00 AM" || time === "5:00:00 AM" || time === "8:00:00 AM" || time === "11:00:00 AM") {
+        if (time === "3:00:00 PM" || time === "6:00:00 PM" || time === "9:00:00 PM" || time === "12:00:00 AM" || time === "3:00:00 AM" || time === "6:00:00 AM" || time === "9:00:00 AM" || time === "12:00:00 PM") {
             //-------"3:00:00 AM NZDT"--------"6:00:00 AM NZDT"--------"9:00:00 AM NZDT"--------"12:00:00 PM NZDT"--------"3:00:00 PM NZDT"--------"6:00:00 PM NZDT"--------"9:00:00 PM NZDT"--------"12:00:00 AM NZDT"
             getHourlyForecast(client, city, hourlyForecastChannel);
         }
