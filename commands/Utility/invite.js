@@ -15,6 +15,5 @@ module.exports = {
                 description: `The best weather bot for New Zealand on Discord. Connecting directly to the MetService API!\n\n[Invite the bot here](${client.config.discord.invite})`
             }
         });
-
     }
 }
