@@ -42,12 +42,12 @@ module.exports = async (client) => {
                         if (warning.length + body(i).length < 2000) warning += body(i);
                         else extention += body(i);
                     }
-
-                    if (warning += extention === savedWarning || warning === title) return;
+                    
+                    if (warning + extention === savedWarning || warning === title) return;
 
                     client.channels.cache.get(warningChannel).send(warning);
                     if (extention) client.channels.cache.get(warningChannel).send(extention);
-                    savedWarning = warning += extention;
+                    savedWarning = warning + extention;
                 });
         } catch (ex) {
             if (ex.name === "FetchError" && ex.type === "invalid-json") return client.channels.cache.get(warningChannel).send(client.emotes.error + "**Error:** `Invalid location`");
