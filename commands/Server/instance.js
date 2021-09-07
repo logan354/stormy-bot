@@ -10,6 +10,7 @@ module.exports = async (client) => {
     const threeDayForecastChannel = "878486808088940564";
     const fiveDayForecastChannel = "876030637834895420";
     const hourlyForecastChannel = "795144435851067392";
+    const serverLogsChannel = "795173942293692447";
     let savedWarning = "";
 
     function getTime() {
@@ -50,10 +51,10 @@ module.exports = async (client) => {
                     savedWarning = warning + extention;
                 });
         } catch (ex) {
-            if (ex.name === "FetchError" && ex.type === "invalid-json") return client.channels.cache.get(warningChannel).send(client.emotes.error + "**Error:** `Invalid location`");
+            if (ex.name === "FetchError" && ex.type === "invalid-json") return client.channels.cache.get(serverLogsChannel).send(client.emotes.error + "**Error In <#" + warningChannel + ">:** `Invalid location`");
             else {
                 console.log(ex);
-                return client.channels.cache.get(warningChannel).send(client.emotes.error + "**Unexpected Error**");
+                return client.channels.cache.get(serverLogsChannel).send(client.emotes.error + "**Unexpected Error** In <#" + warningChannel + ">");
             }
         }
     }
