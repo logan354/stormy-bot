@@ -54,7 +54,7 @@ module.exports = async (client) => {
             if (ex.name === "FetchError" && ex.type === "invalid-json") return client.channels.cache.get(serverLogsChannel).send(client.emotes.error + "**Error In <#" + warningChannel + ">:** `Invalid location`");
             else {
                 console.log(ex);
-                return client.channels.cache.get(serverLogsChannel).send(client.emotes.error + "**Unexpected Error** In <#" + warningChannel + ">");
+                return client.channels.cache.get(serverLogsChannel).send(client.emotes.error + "**Unexpected Error In <#" + warningChannel + ">**");
             }
         }
     }
