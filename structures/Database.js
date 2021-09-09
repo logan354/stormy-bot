@@ -59,7 +59,7 @@ function getIcon(query, type) {
             return "https://about.metservice.com/assets/img/icon-exp/ic-condition-fog-tiny.png";
         case "Snow":
             return "https://about.metservice.com/assets/img/icon-exp/ic-condition-snow-tiny.png";
-        case "Wind":
+        case "Windy":
             return "https://about.metservice.com/assets/Uploads/Windy.png";
         case "Wind rain":
             return "https://about.metservice.com/assets/img/icon-exp/ic-condition-wind-and-rain-tiny-2.png";
@@ -98,7 +98,7 @@ function getIconEmoji(query, type) {
             return "<:Fog:876238436212834304>";
         case "Snow":
             return "<:Snow:876238436347052072>";
-        case "Wind":
+        case "Windy":
             return "<:Wind:876238436305084436>";
         case "Wind rain":
             return "<:WindRain:876238436011499611>";
