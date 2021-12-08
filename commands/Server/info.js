@@ -5,7 +5,7 @@ module.exports = {
     description: "",
     utilisation: "{prefix}info",
 
-    execute(client, message) {
+    execute(client, message, args) {
 
         message.channel.send({
             embed: {

@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
-const { METSERVICE_BASE, API_OPTIONS, getIconEmoji } = require("../../structures/Database");
-const { getHourlyForecast, getForecast } = require("../../structures/API");
-const { reloadTwitter } = require("../../structures/Twitter");
+const { METSERVICE_BASE, API_OPTIONS, getIconEmoji } = require("../../src/Utils");
+const { getHourlyForecast, getForecast } = require("../../src/API");
+const { reloadTwitter } = require("../../src/Twitter");
 
 module.exports = async (client) => {
     const city = "Hamilton";
@@ -61,12 +61,12 @@ module.exports = async (client) => {
 
     reloadTwitter(client);
 
-    client.on("message", message => {
+    client.on("messageCreate", message => {
         if (message.guild.id === "795129011168477205") {
             if (message.channel.type === "news") message.crosspost();
         }
     });
 
-    setInterval(getTime, 1000); //1 second
-    setInterval(checkWarnings, 60000); //1 minute
+    setInterval(getTime, 1000); // 1 second
+    setInterval(checkWarnings, 60000); // 1 minute
 }

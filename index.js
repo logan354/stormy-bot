@@ -1,39 +1,42 @@
 const fs = require("fs");
-const Discord = require("discord.js");
+const dotenv = require("dotenv");
+const { Client, Intents, Collection } = require("discord.js");
+dotenv.config();
 
-const client = new Discord.Client({ disableEveryone: false });
+const client = new Client({
+    intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES,
+    ]
+});
 
-client.config = require("./config/bot");
+client.config = require("./config");
 client.emotes = client.config.emojis;
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 
-let commandCounter = 0;
+console.log("Loading commands...");
 
-//Loading general commands
 fs.readdirSync("./commands").forEach(dirs => {
     const commands = fs.readdirSync(`./commands/${dirs}`).filter(files => files.endsWith(".js"));
 
     for (const file of commands) {
         const command = require(`./commands/${dirs}/${file}`);
-        console.log(`Loading command ${file}`);
-        commandCounter += 1;
+        console.log(`-> Loaded command ${command.name.toLowerCase()}`);
         client.commands.set(command.name.toLowerCase(), command);
-    };
+    }
 });
 
-//Loading client events
-const init = require("./commands/Server/instance");
-init(client);
+console.log("Loading events...");
 
-//Loading message events
 const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
 
 for (const file of events) {
-    console.log(`Loading discord.js event ${file}`);
     const event = require(`./events/${file}`);
+    console.log(`-> Loaded event ${file.split(".")[0]}`);
     client.on(file.split(".")[0], event.bind(null, client));
-};
+}
 
-module.exports = { commandCounter }
+const init = require("./commands/Server/instance");
+init(client);
 
-client.login(client.config.discord.token);
+client.login(process.env.token);

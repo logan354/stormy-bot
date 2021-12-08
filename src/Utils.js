@@ -1,44 +1,33 @@
-const METSERVICE_BASE = "http://metservice.com/publicData/";
-
-const API_OPTIONS = {
-    "LOCAL_FORECAST": "localForecast",
-    "SUN_PROTECTION_URL": "sunProtectionAlert",
-    "ONE_MIN_OBS": "oneMinObs_",
-    "HOURLY_OBS_AND_FORCAST": "hourlyObsAndForecast_",
-    "LOCAL_OBS": "localObs_",
-    "TIDES": "tides_",
-    "WARNINGS": "warningsForRegion3_urban.",
-    "RISE_TIMES": "riseSet_",
-    "POLLEN_LEVELS": "pollen_town_",
-    "DAILY_FORECAST": "climateDataDailyTown_{0}_32",
-    "RAIN_RADAR": "rainRadar{0}_2h_7min_300K"
+/**
+   * Formats milliseconds to formal time 
+   * e.g 3 hours 2 minutes 30 seconds
+   * @param {number} milliseconds 
+   * @returns {string}
+   */
+function formatFormalTime(milliseconds) {
+    if (!milliseconds || !parseInt(milliseconds)) return undefined;
+    const seconds = Math.floor(milliseconds % 60000 / 1000);
+    const minutes = Math.floor(milliseconds % 3600000 / 60000);
+    const hours = Math.floor(milliseconds / 3600000);
+    const days = Math.floor(milliseconds / 86400000);
+    if (days > 0) {
+        return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+    }
+    if (hours > 0) {
+        return `${hours} hours ${minutes} minutes ${seconds} seconds`;
+    }
+    if (minutes > 0) {
+        return `${minutes} minutes ${seconds} seconds`
+    }
+    return `${seconds} seconds`;
 }
 
-const validLocations = [
-    "Kaitaia",
-    "Whangarei",
-    "Auckland",
-    "Hamilton",
-    "Tauranga",
-    "Rotorua",
-    "Gisborne",
-    "New-Plymouth",
-    "Taupo",
-    "Palmerston-North",
-    "Napier",
-    "Masterton",
-    "Wellington",
-    "Nelson",
-    "Blenheim",
-    "Westport",
-    "Christchurch",
-    "Franz-Josef",
-    "Timaru",
-    "Queenstown",
-    "Dunedin",
-    "Invercargill"
-];
-
+/**
+ * Gets weather icon
+ * @param {string} query 
+ * @param {string} type 
+ * @returns {string}
+ */
 function getIcon(query, type) {
     switch (query) {
         case "Fine":
@@ -78,6 +67,12 @@ function getIcon(query, type) {
     }
 }
 
+/**
+ * Gets weather emoji icon
+ * @param {string} query 
+ * @param {string} type 
+ * @returns 
+ */
 function getIconEmoji(query, type) {
     switch (query) {
         case "Fine":
@@ -117,4 +112,45 @@ function getIconEmoji(query, type) {
     }
 }
 
-module.exports = { METSERVICE_BASE, API_OPTIONS, validLocations, getIcon, getIconEmoji }
+const METSERVICE_BASE = "http://metservice.com/publicData/";
+
+const API_OPTIONS = {
+    LOCAL_FORECAST: "localForecast",
+    SUN_PROTECTION_URL: "sunProtectionAlert",
+    ONE_MIN_OBS: "oneMinObs_",
+    HOURLY_OBS_AND_FORCAST: "hourlyObsAndForecast_",
+    LOCAL_OBS: "localObs_",
+    TIDES: "tides_",
+    WARNINGS: "warningsForRegion3_urban.",
+    RISE_TIMES: "riseSet_",
+    POLLEN_LEVELS: "pollen_town_",
+    DAILY_FORECAST: "climateDataDailyTown_{0}_32",
+    RAIN_RADAR: "rainRadar{0}_2h_7min_300K"
+}
+
+const validLocations = [
+    "Kaitaia",
+    "Whangarei",
+    "Auckland",
+    "Hamilton",
+    "Tauranga",
+    "Rotorua",
+    "Gisborne",
+    "New-Plymouth",
+    "Taupo",
+    "Palmerston-North",
+    "Napier",
+    "Masterton",
+    "Wellington",
+    "Nelson",
+    "Blenheim",
+    "Westport",
+    "Christchurch",
+    "Franz-Josef",
+    "Timaru",
+    "Queenstown",
+    "Dunedin",
+    "Invercargill"
+];
+
+module.exports = { formatFormalTime, getIcon, getIconEmoji, METSERVICE_BASE, API_OPTIONS, validLocations }

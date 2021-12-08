@@ -3,8 +3,6 @@ const Twit = require("twit");
 function reloadTwitter(client) {
     const metserviceChannel = "795144248449040446";
     const metserviceWarnChannel = "801396269360480256";
-    const niwaWeatherChannel = "818394869902606386";
-    const weatherWatchChannel = "818394266774274078";
 
     var T = new Twit({
         consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -71,46 +69,6 @@ function reloadTwitter(client) {
             }
         }
     });
-
-    // //@NiwaWeather
-    // var stream = T.stream("statuses/filter", { follow: ["2467228680"] });
-
-    // stream.on("tweet", function (tweet) {
-    //     //...
-    //     var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
-
-    //     if (tweet.user.screen_name === "NiwaWeather") {
-    //     try {
-    //         let channel = client.channels.fetch(niwaWeatherChannel).then(channel => {
-    //             channel.send(url);
-    //         }).catch(err => {
-    //             console.log(err);
-    //         });
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-    // });
-
-    // //@WeatherWatchNZ
-    // var stream = T.stream("statuses/filter", { follow: ["60745428"] });
-
-    // stream.on("tweet", function (tweet) {
-    //     //...
-    //     var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
-
-    //     if (tweet.user.screen_name === "WeatherWatchNZ") {
-    //     try {
-    //         let channel = client.channels.fetch(weatherWatchChannel).then(channel => {
-    //             channel.send(url);
-    //         }).catch(err => {
-    //             console.log(err);
-    //         });
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-    // });
 }
 
 module.exports = { reloadTwitter }

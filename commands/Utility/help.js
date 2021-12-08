@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 module.exports = {
     name: "help",
     aliases: ["h"],
@@ -7,39 +9,63 @@ module.exports = {
 
     execute(client, message, args) {
         if (!args[0]) {
-            const public = message.client.commands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`").join(", "); //./commands/Public
-            const utility = message.client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`").join(", "); //./commands/Utility         
-            
-            message.channel.send({
-                embed: {
-                    color: "BLACK",
-                    title: "Help Panel",
-                    fields: [
-                        { name: "<:Fine:876238436112138331> **Weather**", value: "\n" + public },
-                        { name: client.emotes.utility + " **Utility**", value: "\n" + utility }
-                    ],
-                    thumbnail: { url: client.config.discord.smallLogo }
-                }
-            });
+            // Command categories
+            const weather = client.commands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`");
+            const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
+
+            const embed = new MessageEmbed()
+                .setColor("GREY")
+                .setAuthor("Bass Commands", client.config.app.logo)
+                .setDescription("My current prefix in this server is `" + client.config.app.prefix + "` type `" + client.config.app.prefix + this.utilisation.replace("{prefix}", client.config.app.prefix) + "` to get information about a specific command.")
+                .setThumbnail(message.guild.iconURL())
+                .setFields(
+                    {
+                        name: `**Weather [${weather.length}]**\n`,
+                        value: weather.join(", ")
+                    },
+                    {
+                        name: `**Utility [${utility.length}]**\n`,
+                        value: utility.join(", ")
+                    }
+                )
+                .setTimestamp(new Date())
+                .setFooter(`Total Commands: ${weather.length + utility.length}`);
+
+            message.channel.send({ embeds: [embed] });
         } else {
-            const command = message.client.commands.get(args.join(" ").toLowerCase()) || message.client.commands.find(x => x.aliases && x.aliases.includes(args.join(" ").toLowerCase()));
+            const command = client.commands.get(args.join(" ").toLowerCase()) || client.commands.find(x => x.aliases && x.aliases.includes(args.join(" ").toLowerCase()));
 
-            if (!command) return message.channel.send(client.emotes.error + " **I did not find this command**");
+            if (!command) return message.channel.send(`${client.emotes.error} **I did not find this command**`);
 
-            message.channel.send({
-                embed: {
-                    color: "BLACK",
-                    title: "Help Panel",
-                    fields: [
-                        { name: "Name", value: command.name, inline: true },
-                        { name: "Category", value: command.category, inline: true },
-                        { name: "Aliase(s)", value: command.aliases.length < 1 ? "None" : command.aliases.join(", "), inline: true },
-                        { name: "Description", value: command.description, inline: true },
-                        { name: "Utilisation", value: command.utilisation.replace("{prefix}", client.config.discord.prefix), inline: true }
-                    ],
-                    description: "Find information on the command provided.\nMandatory arguments `[]`, optional arguments `<>`.",
-                }
-            });
+            const embed = new MessageEmbed()
+                .setColor("GREY")
+                .setAuthor(`${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`, client.config.app.logo)
+                .setDescription("Required arguments `<>`, optional arguments `[]`")
+                .setThumbnail(message.guild.iconURL())
+                .setFields(
+                    {
+                        name: "Description",
+                        value: command.description,
+                    },
+                    {
+                        name: "Category",
+                        value: "`" + command.category + "`",
+                        inline: true
+                    },
+                    {
+                        name: "Aliase(s)",
+                        value: command.aliases.length === 0 ? "`None`" : "`" + command.aliases.join(", ") + "`",
+                        inline: true
+                    },
+                    {
+                        name: "Utilisation",
+                        value: "`" + command.utilisation.replace("{prefix}", client.config.app.prefix) + "`",
+                        inline: true
+                    }
+                )
+                .setTimestamp(new Date());
+
+            message.channel.send({ embeds: [embed] });
         }
     }
 }
