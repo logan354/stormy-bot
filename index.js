@@ -36,7 +36,7 @@ for (const file of events) {
     client.on(file.split(".")[0], event.bind(null, client));
 }
 
-const init = require("./commands/Server/instance");
+const init = require("./src/Instance");
 init(client);
 
 client.login(process.env.token);

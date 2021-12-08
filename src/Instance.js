@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
-const { METSERVICE_BASE, API_OPTIONS, getIconEmoji } = require("../../src/Utils");
-const { getHourlyForecast, getForecast } = require("../../src/API");
-const { reloadTwitter } = require("../../src/Twitter");
+const { METSERVICE_BASE, API_OPTIONS, getIconEmoji } = require("./Utils");
+const { getHourlyForecast, getForecast } = require("./API");
+const { reloadTwitter } = require("./Twitter");
 
 module.exports = async (client) => {
     const city = "Hamilton";
