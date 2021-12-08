@@ -6,6 +6,10 @@ module.exports = {
     category: "Utility",
     description: "Shows the bot's commands.",
     utilisation: "{prefix}help <command name>",
+    permissions: {
+        channel: [],
+        member: [],
+    },
 
     execute(client, message, args) {
         if (!args[0]) {
@@ -35,7 +39,7 @@ module.exports = {
         } else {
             const command = client.commands.get(args.join(" ").toLowerCase()) || client.commands.find(x => x.aliases && x.aliases.includes(args.join(" ").toLowerCase()));
 
-            if (!command) return message.channel.send(`${client.emotes.error} **I did not find this command**`);
+            if (!command) return message.channel.send(client.emotes.error + " **I did not find this command**");
 
             const embed = new MessageEmbed()
                 .setColor("GREY")
@@ -54,7 +58,7 @@ module.exports = {
                     },
                     {
                         name: "Aliase(s)",
-                        value: command.aliases.length === 0 ? "`None`" : "`" + command.aliases.join(", ") + "`",
+                        value: command.aliases.length === 0 ? "`None`" : command.aliases.map((aliase) => "`" + aliase + "`").join(", "),
                         inline: true
                     },
                     {
@@ -66,6 +70,14 @@ module.exports = {
                 .setTimestamp(new Date());
 
             message.channel.send({ embeds: [embed] });
+        }
+    },
+
+    slashCommand: {
+        options: [],
+
+        execute(client, interaction, args) {
+
         }
     }
 }

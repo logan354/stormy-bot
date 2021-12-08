@@ -9,6 +9,10 @@ module.exports = {
     category: "Utility",
     description: "Shows the bot's statistics",
     utilisation: "{prefix}stats",
+    permissions: {
+        channel: [],
+        member: [],
+    },
 
     execute(client, message, args) {
         const embed = new MessageEmbed()
@@ -32,6 +36,14 @@ module.exports = {
             .setFooter("Thanks For Choosing Stormy", client.config.app.logo);
 
         message.channel.send({ embeds: [embed] });
+    },
+
+    slashCommand: {
+        options: [],
+
+        execute(client, interaction, args) {
+
+        }
     }
 }
 
