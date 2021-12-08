@@ -6,7 +6,7 @@ The best weather bot for New Zealand on Discord. Connecting directly to the MetS
 
 ## Features
 
-- ✅ Build on Discord.js v12
+- ✅ Build on Discord.js v13
 - ✅ Connects directly to the MetService API
 
 ## Commands
