@@ -13,7 +13,7 @@ module.exports = {
 
     execute(client, message, args) {
         const embed = new MessageEmbed()
-            .setColor("BLACK")
+            .setColor("GREY")
             .setAuthor("About Me")
             .setDescription(`A weather bot for New Zealand on Discord. \nConnecting directly to the MetService API!\n\n[Invite the bot here](${client.config.app.invite})`)
             .setThumbnail(message.guild.iconURL())

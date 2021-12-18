@@ -19,7 +19,7 @@ module.exports = {
         const memory = 512;
         
         const embed = new MessageEmbed()
-            .setColor("BLACK")
+            .setColor("GREY")
             .setAuthor("-- Stormy's Statistics --", client.config.app.logo)
             .setFields(
                 {

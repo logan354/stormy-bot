@@ -18,7 +18,7 @@ module.exports = {
             const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
 
             const embed = new MessageEmbed()
-                .setColor("BLACK")
+                .setColor("GREY")
                 .setAuthor("Stormy Commands", client.config.app.logo)
                 .setDescription("My current prefix in this server is `" + client.config.app.prefix + "` type `" + this.utilisation.replace("{prefix}", client.config.app.prefix) + "` to get information about a specific command.")
                 .setThumbnail(message.guild.iconURL())
@@ -42,7 +42,7 @@ module.exports = {
             if (!command) return message.channel.send(client.emotes.error + " **I could not find that command**");
 
             const embed = new MessageEmbed()
-                .setColor("BLACK")
+                .setColor("GREY")
                 .setAuthor(`${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`, client.config.app.logo)
                 .setDescription("Required arguments `<>`, optional arguments `[]`")
                 .setThumbnail(message.guild.iconURL())
