@@ -1,7 +1,9 @@
 const fetch = require("node-fetch");
-const { METSERVICE_BASE, API_OPTIONS, getIconEmoji } = require("./Utils");
-const { getHourlyForecast, getForecast } = require("./API");
-const { reloadTwitter } = require("./Twitter");
+
+const { getHourlyForecast, getForecast } = require("./api");
+const { reloadTwitter } = require("./twitter");
+const { METSERVICE_BASE, API_OPTIONS } = require("../utils/constants");
+const { getIconEmoji } = require("../utils/icons");
 
 module.exports = async (client) => {
     const city = "Hamilton";
@@ -59,7 +61,7 @@ module.exports = async (client) => {
         }
     }
 
-    reloadTwitter(client);
+    //reloadTwitter(client);
 
     client.on("messageCreate", message => {
         if (message.guild.id === "795129011168477205") {

@@ -1,4 +1,4 @@
-const { getWarnings, Exception } = require("../../src/API")
+const { getWarnings, Exception } = require("../../structures/api")
 
 module.exports = {
     name: "warning",
@@ -33,14 +33,6 @@ module.exports = {
                 message.channel.send(data.forecast);
                 message.channel.send(data.extention);
             } else message.channel.send(data.forecast);
-        }
-    },
-
-    slashCommand: {
-        options: [],
-
-        async execute(client, interaction, args) {
-
         }
     }
 }

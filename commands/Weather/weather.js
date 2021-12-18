@@ -1,4 +1,4 @@
-const { getHourlyForecast, Exception } = require("../../src/API");
+const { getHourlyForecast, Exception } = require("../../structures/api");
 
 module.exports = {
     name: "weather",
@@ -29,13 +29,5 @@ module.exports = {
             else if (data.exception === Exception.UNKNOWN_ERROR) message.channel.send(client.emotes.error + " **Unexpected Error**"); 
             else message.channel.send(client.emotes.error + " **Unexpected Error**"); 
         } else message.channel.send({ embeds: [data.forecast] });
-    },
-
-    slashCommand: {
-        options: [],
-
-        async execute(client, interaction, args) {
-
-        }
     }
 }

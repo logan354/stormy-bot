@@ -18,9 +18,9 @@ module.exports = {
             const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
 
             const embed = new MessageEmbed()
-                .setColor("GREY")
-                .setAuthor("Bass Commands", client.config.app.logo)
-                .setDescription("My current prefix in this server is `" + client.config.app.prefix + "` type `" + client.config.app.prefix + this.utilisation.replace("{prefix}", client.config.app.prefix) + "` to get information about a specific command.")
+                .setColor("BLACK")
+                .setAuthor("Stormy Commands", client.config.app.logo)
+                .setDescription("My current prefix in this server is `" + client.config.app.prefix + "` type `" + this.utilisation.replace("{prefix}", client.config.app.prefix) + "` to get information about a specific command.")
                 .setThumbnail(message.guild.iconURL())
                 .setFields(
                     {
@@ -39,10 +39,10 @@ module.exports = {
         } else {
             const command = client.commands.get(args.join(" ").toLowerCase()) || client.commands.find(x => x.aliases && x.aliases.includes(args.join(" ").toLowerCase()));
 
-            if (!command) return message.channel.send(client.emotes.error + " **I did not find this command**");
+            if (!command) return message.channel.send(client.emotes.error + " **I could not find that command**");
 
             const embed = new MessageEmbed()
-                .setColor("GREY")
+                .setColor("BLACK")
                 .setAuthor(`${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`, client.config.app.logo)
                 .setDescription("Required arguments `<>`, optional arguments `[]`")
                 .setThumbnail(message.guild.iconURL())
@@ -70,14 +70,6 @@ module.exports = {
                 .setTimestamp(new Date());
 
             message.channel.send({ embeds: [embed] });
-        }
-    },
-
-    slashCommand: {
-        options: [],
-
-        execute(client, interaction, args) {
-
         }
     }
 }

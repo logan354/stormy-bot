@@ -11,13 +11,5 @@ module.exports = {
 
     execute(client, message, args) {
         message.channel.send(client.emotes.ping + " Ping: **" + client.ws.ping + "ms**");
-    },
-
-    slashCommand: {
-        options: [],
-
-        execute(client, interaction, args) {
-
-        }
     }
 }

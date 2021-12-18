@@ -8,7 +8,7 @@ module.exports = {
         invite: "https://discord.com/oauth2/authorize?client_id=822342435941908480&scope=bot&permissions=379912",
 
         // Slogan
-        slogan: "The best weather bot for New Zealand on Discord. Connecting directly to the MetService API!",
+        slogan: "A weather bot for New Zealand on Discord. Connecting directly to the MetService API!",
 
         // Support server
         support_server: "Unknown",

@@ -1,7 +1,7 @@
 {
   "name": "stormy-bot",
   "version": "3.0.0",
-  "description": "The best weather bot for New Zealand on Discord. Connecting directly to the MetService API!",
+  "description": "A weather bot for New Zealand on Discord. Connecting directly to the MetService API!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

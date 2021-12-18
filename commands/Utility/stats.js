@@ -1,7 +1,8 @@
 const { MessageEmbed } = require("discord.js");
-const { formatFormalTime } = require("../../src/Utils");
+
+const { formatFormalTime } = require("../../utils/formats");
+
 const package = require("../../package.json");
-const memory = 512;
 
 module.exports = {
     name: "stats",
@@ -15,8 +16,10 @@ module.exports = {
     },
 
     execute(client, message, args) {
+        const memory = 512;
+        
         const embed = new MessageEmbed()
-            .setColor("GREY")
+            .setColor("BLACK")
             .setAuthor("-- Stormy's Statistics --", client.config.app.logo)
             .setFields(
                 {
@@ -36,14 +39,6 @@ module.exports = {
             .setFooter("Thanks For Choosing Stormy", client.config.app.logo);
 
         message.channel.send({ embeds: [embed] });
-    },
-
-    slashCommand: {
-        options: [],
-
-        execute(client, interaction, args) {
-
-        }
     }
 }
 

@@ -1,6 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
-const { METSERVICE_BASE, API_OPTIONS, getIconEmoji } = require("./Utils");
+
+const { METSERVICE_BASE, API_OPTIONS } = require("../utils/constants");
+const { getIconEmoji } = require("../utils/icons");
 
 /**
  * Gets hourly forecast
@@ -13,7 +15,7 @@ async function getHourlyForecast(city) {
         const data = await response.json();
 
         const embed = new MessageEmbed()
-            .setColor("Black")
+            .setColor("BLACK")
             .setAuthor("Current Conditions in " + data.location)
             .addFields(
                 {
@@ -151,7 +153,7 @@ async function getRadarImage(region) {
         const data = await response.json();
 
         const embed = new MessageEmbed()
-            .setColor("Black")
+            .setColor("BLACK")
             .setAuthor(data[0].url.split("/publicData/rainRadar/image/")[1].split("/")[0] + " Radar Image " + data[0].longDateTime)
             .setImage("http://metservice.com" + data[0].url)
 

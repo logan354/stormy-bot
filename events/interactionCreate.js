@@ -1,4 +1,6 @@
 module.exports = (client, interaction) => {
+    if (!interaction.isCommand()) return;
+    
     if (interaction.user.bot || interaction.channel.type === "dm") return;
 
     const args = interaction.options;

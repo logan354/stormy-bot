@@ -1,4 +1,4 @@
-const { getRadarImage, Exception } = require("../../src/API")
+const { getRadarImage, Exception } = require("../../structures/api")
 
 module.exports = {
     name: "radar",
@@ -29,13 +29,5 @@ module.exports = {
             else if (data.exception === Exception.UNKNOWN_ERROR) message.channel.send(client.emotes.error + " **Unexpected Error**"); 
             else message.channel.send(client.emotes.error + " **Unexpected Error**"); 
         } else message.channel.send({ embeds: [data.image] });
-    },
-
-    slashCommand: {
-        options: [],
-
-        async execute(client, interaction, args) {
-
-        }
     }
 }

@@ -13,21 +13,13 @@ module.exports = {
 
     execute(client, message, args) {
         const embed = new MessageEmbed()
-            .setColor("GREY")
+            .setColor("BLACK")
             .setAuthor("About Me")
-            .setDescription(`The best weather bot for New Zealand on Discord. Connecting directly to the MetService API!\n\n[Invite the bot here](${client.config.app.invite})`)
+            .setDescription(`A weather bot for New Zealand on Discord. \nConnecting directly to the MetService API!\n\n[Invite the bot here](${client.config.app.invite})`)
             .setThumbnail(message.guild.iconURL())
             .setTimestamp(new Date())
             .setFooter("Thanks For Choosing Stormy", client.config.app.logo);
 
         message.channel.send({ embeds: [embed] });
-    },
-
-    slashCommand: {
-        options: [],
-
-        execute(client, interaction, args) {
-
-        }
     }
 }
