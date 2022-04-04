@@ -1,20 +1,18 @@
-const { Client, Message, Permissions, MessageEmbed } = require("discord.js");
+const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions, MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "invite",
-    aliases: ["links"],
     category: "Utility",
     description: "Shows information on how to invite Stormy",
-    utilisation: "{prefix}invite",
 
     /**
      * @param {Client} client 
-     * @param {Message} message 
-     * @param {string[]} args 
+     * @param {CommandInteraction} interaction 
+     * @param {CommandInteractionOptionResolver} args 
      */
-    execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+    execute(client, interaction, args) {
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.me);
+        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
 
         const embed = new MessageEmbed()
             .setColor("BLACK")
@@ -22,7 +20,7 @@ module.exports = {
                 name: "About Me"
             })
             .setDescription(client.config.app.slogan.split(".").join(".\n"))
-            .setThumbnail(message.guild.iconURL())
+            .setThumbnail(interaction.guild.iconURL())
             .setFields(
                 {
                     name: "Invite",
@@ -39,6 +37,6 @@ module.exports = {
                 iconURL: client.config.app.logo
             });
 
-        message.channel.send({ embeds: [embed] });
+        interaction.reply({ embeds: [embed] });
     }
 }

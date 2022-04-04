@@ -1,10 +1,10 @@
 /**
-   * Formats milliseconds to formal time 
-   * e.g 3 hours 2 minutes 30 seconds
-   * @param {number} milliseconds 
-   * @returns {string}
-   */
- function formatFormalTime(milliseconds) {
+ * Formats milliseconds to formal time 
+ * e.g 3 hours 2 minutes 30 seconds
+ * @param {number} milliseconds 
+ * @returns {string}
+ */
+function formatFormalTime(milliseconds) {
     if (!milliseconds || !parseInt(milliseconds)) return undefined;
     const seconds = Math.floor(milliseconds % 60000 / 1000);
     const minutes = Math.floor(milliseconds % 3600000 / 60000);

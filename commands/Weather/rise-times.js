@@ -1,13 +1,13 @@
 const { Client, Message, Permissions } = require("discord.js");
-const { warnings } = require("../../structures/database");
+const { riseTimes } = require("../../structures/database");
 const { LoadType } = require("../../utils/constants");
 
 module.exports = {
-    name: "warning",
-    aliases: ["warn", "w"],
+    name: "risetimes",
+    aliases: ["rt"],
     category: "Weather",
-    description: "Displays the current MetService issued warnings for a specified location in New Zealand.",
-    utilisation: "{prefix}warning <location>",
+    description: "Displays the rise times for a specified location in New Zealand.",
+    utilisation: "{prefix}risetimes <location>",
 
     /**
      * @param {Client} client 
@@ -17,16 +17,14 @@ module.exports = {
     async execute(client, message, args) {
         const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
         if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
+        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
 
         const location = args.join(" ");
         if (!location) return message.channel.send(client.emotes.error + " A location is required");
 
-        const res = await warnings(location);
-        if (res.loadType === LoadType.LOADED_DATA) {
-            for (let i = 0; i < res.data.length; i++) {
-                message.channel.send(res.data[i]);
-            }
-        } else {
+        const res = await riseTimes(location);
+        if (res.loadType === LoadType.LOADED_DATA) message.channel.send({ embeds: [res.data] });
+        else {
             if (res.loadType === LoadType.NO_DATA) message.channel.send(client.emotes.error + " **" + res.exception + "**");
             else if (res.loadType === LoadType.LOAD_FAILED) message.channel.send(client.emotes.error + " **Error** `" + res.exception + "`");
         }

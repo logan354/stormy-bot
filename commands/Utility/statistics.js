@@ -1,26 +1,31 @@
-const { MessageEmbed } = require("discord.js");
-
+const { Client, Message, Permissions, MessageEmbed } = require("discord.js");
 const { formatFormalTime } = require("../../utils/formats");
-
 const package = require("../../package.json");
 
 module.exports = {
-    name: "stats",
-    aliases: [],
+    name: "statistics",
+    aliases: ["stats"],
     category: "Utility",
-    description: "Shows the bot's statistics",
+    description: "Shows information about Stormy's statistics",
     utilisation: "{prefix}stats",
-    permissions: {
-        channel: [],
-        member: [],
-    },
 
+    /**
+     * @param {Client} client 
+     * @param {Message} message 
+     * @param {string[]} args 
+     */
     execute(client, message, args) {
         const memory = 512;
-        
+
+        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
+        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+
         const embed = new MessageEmbed()
-            .setColor("GREY")
-            .setAuthor("-- Stormy's Statistics --", client.config.app.logo)
+            .setColor("BLACK")
+            .setAuthor({
+                name: "-- Stormy's Statistics --",
+                iconURL: client.config.app.logo
+            })
             .setFields(
                 {
                     name: ":joystick: Bot Statistics",
@@ -36,9 +41,11 @@ module.exports = {
                 }
             )
             .setTimestamp(new Date())
-            .setFooter("Thanks For Choosing Stormy", client.config.app.logo);
+            .setFooter({
+                text: "Thanks For Choosing Stormy",
+                iconURL: client.config.app.logo
+            });
 
         message.channel.send({ embeds: [embed] });
     }
 }
-

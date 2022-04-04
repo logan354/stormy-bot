@@ -1,23 +1,29 @@
-const { Client, Message, Permissions, MessageEmbed } = require("discord.js");
+const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions, MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "help",
-    aliases: [],
     category: "Utility",
     description: "Shows information about Stormy",
-    utilisation: "{prefix}help [command]",
+    options: [
+        {
+            name: "command",
+            description: "Enter a command",
+            required: false,
+            type: "STRING"
+        }
+    ],
 
     /**
      * @param {Client} client 
-     * @param {Message} message 
-     * @param {string[]} args 
+     * @param {CommandInteraction} interaction
+     * @param {CommandInteractionOptionResolver} args 
      */
-    execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
-        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+    execute(client, interaction, args) {
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.me);
+        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
+        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
 
-        if (!args[0]) {
+        if (!args.getString("command")) {
             // Command categories
             const weather = client.commands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`");
             const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
@@ -29,7 +35,7 @@ module.exports = {
                     iconURL: client.config.app.logo
                 })
                 .setDescription("My current prefix in this server is `" + client.config.app.prefix + "` type `" + this.utilisation.replace("{prefix}", client.config.app.prefix) + "` to get information about a specific command.")
-                .setThumbnail(message.guild.iconURL())
+                .setThumbnail(interaction.guild.iconURL())
                 .setFields(
                     {
                         name: `**Weather [${weather.length}]**\n`,
@@ -45,11 +51,11 @@ module.exports = {
                     text: `Total Commands: ${weather.length + utility.length}`
                 });
 
-            message.channel.send({ embeds: [embed] });
+            interaction.reply({ embeds: [embed] });
         } else {
-            const command = client.commands.get(args.join(" ").toLowerCase()) || client.commands.find(x => x.aliases && x.aliases.includes(args.join(" ").toLowerCase()));
+            const command = client.commands.get(args.getString("command").toLowerCase());
 
-            if (!command) return message.channel.send(client.emotes.error + " **I could not find that command**");
+            if (!command) return interaction.reply(client.emotes.error + " **I could not find that command**");
 
             const embed = new MessageEmbed()
                 .setColor("BLACK")
@@ -58,7 +64,7 @@ module.exports = {
                     iconURL: client.config.app.logo
                 })
                 .setDescription("Required arguments `<>`, optional arguments `[]`")
-                .setThumbnail(message.guild.iconURL())
+                .setThumbnail(interaction.guild.iconURL())
                 .setFields(
                     {
                         name: "Description",
@@ -82,7 +88,7 @@ module.exports = {
                 )
                 .setTimestamp(new Date());
 
-            message.channel.send({ embeds: [embed] });
+            interaction.reply({ embeds: [embed] });
         }
     }
 }

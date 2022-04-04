@@ -1,5 +1,5 @@
 /**
- * Gets weather icon
+ * Gets MetService icon url
  * @param {string} query 
  * @param {string} type 
  * @returns {string}
@@ -44,7 +44,7 @@
 }
 
 /**
- * Gets weather emoji icon
+ * Gets MetService emoji icon url
  * @param {string} query 
  * @param {string} type 
  * @returns 

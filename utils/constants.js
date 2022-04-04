@@ -2,9 +2,9 @@ const METSERVICE_BASE = "http://metservice.com/publicData/";
 
 const API_OPTIONS = {
     LOCAL_FORECAST: "localForecast",
-    SUN_PROTECTION_URL: "sunProtectionAlert",
+    SUN_PROTECTION_ALERT: "sunProtectionAlert",
     ONE_MIN_OBS: "oneMinObs_",
-    HOURLY_OBS_AND_FORCAST: "hourlyObsAndForecast_",
+    HOURLY_OBS_AND_FORECAST: "hourlyObsAndForecast_",
     LOCAL_OBS: "localObs_",
     TIDES: "tides_",
     WARNINGS: "warningsForRegion3_urban.",
@@ -14,29 +14,22 @@ const API_OPTIONS = {
     RAIN_RADAR: "rainRadar{0}_2h_7min_300K"
 }
 
-const validLocations = [
-    "Kaitaia",
-    "Whangarei",
-    "Auckland",
-    "Hamilton",
-    "Tauranga",
-    "Rotorua",
-    "Gisborne",
-    "New-Plymouth",
-    "Taupo",
-    "Palmerston-North",
-    "Napier",
-    "Masterton",
-    "Wellington",
-    "Nelson",
-    "Blenheim",
-    "Westport",
-    "Christchurch",
-    "Franz-Josef",
-    "Timaru",
-    "Queenstown",
-    "Dunedin",
-    "Invercargill"
-];
+const LoadType = {
+    LOADED_DATA: "LOADED_DATA",
+    NO_DATA: "NO_DATA",
+    LOAD_FAILED: "LOAD_FAILED"
+}
 
-module.exports = { METSERVICE_BASE, API_OPTIONS, validLocations }
+const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+]
+
+const shortDays = days.map((x) => x.substring(0, 3));
+
+module.exports = { METSERVICE_BASE, API_OPTIONS, LoadType, days, shortDays }

@@ -1,4 +1,6 @@
-const { getForecast, Exception } = require("../../structures/api");
+const { Client, Message, Permissions } = require("discord.js");
+const { localForecast } = require("../../structures/database");
+const { LoadType, days, shortDays } = require("../../utils/constants");
 
 module.exports = {
     name: "forecast",
@@ -6,34 +8,32 @@ module.exports = {
     category: "Weather",
     description: "Displays the forecast for a specified location in New Zealand.",
     utilisation: "{prefix}forecast <outlook> <location>",
-    permissions: {
-        channel: [],
-        member: [],
-    },
 
+    /**
+     * @param {Client} client 
+     * @param {Message} message 
+     * @param {string[]} args 
+     */
     async execute(client, message, args) {
-        let city = args[1];
-        let outlook = args[0];
+        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
+        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
 
-        if (!city || !outlook) return message.channel.send(client.emotes.error + " **Invalid usage:** `" + this.utilisation.replace("{prefix}", client.config.app.prefix) + "`");
+        const outlook = args[0];
+        if (!outlook) return message.channel.send(client.emotes.error + " A outlook is required");
 
-        if (args.length > 2) {
-            for (let i = 2; i < args.length; i++) {
-                city += "-" + args[i];
+        args.shift();
+
+        const location = args.join(" ");
+        if (!location) return message.channel.send(client.emotes.error + " A location is required");
+
+        const res = await localForecast(location, outlook);
+        if (res.loadType === LoadType.LOADED_DATA) {
+            for (let i = 0; i < res.data.length; i++) {
+                message.channel.send(res.data[i]);
             }
-        }
-
-        const data = await getForecast(city, outlook);
-
-        if (!data.forecast) {
-            if (data.exception === Exception.INVALID_LOCATION) message.channel.send(client.emotes.error + " **Invalid Location**");
-            else if (data.exception === Exception.UNKNOWN_ERROR) message.channel.send(client.emotes.error + " **Unexpected Error**"); 
-            else message.channel.send(client.emotes.error + " **Unexpected Error**"); 
-        } else { 
-            if (data.extention) {
-                message.channel.send(data.forecast);
-                message.channel.send(data.extention);
-            } else message.channel.send(data.forecast);
+        } else {
+            if (res.loadType === LoadType.NO_DATA) message.channel.send(client.emotes.error + " **" + res.exception + "**");
+            else if (res.loadType === LoadType.LOAD_FAILED) message.channel.send(client.emotes.error + " **Error** `" + res.exception + "`");
         }
     }
 }

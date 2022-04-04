@@ -1,3 +1,11 @@
+const { Client } = require("discord.js");
+
+const alert_system = require("../structures/alert-system");
+const twitter_system = require("../structures/twitter-system");
+
+/**
+ * @param {Client} client 
+ */
 module.exports = async (client) => {
     console.log(`Logged to the client ${client.user.username}\n-> Ready on ${client.guilds.cache.size} servers for a total of ${client.users.cache.size} users`);
 
@@ -11,23 +19,18 @@ module.exports = async (client) => {
         status: "online"
     });
 
-    // console.log("Registering slash commands...");
+    console.log("Starting guild weather warning and twitter systems...");
 
-    // fs.readdirSync("./commands").forEach(dirs => {
-    //     const commands = fs.readdirSync(`./commands/${dirs}`).filter(files => files.endsWith(".js"));
+    alert_system(client);
+    twitter_system(client);
 
-    //     for (const file of commands) {
-    //         const command = require(`../commands/${dirs}/${file}`);
-    //         console.log(`-> Loaded command ${command.name.toLowerCase()}`);
-    //         client.guilds.cache.get("718350376344223754").commands.create({
-    //             name: command.name,
-    //             description: command.description,
-    //             options: command.slashCommand.options
-    //         });
-    //     }
-    // });
+    console.log("Registering slash commands...");
 
-    // Deleting commands client.guilds.cache.get("718350376344223754").commands.delete(" Command id");
+    const data = [];
+
+    client.slashCommands.forEach((slashCommand) => data.push(slashCommand));
+
+    client.application.commands.set(data);
 
     console.log("Successful startup...");
 }

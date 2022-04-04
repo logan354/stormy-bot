@@ -1,5 +1,11 @@
+const { Client, Message } = require("discord.js");
+
+/**
+ * @param {Client} client 
+ * @param {Message} message 
+ */
 module.exports = (client, message) => {
-    if (message.author.bot || message.channel.type === "dm") return;
+    if (message.author.bot || message.channel.type === "DM") return;
 
     const prefix = client.config.app.prefix;
 
@@ -10,5 +16,11 @@ module.exports = (client, message) => {
 
     const cmd = client.commands.get(command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
 
-    if (cmd) cmd.execute(client, message, args);
+    if (cmd) {
+        try {
+            cmd.execute(client, message, args);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }
