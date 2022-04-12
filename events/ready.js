@@ -1,7 +1,7 @@
 const { Client } = require("discord.js");
 
-const alert_system = require("../structures/alert-system");
-const twitter_system = require("../structures/twitter-system");
+const alert_system = require("../structures/guildSystems/alert-system");
+const twitter_system = require("../structures/guildSystems/twitter-system");
 
 /**
  * @param {Client} client 

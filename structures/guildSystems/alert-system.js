@@ -1,6 +1,6 @@
 const { Client } = require("discord.js");
-const { localForecast, localObservation, warnings } = require("./database");
-const { LoadType } = require("../utils/constants");
+const { localForecast, localObservation, warnings } = require("../formats");
+const { LoadType } = require("../../utils/constants");
 
 // Location
 const location = "Hamilton";
@@ -63,6 +63,7 @@ module.exports = async (client) => {
             if (res.data.join() === previousWarning || res.data.join().includes("No warnings for this region")) return;
 
             for (let i = 0; i < res.data.length; i++) {
+                if (i === 0) res[0] = "[ @everyone ]\n" + res[0]
                 client.channels.cache.get(warningChannelId).send(res.data[i]);
             }
 
