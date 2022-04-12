@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const { MessageEmbed } = require("discord.js");
-const { METSERVICE_BASE, API_OPTIONS, LoadType, days, shortDays } = require("../utils/constants");
+const { METSERVICE_BASE, API_OPTIONS, LoadType, days, shortDays, Exception } = require("../utils/constants");
 const { getIconEmoji } = require("../utils/icons");
 
 /**
@@ -36,14 +36,15 @@ async function localForecast(location, outlook) {
             if (!days.includes(outlook) && !shortDays.includes(outlook)) {
                 return {
                     loadType: LoadType.NO_DATA,
-                    exception: "Invalid Outlook",
+                    exception: Exception.INVALID_OUTLOOK,
                     data: null,
                 }
             }
 
             for (let i = 0; i < 7; i++) {
-                if (data.days[i].dow === outlook || data.days[i].dowTLA === outlook) {
+                if (data.days[i].dow.toLowerCase() === outlook.toLowerCase() || data.days[i].dowTLA.toLowerCase() === outlook.toLowerCase()) {
                     finalData.push(base_title(i) + base_forecast(i));
+                    break;
                 }
             }
         } else {
@@ -51,7 +52,7 @@ async function localForecast(location, outlook) {
             if (outlook < 1 || outlook > data.days.length) {
                 return {
                     loadType: LoadType.NO_DATA,
-                    exception: "Invalid Outlook",
+                    exception: Exception.INVALID_LOCATION,
                     data: null,
                 }
             }
@@ -61,7 +62,7 @@ async function localForecast(location, outlook) {
 
                 if (finalData[k].length + base_forecast(i).length > charLimit) {
                     k++
-                    finalData[k] += base_forecast(i);
+                    finalData[k] = base_forecast(i);
                 } else {
                     finalData[k] += base_forecast(i);
                 }
@@ -77,7 +78,7 @@ async function localForecast(location, outlook) {
         if (e.name === "FetchError" && e.type === "invalid-json") {
             return {
                 loadType: LoadType.NO_DATA,
-                exception: "Invalid Location",
+                exception: Exception.INVALID_LOCATION,
                 data: null,
             }
         }
@@ -136,7 +137,7 @@ async function sunProtectionAlert(location) {
         if (e.name === "FetchError" && e.type === "invalid-json") {
             return {
                 loadType: LoadType.NO_DATA,
-                exception: "Invalid Location",
+                exception: Exception.INVALID_LOCATION,
                 data: null
             }
         }
@@ -211,7 +212,7 @@ async function localObservation(location) {
         if (e.name === "FetchError" && e.type === "invalid-json") {
             return {
                 loadType: LoadType.NO_DATA,
-                exception: "Invalid Location",
+                exception: Exception.INVALID_LOCATION,
                 data: null
             }
         }
@@ -272,7 +273,7 @@ async function warnings(location) {
         if (e.name === "FetchError" && e.type === "invalid-json") {
             return {
                 loadType: LoadType.NO_DATA,
-                exception: "Invalid Location",
+                exception: Exception.INVALID_LOCATION,
                 data: null,
             }
         }
@@ -338,7 +339,7 @@ async function riseTimes(location) {
         if (e.name === "FetchError" && e.type === "invalid-json") {
             return {
                 loadType: LoadType.NO_DATA,
-                exception: "Invalid Location",
+                exception: Exception.INVALID_LOCATION,
                 data: null
             }
         }
@@ -383,7 +384,7 @@ async function pollenLevels(location) {
         if (e.name === "FetchError" && e.type === "invalid-json") {
             return {
                 loadType: LoadType.NO_DATA,
-                exception: "Invalid Location",
+                exception: Exception.INVALID_LOCATION,
                 data: null
             }
         }
@@ -428,7 +429,7 @@ async function rainRadar(location) {
         if (e.name === "FetchError" && e.type === "invalid-json") {
             return {
                 loadType: LoadType.NO_DATA,
-                exception: "Invalid Location",
+                exception: Exception.INVALID_LOCATION,
                 data: null
             }
         }

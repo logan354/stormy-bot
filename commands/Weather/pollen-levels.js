@@ -1,5 +1,5 @@
 const { Client, Message, Permissions } = require("discord.js");
-const { pollenLevels } = require("../../structures/database");
+const { pollenLevels } = require("../../structures/formats");
 const { LoadType } = require("../../utils/constants");
 
 module.exports = {

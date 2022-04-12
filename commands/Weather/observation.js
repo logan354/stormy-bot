@@ -1,5 +1,5 @@
 const { Client, Message, Permissions } = require("discord.js");
-const { localObservation } = require("../../structures/database");
+const { localObservation } = require("../../structures/formats");
 const { LoadType } = require("../../utils/constants");
 
 module.exports = {

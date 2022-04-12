@@ -47,7 +47,7 @@
  * Gets MetService emoji icon url
  * @param {string} query 
  * @param {string} type 
- * @returns 
+ * @returns {string}
  */
 function getIconEmoji(query, type) {
     switch (query) {

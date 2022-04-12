@@ -1,5 +1,5 @@
 const { Client, Message, Permissions } = require("discord.js");
-const { sunProtectionAlert } = require("../../structures/database");
+const { sunProtectionAlert } = require("../../structures/formats");
 const { LoadType } = require("../../utils/constants");
 
 module.exports = {

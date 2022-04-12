@@ -1,6 +1,6 @@
 const { Client, Message, Permissions } = require("discord.js");
-const { localForecast } = require("../../structures/database");
-const { LoadType, days, shortDays } = require("../../utils/constants");
+const { localForecast } = require("../../structures/formats");
+const { LoadType } = require("../../utils/constants");
 
 module.exports = {
     name: "forecast",
