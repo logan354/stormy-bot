@@ -63,7 +63,7 @@ module.exports = async (client) => {
             if (res.data.join() === previousWarning || res.data.join().includes("No warnings for this region")) return;
 
             for (let i = 0; i < res.data.length; i++) {
-                if (i === 0) res[0] = "[ @everyone ]\n" + res[0]
+                if (i === 0) res.data[0] = "[ @everyone ]\n" + res.data[0]
                 client.channels.cache.get(warningChannelId).send(res.data[i]);
             }
 

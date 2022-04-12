@@ -44,7 +44,7 @@
 }
 
 /**
- * Gets MetService emoji icon url
+ * Gets MetService emoji icon id
  * @param {string} query 
  * @param {string} type 
  * @returns {string}
