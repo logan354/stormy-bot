@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["f"],
     category: "Weather",
     description: "Displays the forecast for a specified location in New Zealand.",
-    utilisation: "{prefix}forecast <outlook> <location>",
+    utilisation: "{prefix}forecast [outlook] <location>",
 
     /**
      * @param {Client} client 
@@ -18,8 +18,8 @@ module.exports = {
         const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
         if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
 
-        const outlook = args[0];
-        if (!outlook) return message.channel.send(client.emotes.error + " A outlook is required");
+        let outlook = args[0];
+        if (!outlook) outlook = 1;
 
         args.shift();
 
