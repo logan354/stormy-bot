@@ -19,7 +19,7 @@ async function localForecast(location, outlook) {
         const isOutlookNum = Number(outlook);
 
         // Base variables
-        const base_title = (i) => { return `${getIconEmoji("Fine")} __**${isOutlookNum ? outlook.toString() + "-Day" : data.days[i].dow} Forecast for ${data.locationIPS.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
+        const base_title = (i) => { return `${getIconEmoji("Fine")} __**${isOutlookNum && outlook > 1 ? outlook.toString() + "-Day" : data.days[i].dow} Forecast for ${data.locationIPS.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
 
         const base_forecast = (i) => { return `\n\n${getIconEmoji(data.days[i].forecastWord)} **${i > 0 ? data.days[i].dowTLA : "Today"}** ${data.days[i].date} | High: ${data.days[i].max}°, Low: ${data.days[i].min}°${!data.days[i].partDayData ? "\n" : `\n| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmoji(data.days[i].partDayData.overnight.forecastWord, data.days[i].partDayData.overnight.iconType)}       |      ${getIconEmoji(data.days[i].partDayData.morning.forecastWord, data.days[i].partDayData.morning.iconType)}      |        ${getIconEmoji(data.days[i].partDayData.afternoon.forecastWord, data.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmoji(data.days[i].partDayData.evening.forecastWord, data.days[i].partDayData.evening.iconType)}     |\n\n`}${data.days[i].forecast}\n*Issued: ${data.days[i].issuedAt.split(" ")[0]} ${data.days[i].dowTLA} ${data.days[i].issuedAt.split(" ")[1]} ${data.days[i].issuedAt.split(" ")[2]}*`; }
 
@@ -58,7 +58,7 @@ async function localForecast(location, outlook) {
             }
 
             for (let i = 0; i < outlook; i++) {
-                if (i === 0) finalData[k] = base_title(null);
+                if (i === 0) finalData[k] = base_title(i);
 
                 if (finalData[k].length + base_forecast(i).length > charLimit) {
                     k++
