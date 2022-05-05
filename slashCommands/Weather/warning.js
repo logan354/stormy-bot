@@ -1,37 +1,43 @@
-const { Client, Message, Permissions } = require("discord.js");
+const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { base_warning_title, base_warning } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
 
 module.exports = {
     name: "warning",
-    aliases: ["warn", "w"],
     category: "Weather",
     description: "Displays the current MetService issued warnings for a specified location in New Zealand.",
-    utilisation: "{prefix}warning <location>",
+    options: [
+        {
+            type: "STRING",
+            name: "location",
+            description: "Location in New Zealand.",
+            required: true,
+        }
+    ],
 
     /**
      * @param {Client} client 
-     * @param {Message} message 
-     * @param {string[]} args 
+     * @param {CommandInteraction} interaction 
+     * @param {CommandInteractionOptionResolver} args 
      */
-    async execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
+    async execute(client, interaction, args) {
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.me);
+        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
 
-        const location = args.join(" ");
-        if (!location) return message.channel.send(client.emotes.error + " **A location is required**");
+        const location = args.getString("location");
 
         // Fetch data from MetService API
+        interaction.deferReply();
         try {
             const response = await fetch(METSERVICE_BASE + API_OPTIONS.WARNINGS + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
-                return message.channel.send(client.emotes.error + " **Invalid location**");
+                return interaction.editReply(client.emotes.error + " **Invalid location**");
             } else {
                 console.error(e);
-                return message.channel.send(client.emotes.error + " **Error** `" + e.message + "`");
+                return interaction.editReply(client.emotes.error + " **Error** `" + e.message + "`");
             }
         }
 
@@ -54,7 +60,7 @@ module.exports = {
 
         // Iterate through formatted data array
         for (let i of finalData) {
-            message.channel.send(i);
+            interaction.editReply(i);
         }
     }
 }

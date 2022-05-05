@@ -14,17 +14,6 @@ const API_OPTIONS = {
     RAIN_RADAR: "rainRadar{0}_2h_7min_300K"
 }
 
-const LoadType = {
-    LOADED_DATA: "LOADED_DATA",
-    NO_DATA: "NO_DATA",
-    LOAD_FAILED: "LOAD_FAILED"
-}
-
-const Exception = {
-    INVALID_LOCATION: "Invalid Location",
-    INVALID_OUTLOOK: "Invalid Outlook"
-}
-
 const days = [
     "Monday",
     "Tuesday",
@@ -37,4 +26,4 @@ const days = [
 
 const shortDays = days.map((x) => x.substring(0, 3));
 
-module.exports = { METSERVICE_BASE, API_OPTIONS, LoadType, Exception, days, shortDays }
+module.exports = { METSERVICE_BASE, API_OPTIONS, days, shortDays }

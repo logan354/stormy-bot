@@ -1,42 +1,57 @@
-const { Client, Message, Permissions } = require("discord.js");
+const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { base_forecast_title, base_forecast } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS, days, shortDays } = require("../../utils/constants");
 
+const choices = [];
+for (let i of days) {
+    choices.push({ name: i, value: i });
+}
+
 module.exports = {
     name: "forecast",
-    aliases: ["f"],
     category: "Weather",
     description: "Displays the forecast for a specified location in New Zealand.",
-    utilisation: "{prefix}forecast [outlook] <location>",
+    options: [
+        {
+            type: "STRING",
+            name: "location",
+            description: "Location in New Zealand.",
+            required: true,
+        },
+        {
+            type: "STRING",
+            name: "outlook",
+            description: "Outlook in day or number format.",
+            choices: choices
+        }
+    ],
 
     /**
      * @param {Client} client 
-     * @param {Message} message 
-     * @param {string[]} args 
+     * @param {CommandInteraction} interaction
+     * @param {CommandInteractionOptionResolver} args 
      */
-    async execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
+    async execute(client, interaction, args) {
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.me);
+        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
 
-        let outlook = args[0];
+        const location = args.getString("location");
+
+        let outlook = args.getString("outlook");
         if (!outlook) outlook = 1;
 
-        args.shift();
-
-        const location = args.join(" ");
-        if (!location) return message.channel.send(client.emotes.error + " **A location is required**");
-
         // Fetch data from MetService API
+        interaction.deferReply();
         try {
             const response = await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_FORECAST + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
-                return message.channel.send(client.emotes.error + " **Invalid location**");
+                return interaction.editReply(client.emotes.error + " **Invalid location**");
             } else {
                 console.error(e);
-                return message.channel.send(client.emotes.error + " **Error** `" + e.message + "`");
+                return interaction.editReply(client.emotes.error + " **Error** `" + e.message + "`");
             }
         }
 
@@ -48,7 +63,7 @@ module.exports = {
             outlook = outlook.charAt(0).toUpperCase() + outlook.slice(1).toLowerCase();
 
             if (!days.includes(outlook) && !shortDays.includes(outlook)) {
-                return message.channel.send(client.emotes.error + " **Invalid outlook day**");
+                return interaction.editReply(client.emotes.error + " **Invalid outlook day**");
             }
 
             for (let i = 0; i < 7; i++) {
@@ -59,7 +74,7 @@ module.exports = {
             }
         } else {
             if (outlook < 1 || outlook > data.days.length) {
-                return message.channel.send(client.emotes.error + " **Invalid outlook number. Must be between 1 and " + data.days.length + "**");
+                return interaction.editReply(client.emotes.error + " **Invalid outlook number. Must be between 1 and " + data.days.length + "**");
             }
 
             for (let i = 0; i < outlook; i++) {
@@ -76,7 +91,7 @@ module.exports = {
 
         // Iterate through formatted data array
         for (let i of finalData) {
-            message.channel.send(i);
+            interaction.editReply(i);
         }
     }
 }

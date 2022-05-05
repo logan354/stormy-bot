@@ -1,8 +1,6 @@
 const { Client } = require("discord.js");
 const Twit = require("twit");
-
-const metserviceChannelId = "795144248449040446";
-const metserviceWarnChannelId = "801396269360480256";
+const { guildChannels } = require("./utils/constants");
 
 /**
  * @param {Client} client 
@@ -24,7 +22,7 @@ module.exports = (client) => {
         const url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
         if (tweet.user.screen_name === "MetService") {
-            client.channels.fetch(metserviceChannelId)
+            client.channels.fetch(guildChannels.METSERVICE_CHANNEL)
                 .then(channel => channel.send(url))
                 .catch(e => console.error(e));
         }
@@ -37,7 +35,7 @@ module.exports = (client) => {
         const url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
         if (tweet.user.screen_name === "MetServiceWARN") {
-            client.channels.fetch(metserviceWarnChannelId)
+            client.channels.fetch(guildChannels.METSERVICEWARN_CHANNEL)
                 .then(channel => channel.send(url))
                 .catch(e => console.error(e));
         }

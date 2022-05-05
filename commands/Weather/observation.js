@@ -1,10 +1,11 @@
 const { Client, Message, Permissions } = require("discord.js");
-const { localObservation } = require("../../structures/formats");
-const { LoadType } = require("../../utils/constants");
+const { default: fetch } = require("node-fetch");
+const { base_local_observation } = require("../../src/baseFormats");
+const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
 
 module.exports = {
     name: "observation",
-    aliases: ["weather", "obs"],
+    aliases: ["obs", "weather"],
     category: "Weather",
     description: "Displays the current weather observation for a specified location in New Zealand.",
     utilisation: "{prefix}observation <location>",
@@ -20,13 +21,22 @@ module.exports = {
         if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
 
         const location = args.join(" ");
-        if (!location) return message.channel.send(client.emotes.error + " A location is required");
+        if (!location) return message.channel.send(client.emotes.error + " **A location is required**");
 
-        const res = await localObservation(location);
-        if (res.loadType === LoadType.LOADED_DATA) message.channel.send({ embeds: [res.data] });
-        else {
-            if (res.loadType === LoadType.NO_DATA) message.channel.send(client.emotes.error + " **" + res.exception + "**");
-            else if (res.loadType === LoadType.LOAD_FAILED) message.channel.send(client.emotes.error + " **Error** `" + res.exception + "`");
+        // Fetch data from MetService API
+        try {
+            const response = await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_OBS + location.replace(" ", "-"));
+            var data = await response.json();
+        } catch (e) {
+            if (e.name === "FetchError" && e.type === "invalid-json") {
+                return message.channel.send(client.emotes.error + " **Invalid location**");
+            } else {
+                console.error(e);
+                return message.channel.send(client.emotes.error + " **Error** `" + e.message + "`");
+            }
         }
+
+        const embed = base_local_observation(data);
+        message.channel.send({ embeds: [embed] });
     }
 }

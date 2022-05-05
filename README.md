@@ -6,12 +6,12 @@ The best weather bot for New Zealand on Discord. Connecting directly to the MetS
 
 ## Features
 
-- ✅ Build on Discord.js v13
-- ✅ Connects directly to the MetService API
+* ✅ Built on Discord.js v13
+* ✅ Connects directly to the MetService API
 
 ## Commands
 
 Stormy has 2 main command categories
 
-- **Weather**: `forecast`, `observation`, `pollen-levels`, `rain-radar`, `rise-times`, `sun-protection`, `warning`
-- **Utility**: `help`, `invite`, `ping`, `statistics`
+*   🌦️ **Weather**: `forecast`, `observation`, `pollen-levels`, `rain-radar`, `rise-times`, `sun-protection`, `warning`
+*   ⚙️ **Utility**: `help`, `invite`, `ping`, `statistics`
