@@ -11,7 +11,7 @@ module.exports = async (client) => {
     client.user.setPresence({
         activities: [
             {
-                name: "🌧️ Rain Radar",
+                name: "🌧️ MetService",
                 type: "WATCHING"
             }
         ],
