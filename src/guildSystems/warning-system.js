@@ -20,7 +20,7 @@ module.exports = (client) => {
                 return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Invalid location**");
             } else {
                 console.error(e);
-                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error** `" + e.message + "`");
+                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error(Guild System: Warning System)** `" + e.message + "`");
             }
         }
 
