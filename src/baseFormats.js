@@ -33,7 +33,7 @@ const base_warning_title = (data) => { return `${getIconEmojiID("warning_orange"
  * @param {Object} data 
  * @returns {string}
  */
-const base_warning = (i, data) => { return `\n\n${getIconEmoji("warning_" + data.warnings[i].warnLevel)} **${data.warnings[i].name}**\n${data.warnings[i].editions[0].datum.text}`; }
+const base_warning = (i, data) => { return `\n\n${getIconEmojiID("warning_" + data.warnings[i].warnLevel)} **${data.warnings[i].name}**\n${data.warnings[i].editions[0].datum.text}`; }
 
 /**
  * Base format for all local observations

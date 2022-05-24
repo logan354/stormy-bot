@@ -23,6 +23,7 @@ module.exports = {
             type: "STRING",
             name: "outlook",
             description: "Outlook in day or number format.",
+            required: false,
             choices: choices
         }
     ],
