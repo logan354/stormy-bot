@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { getIconURL, getIconEmojiID } = require("./icons");
+const { getIconEmojiID } = require("./icons");
 const { days, shortDays } = require("../utils/constants");
 
 /**
@@ -17,7 +17,7 @@ const base_forecast_title = (i, data, outlook) => { return `${getIconEmojiID("fi
  * @param {Object} data 
  * @returns {string}
  */
-const base_forecast = (i, data) => { return `\n\n${getIconEmojiID(data.days[i].forecastWord)} **${i > 0 ? data.days[i].dowTLA : "Today"}** ${data.days[i].date} | High: ${data.days[i].max}°, Low: ${data.days[i].min}°${!data.days[i].partDayData ? "\n" : `\n| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmojiID(data.days[i].partDayData.overnight.forecastWord, data.days[i].partDayData.overnight.iconType)}       |      ${getIconEmojiID(data.days[i].partDayData.morning.forecastWord, data.days[i].partDayData.morning.iconType)}      |        ${getIconEmojiID(data.days[i].partDayData.afternoon.forecastWord, data.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmojiID(data.days[i].partDayData.evening.forecastWord, data.days[i].partDayData.evening.iconType)}     |\n\n`}${data.days[i].forecast}\n*Issued: ${data.days[i].issuedAt.split(" ")[0]} ${data.days[i].dowTLA} ${data.days[i].issuedAt.split(" ")[1]} ${data.days[i].issuedAt.split(" ")[2]}*`; }
+const base_forecast = (i, data) => { return `\n\n${getIconEmojiID(data.days[i].forecastWord)} **${i > 0 ? data.days[i].dowTLA : "Today"}** ${data.days[i].date} | High: ${data.days[i].max}°, Low: ${data.days[i].min}°${!data.days[i].partDayData ? "\n" : `\n| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmojiID(data.days[i].partDayData.overnight.forecastWord, data.days[i].partDayData.overnight.iconType)}       |      ${getIconEmojiID(data.days[i].partDayData.morning.forecastWord, data.days[i].partDayData.morning.iconType)}      |        ${getIconEmojiID(data.days[i].partDayData.afternoon.forecastWord, data.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmojiID(data.days[i].partDayData.evening.forecastWord, data.days[i].partDayData.evening.iconType)}     |\n\n`}${data.days[i].forecast}\n*Issued: ${data.days[i].issuedAt.split(" ")[0]} ${shortDays[new Date().getDay(data.days[i].issuedAtRaw) - 1]} ${data.days[i].issuedAt.split(" ")[1]} ${data.days[i].issuedAt.split(" ")[2]}*`; }
 
 /**
  * Base format for warning title
