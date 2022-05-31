@@ -1,6 +1,6 @@
 {
   "name": "stormy-bot",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "description": "A weather bot for New Zealand on Discord. Connecting directly to the MetService API!",
   "main": "index.js",
   "scripts": {
