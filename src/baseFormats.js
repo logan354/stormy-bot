@@ -33,8 +33,7 @@ const base_forecast = (i, data) => {
  * @param {Object} data
  * @returns {string}
  */
-const base_warning_title = (data) => { return `${getIconEmojiID("warning_orange")} __**Warning(s) for ${data.locationName}**__`; }
-
+const base_warning_title = (data) => { return `__**Warning(s) for ${data.locationName}**__`; }
 
 /**
  * Base format for all warnings
