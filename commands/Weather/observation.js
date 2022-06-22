@@ -1,6 +1,6 @@
 const { Client, Message, Permissions } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { base_local_observation } = require("../../src/baseFormats");
+const { baseLocalObservation } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
 
 module.exports = {
@@ -36,7 +36,7 @@ module.exports = {
             }
         }
 
-        const embed = base_local_observation(data);
+        const embed = baseLocalObservation(data);
         message.channel.send({ embeds: [embed] });
     }
 }

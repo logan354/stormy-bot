@@ -1,7 +1,7 @@
 const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
-const { base_forecast_title, base_forecast, base_local_observation } = require("../baseFormats");
+const { baseForecastTitle, baseForecast, baseLocalObservation } = require("../baseFormats");
 const { location, guildChannels } = require("./utils/constants");
 
 /**
@@ -42,13 +42,13 @@ module.exports = (client) => {
         let k = 0;
 
         for (let i = 0; i < outlook; i++) {
-            if (i === 0) finalData[k] = base_forecast_title(i, data, outlook);
+            if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
 
-            if (finalData[k].length + base_forecast(i, data).length > charLimit) {
+            if (finalData[k].length + baseForecast(i, data).length > charLimit) {
                 k++
-                finalData[k] = base_forecast(i, data);
+                finalData[k] = baseForecast(i, data);
             } else {
-                finalData[k] += base_forecast(i, data);
+                finalData[k] += baseForecast(i, data);
             }
         }
 
@@ -62,13 +62,13 @@ module.exports = (client) => {
         k = 0;
 
         for (let i = 0; i < outlook; i++) {
-            if (i === 0) finalData[k] = base_forecast_title(i, data, outlook);
+            if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
 
-            if (finalData[k].length + base_forecast(i, data).length > charLimit) {
+            if (finalData[k].length + baseForecast(i, data).length > charLimit) {
                 k++
-                finalData[k] = base_forecast(i, data);
+                finalData[k] = baseForecast(i, data);
             } else {
-                finalData[k] += base_forecast(i, data);
+                finalData[k] += baseForecast(i, data);
             }
         }
 
@@ -82,13 +82,13 @@ module.exports = (client) => {
         k = 0;
 
         for (let i = 0; i < outlook; i++) {
-            if (i === 0) finalData[k] = base_forecast_title(i, data, outlook);
+            if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
 
-            if (finalData[k].length + base_forecast(i, data).length > charLimit) {
+            if (finalData[k].length + baseForecast(i, data).length > charLimit) {
                 k++
-                finalData[k] = base_forecast(i, data);
+                finalData[k] = baseForecast(i, data);
             } else {
-                finalData[k] += base_forecast(i, data);
+                finalData[k] += baseForecast(i, data);
             }
         }
 
@@ -112,7 +112,7 @@ module.exports = (client) => {
             }
         }
 
-        const embed = base_local_observation(data);
+        const embed = baseLocalObservation(data);
         client.channels.cache.get(guildChannels.HOURLY_OBSERVATION_CHANNEL).send({ embeds: [embed] });
     }
 

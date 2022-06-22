@@ -1,6 +1,6 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { base_warning_title, base_warning } = require("../../src/baseFormats");
+const { baseWarningTitle, baseWarning } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
 
 module.exports = {
@@ -46,17 +46,17 @@ module.exports = {
         let k = 0;
 
         for (let i = 0; i < data.warnings.length; i++) {
-            if (i === 0) finalData[k] = base_warning_title(data);
+            if (i === 0) finalData[k] = baseWarningTitle(data);
 
-            if (finalData[k].length + base_warning(i, data).length > charLimit) {
+            if (finalData[k].length + baseWarning(i, data).length > charLimit) {
                 k++
-                finalData[k] = base_warning(i, data);
+                finalData[k] = baseWarning(i, data);
             } else {
-                finalData[k] += base_warning(i, data);
+                finalData[k] += baseWarning(i, data);
             }
         }
 
-        if (!finalData.length) finalData[k] = base_warning_title(data) + "\n\nNo warnings for this region";
+        if (!finalData.length) finalData[k] = baseWarningTitle(data) + "\n\nNo warnings for this region";
 
         // Iterate through formatted data array
         for (let i of finalData) {

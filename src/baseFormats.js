@@ -9,7 +9,7 @@ const { days, shortDays } = require("../utils/constants");
  * @param {days|shortDays|number} outlook 
  * @returns {string}
  */
-const base_forecast_title = (i, data, outlook) => { return `${getIconEmojiID("fine")} __**${Number(outlook) && outlook > 1 ? outlook.toString() + "-Day" : data.days[i].dow} Forecast for ${data.locationIPS.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
+const baseForecastTitle = (i, data, outlook) => { return `${getIconEmojiID("fine")} __**${Number(outlook) && outlook > 1 ? outlook.toString() + "-Day" : data.days[i].dow} Forecast for ${data.locationIPS.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
 
 /**
  * Base format for all forecasts
@@ -17,7 +17,7 @@ const base_forecast_title = (i, data, outlook) => { return `${getIconEmojiID("fi
  * @param {Object} data 
  * @returns {string}
  */
-const base_forecast = (i, data) => {
+const baseForecast = (i, data) => {
     const d = new Date(data.days[i].issuedAtRaw);
     let partDayData = null;
 
@@ -33,7 +33,7 @@ const base_forecast = (i, data) => {
  * @param {Object} data
  * @returns {string}
  */
-const base_warning_title = (data) => { return `${getIconEmojiID("warning_orange")} __**Warning(s) for ${data.locationName}**__`; }
+const baseWarningTitle = (data) => { return `${getIconEmojiID("warning_orange")} __**Warning(s) for ${data.locationName}**__`; }
 
 /**
  * Base format for all warnings
@@ -41,14 +41,14 @@ const base_warning_title = (data) => { return `${getIconEmojiID("warning_orange"
  * @param {Object} data 
  * @returns {string}
  */
-const base_warning = (i, data) => { return "\n\n" + `${getIconEmojiID("warning_" + data.warnings[i].warnLevel)} **${data.warnings[i].name}**\n${data.warnings[i].editions[0].datum.text}`; }
+const baseWarning = (i, data) => { return "\n\n" + `${getIconEmojiID("warning_" + data.warnings[i].warnLevel)} **${data.warnings[i].name}**\n${data.warnings[i].editions[0].datum.text}`; }
 
 /**
  * Base format for all local observations
  * @param {Object} data 
  * @returns {MessageEmbed}
  */
-const base_local_observation = (data) => {
+const baseLocalObservation = (data) => {
     const embed = new MessageEmbed()
         .setColor("GREY")
         .setAuthor({
@@ -92,4 +92,4 @@ const base_local_observation = (data) => {
     return embed;
 }
 
-module.exports = { base_forecast_title, base_forecast, base_warning_title, base_warning, base_local_observation }
+module.exports = { baseForecastTitle, baseForecast, baseWarningTitle, baseWarning, baseLocalObservation }

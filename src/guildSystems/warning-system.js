@@ -1,7 +1,7 @@
 const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
-const { base_warning_title, base_warning } = require("../baseFormats");
+const { baseWarningTitle, baseWarning } = require("../baseFormats");
 const { location, guildChannels } = require("./utils/constants");
 
 /**
@@ -29,13 +29,13 @@ module.exports = (client) => {
         let k = 0;
 
         for (let i = 0; i < data.warnings.length; i++) {
-            if (i === 0) finalData[k] = "[ @everyone ]\n" + base_warning_title(data);
+            if (i === 0) finalData[k] = "[ @everyone ]\n" + baseWarningTitle(data);
 
-            if (finalData[k].length + base_warning(i, data).length > charLimit) {
+            if (finalData[k].length + baseWarning(i, data).length > charLimit) {
                 k++
-                finalData[k] = base_warning(i, data);
+                finalData[k] = baseWarning(i, data);
             } else {
-                finalData[k] += base_warning(i, data);
+                finalData[k] += baseWarning(i, data);
             }
         }
 

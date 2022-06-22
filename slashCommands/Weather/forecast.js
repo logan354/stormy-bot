@@ -1,6 +1,6 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { base_forecast_title, base_forecast } = require("../../src/baseFormats");
+const { baseForecastTitle, baseForecast } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS, days, shortDays } = require("../../utils/constants");
 
 const choices = [];
@@ -69,7 +69,7 @@ module.exports = {
 
             for (let i = 0; i < 7; i++) {
                 if (data.days[i].dow.toLowerCase() === outlook.toLowerCase() || data.days[i].dowTLA.toLowerCase() === outlook.toLowerCase()) {
-                    finalData.push(base_forecast_title(i, data, outlook) + base_forecast(i, data));
+                    finalData.push(baseForecastTitle(i, data, outlook) + baseForecast(i, data));
                     break;
                 }
             }
@@ -79,13 +79,13 @@ module.exports = {
             }
 
             for (let i = 0; i < outlook; i++) {
-                if (i === 0) finalData[k] = base_forecast_title(i, data, outlook);
+                if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
 
-                if (finalData[k].length + base_forecast(i, data).length > charLimit) {
+                if (finalData[k].length + baseForecast(i, data).length > charLimit) {
                     k++
-                    finalData[k] = base_forecast(i, data);
+                    finalData[k] = baseForecast(i, data);
                 } else {
-                    finalData[k] += base_forecast(i, data);
+                    finalData[k] += baseForecast(i, data);
                 }
             }
         }
