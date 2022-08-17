@@ -57,6 +57,5 @@ module.exports = {
         for (let i of finalData) {
             message.channel.send(i);
         }
-        message.channel.send(str)
     }
 }
