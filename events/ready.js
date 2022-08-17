@@ -21,14 +21,16 @@ module.exports = async (client) => {
     /**
      * Loading all guild systems
      */
-    console.log("Loading " + client.guilds.cache.get(guildId).name + " guild systems...");
+    if (client.startGuildSystems) {
+        console.log("Loading " + client.guilds.cache.get(guildId).name + " guild systems...");
 
-    const systems = fs.readdirSync("./src/guildSystems").filter(file => file.endsWith(".js"));
+        const systems = fs.readdirSync("./src/guildSystems").filter(file => file.endsWith(".js"));
 
-    for (const file of systems) {
-        const system = require(`../src/guildSystems/${file}`);
-        console.log(`-> Loaded system ${file.split(".")[0]}`);
-        system(client);
+        for (const file of systems) {
+            const system = require(`../src/guildSystems/${file}`);
+            console.log(`-> Loaded system ${file.split(".")[0]}`);
+            system(client);
+        }
     }
 
     /**
