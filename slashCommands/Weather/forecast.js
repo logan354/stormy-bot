@@ -3,11 +3,6 @@ const { default: fetch } = require("node-fetch");
 const { baseForecastTitle, baseForecast } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS, days, shortDays } = require("../../utils/constants");
 
-const choices = [];
-for (let i of days) {
-    choices.push({ name: i, value: i });
-}
-
 module.exports = {
     name: "forecast",
     category: "Weather",
@@ -22,9 +17,8 @@ module.exports = {
         {
             type: "STRING",
             name: "outlook",
-            description: "Outlook in day or number format.",
+            description: "Outlook in number or day format.",
             required: false,
-            choices: choices
         }
     ],
 
