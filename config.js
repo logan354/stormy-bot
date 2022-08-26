@@ -17,7 +17,7 @@ module.exports = {
         // Logo
         logo: "https://cdn.discordapp.com/attachments/718350376344223758/948453475522609202/Logo128.jpg",
 
-        startGuildSystems: false
+        startGuildSystems: true
     },
 
     emojis: {
