@@ -21,7 +21,7 @@ module.exports = async (client) => {
     /**
      * Loading all guild systems
      */
-    if (client.startGuildSystems) {
+    if (client.config.app.startGuildSystems) {
         console.log("Loading " + client.guilds.cache.get(guildId).name + " guild systems...");
 
         const systems = fs.readdirSync("./src/guildSystems").filter(file => file.endsWith(".js"));
