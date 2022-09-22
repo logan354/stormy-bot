@@ -1,4 +1,4 @@
-const { Client, Message, Permissions, MessageEmbed } = require("discord.js");
+const { Client, Message, PermissionsBitField, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "help",
@@ -13,16 +13,16 @@ module.exports = {
      * @param {string[]} args 
      */
     execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
-        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+        const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
 
         if (!args[0]) {
             // Command categories
             const weather = client.commands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`");
             const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor("BLACK")
                 .setAuthor({
                     name: "Stormy's Commands",
@@ -51,7 +51,7 @@ module.exports = {
 
             if (!command) return message.channel.send(client.emotes.error + " **I could not find that command**");
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor("BLACK")
                 .setAuthor({
                     name: `${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`,

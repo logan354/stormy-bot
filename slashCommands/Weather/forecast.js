@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions } = require("discord.js");
+const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseForecastTitle, baseForecast } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS, days, shortDays } = require("../../utils/constants");
@@ -9,13 +9,13 @@ module.exports = {
     description: "Displays the forecast for a specified location in New Zealand.",
     options: [
         {
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             name: "location",
             description: "Location in New Zealand.",
             required: true,
         },
         {
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             name: "outlook",
             description: "Outlook in number or day format.",
             required: false,
@@ -28,8 +28,8 @@ module.exports = {
      * @param {CommandInteractionOptionResolver} args 
      */
     async execute(client, interaction, args) {
-        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
 
         const location = args.getString("location");
 
@@ -85,8 +85,13 @@ module.exports = {
         }
 
         // Iterate through formatted data array
-        for (let i of finalData) {
-            interaction.editReply(i);
+        for (let i = 0; i < finalData.length; i++) {
+            if (i === 0) {
+                interaction.editReply(finalData[i]);
+            }
+            else {
+                interaction.channel.send(finalData[i]);
+            }
         }
     }
 }

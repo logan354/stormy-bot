@@ -1,4 +1,4 @@
-const { Client, Message, Permissions } = require("discord.js");
+const { Client, Message, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseForecastTitle, baseForecast } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS, days, shortDays } = require("../../utils/constants");
@@ -16,8 +16,8 @@ module.exports = {
      * @param {string[]} args 
      */
     async execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
+        const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
 
         let outlook;
         if (args.length <= 1) {

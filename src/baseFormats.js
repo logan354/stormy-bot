@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { getIconEmojiID } = require("./icons");
 const { days, shortDays } = require("../utils/constants");
 
@@ -46,10 +46,10 @@ const baseWarning = (i, data) => { return "\n\n" + `${getIconEmojiID("warning_" 
 /**
  * Base format for all local observations
  * @param {Object} data 
- * @returns {MessageEmbed}
+ * @returns {EmbedBuilder}
  */
 const baseLocalObservation = (data) => {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setColor("GREY")
         .setAuthor({
             name: "Current Conditions at " + data.location

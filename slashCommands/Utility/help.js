@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions, MessageEmbed } = require("discord.js");
+const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: "help",
@@ -9,7 +9,7 @@ module.exports = {
             name: "command",
             description: "Enter a command",
             required: false,
-            type: "STRING"
+            type: ApplicationCommandOptionType.String
         }
     ],
 
@@ -19,16 +19,16 @@ module.exports = {
      * @param {CommandInteractionOptionResolver} args 
      */
     execute(client, interaction, args) {
-        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
-        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
 
         if (!args.getString("command")) {
             // Command categories
             const weather = client.commands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`");
             const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor("BLACK")
                 .setAuthor({
                     name: "Stormy's Commands",
@@ -57,7 +57,7 @@ module.exports = {
 
             if (!command) return interaction.reply(client.emotes.error + " **I could not find that command**");
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setColor("BLACK")
                 .setAuthor({
                     name: `${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`,

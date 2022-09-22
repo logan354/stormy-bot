@@ -1,4 +1,4 @@
-const { Client, Message, Permissions, MessageEmbed } = require("discord.js");
+const { Client, Message, PermissionsBitField, EmbedBuilder } = require("discord.js");
 const { formatFormalTime } = require("../../utils/formats");
 const { version, dependencies } = require("../../package.json");
 
@@ -17,10 +17,10 @@ module.exports = {
     execute(client, message, args) {
         const memory = 512;
 
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.EMBED_LINKS)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+        const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor("BLACK")
             .setAuthor({
                 name: "-- Stormy's Statistics --",

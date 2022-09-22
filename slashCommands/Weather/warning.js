@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, CommandInteractionOptionResolver, Permissions } = require("discord.js");
+const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseWarningTitle, baseWarning } = require("../../src/baseFormats");
 const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
@@ -9,7 +9,7 @@ module.exports = {
     description: "Displays the current MetService issued warnings for a specified location in New Zealand.",
     options: [
         {
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             name: "location",
             description: "Location in New Zealand.",
             required: true,
@@ -22,8 +22,8 @@ module.exports = {
      * @param {CommandInteractionOptionResolver} args 
      */
     async execute(client, interaction, args) {
-        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.me);
-        if (!botPermissionsFor.has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
 
         const location = args.getString("location");
 

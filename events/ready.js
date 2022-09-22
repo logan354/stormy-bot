@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { Client } = require("discord.js");
+const { Client, ActivityType } = require("discord.js");
 const { guildId } = require("../src/guildSystems/utils/constants");
 
 /**
@@ -12,7 +12,7 @@ module.exports = async (client) => {
         activities: [
             {
                 name: "🌧️ MetService",
-                type: "WATCHING"
+                type: ActivityType.Watching
             }
         ],
         status: "online"
