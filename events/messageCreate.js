@@ -7,7 +7,7 @@ const { Client, Message, ChannelType } = require("discord.js");
 module.exports = async (client, message) => {
     if (message.author.bot || message.channel.type === ChannelType.DM) return;
 
-    const prefix = client.config.app.prefix;
+    const prefix = client.config.app.mentionPrefix;
 
     if (message.content.indexOf(prefix) !== 0) return;
 

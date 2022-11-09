@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { Client, ActivityType } = require("discord.js");
-const { guildId } = require("../src/guildSystems/utils/constants");
+const { guildId } = require("../src/utils/constants");
 
 /**
  * @param {Client} client 

@@ -1,9 +1,8 @@
 module.exports = {
     app: {
         // Prefix settings
-        prefix: "!",
-        default_prefix: "!",
-        slash_prefix: "/",
+        mentionPrefix: `<@822342435941908480>`,
+        slashPrefix: "/",
 
         // Invite
         invite: "https://discord.com/oauth2/authorize?client_id=822342435941908480&scope=bot+applications.commands&permissions=347144",
@@ -15,7 +14,7 @@ module.exports = {
         slogan: "A weather bot for New Zealand on Discord. Connecting directly to the MetService API!",
 
         // Support server
-        support_server: "https://discord.gg/ja4KJAj3sU",
+        supportServer: "https://discord.gg/ja4KJAj3sU",
 
         startGuildSystems: true
     },

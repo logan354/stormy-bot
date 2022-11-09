@@ -1,7 +1,7 @@
 const { GuildEmoji } = require("discord.js");
 
 /**
- * Gets MetService icon url
+ * Gets a MetService icon url
  * @param {string} query 
  * @param {?string} type 
  * @returns {URL}
@@ -9,13 +9,16 @@ const { GuildEmoji } = require("discord.js");
  function getIconURL(query, type = "day") {
     switch (query.toLowerCase()) {
         case "fine":
-            return type.toLowerCase() === "night" ? "https://about.metservice.com/assets/Uploads/Fine-Night.png" : "https://about.metservice.com/assets/img/icon-exp/_resampled/resizedimage5555-ic-condition-fine-tiny-2.png";
+            if (type.toLowerCase() === "night") return "https://about.metservice.com/assets/Uploads/Fine-Night.png";
+            else return "https://about.metservice.com/assets/img/icon-exp/_resampled/resizedimage5555-ic-condition-fine-tiny-2.png";
         case "partly cloudy":
-            return type.toLowerCase() === "night" ? "https://about.metservice.com/assets/Uploads/Partly-Cloudy-Night.png" : "https://about.metservice.com/assets/img/icon-exp/ic-condition-partly-cloudy-tiny-2.png";
+            if (type.toLowerCase() === "night") return "https://about.metservice.com/assets/Uploads/Partly-Cloudy-Night.png";
+            else return "https://about.metservice.com/assets/img/icon-exp/ic-condition-partly-cloudy-tiny-2.png";
         case "cloudy":
             return "https://about.metservice.com/assets/img/icon-exp/ic-condition-cloudy-tiny.png";
         case "few showers":
-            return type.toLowerCase() === "night" ? "https://about.metservice.com/assets/Uploads/Few-Showers-Night.png" : "https://about.metservice.com/assets/img/icon-exp/ic-condition-few-showers-tiny-2.png";
+            if (type.toLowerCase() === "night") return "https://about.metservice.com/assets/Uploads/Few-Showers-Night.png";
+            else return "https://about.metservice.com/assets/img/icon-exp/ic-condition-few-showers-tiny-2.png";
         case "showers":
             return "https://about.metservice.com/assets/img/icon-exp/ic-condition-showers-tiny.png";
         case "rain":
@@ -46,7 +49,7 @@ const { GuildEmoji } = require("discord.js");
 }
 
 /**
- * Gets MetService emoji icon id
+ * Gets a Discord emoji id to the related MetService icon
  * @param {string} query 
  * @param {?string} type 
  * @returns {GuildEmoji}
@@ -54,13 +57,16 @@ const { GuildEmoji } = require("discord.js");
 function getIconEmojiID(query, type = "day") {
     switch (query.toLowerCase()) {
         case "fine":
-            return type.toLowerCase() === "night" ? "<:Night_Fine:876238635920408646>" : "<:Fine:876238436112138331>";
+            if (type.toLowerCase() === "night") "<:Night_Fine:876238635920408646>";
+            else return "<:Fine:876238436112138331>";
         case "partly cloudy":
-            return type.toLowerCase() === "night" ? "<:Night_PartlyCloudy:876238635924615168>" : "<:PartlyCloudy:876238435885658134>";
+            if (type.toLowerCase() === "night") "<:Night_PartlyCloudy:876238635924615168>";
+            else return "<:PartlyCloudy:876238435885658134>";
         case "cloudy":
             return "<:Cloudy:876238436242182174>";
         case "few showers":
-            return type.toLowerCase() === "night" ? "<:Night_FewShowers:876238635396132905>" : "<:FewShowers:876238436028285048>";
+            if (type.toLowerCase() === "night") "<:Night_FewShowers:876238635396132905>";
+            else return "<:FewShowers:876238436028285048>";
         case "showers":
             return "<:Showers:876238435894063115>";
         case "rain":

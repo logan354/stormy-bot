@@ -1,7 +1,8 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseForecastTitle, baseForecast } = require("../../src/baseFormats");
-const { METSERVICE_BASE, API_OPTIONS, days, shortDays } = require("../../utils/constants");
+const { apiBaseURL, apiOptions } = require("../../src/utils/constants");
+const { days, shortDays } = require("../../utils/constants");
 
 module.exports = {
     name: "forecast",
@@ -34,12 +35,11 @@ module.exports = {
         const location = args.getString("location");
 
         let outlook = args.getString("outlook");
-        if (!outlook) outlook = 1;
 
         // Fetch data from MetService API
         interaction.deferReply();
         try {
-            const response = await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_FORECAST + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
@@ -53,8 +53,12 @@ module.exports = {
         const finalData = [];
         const charLimit = 2000;
         let k = 0;
+        let isToday = false;
+
+        if (!outlook || outlook === 1) outlook = data.days[0].dow;
 
         if (!Number(outlook)) {
+            // Format outlook
             outlook = outlook.charAt(0).toUpperCase() + outlook.slice(1).toLowerCase();
 
             if (!days.includes(outlook) && !shortDays.includes(outlook)) {
@@ -62,8 +66,14 @@ module.exports = {
             }
 
             for (let i = 0; i < 7; i++) {
+                if (i === 0) {
+                    isToday = true;
+                } else {
+                    isToday = false;
+                }
+
                 if (data.days[i].dow.toLowerCase() === outlook.toLowerCase() || data.days[i].dowTLA.toLowerCase() === outlook.toLowerCase()) {
-                    finalData.push(baseForecastTitle(i, data, outlook) + baseForecast(i, data));
+                    finalData.push(baseForecastTitle(data.locationIPS, data.days[i].dow, null) + baseForecast(data.days[i], isToday));
                     break;
                 }
             }
@@ -73,13 +83,18 @@ module.exports = {
             }
 
             for (let i = 0; i < outlook; i++) {
-                if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
-
-                if (finalData[k].length + baseForecast(i, data).length > charLimit) {
-                    k++
-                    finalData[k] = baseForecast(i, data);
+                if (i === 0) {
+                    isToday = true;
+                    finalData[k] = baseForecastTitle(data.locationIPS, null, outlook);
                 } else {
-                    finalData[k] += baseForecast(i, data);
+                    isToday = false;
+                }
+
+                if (finalData[k].length + baseForecast(data.days[i], isToday).length > charLimit) {
+                    k++
+                    finalData[k] = baseForecast(data.days[i], isToday);
+                } else {
+                    finalData[k] += baseForecast(data.days[i], isToday);
                 }
             }
         }

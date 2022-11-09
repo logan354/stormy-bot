@@ -1,56 +1,55 @@
 const { EmbedBuilder } = require("discord.js");
-const { getIconEmojiID } = require("./icons");
+const { getIconEmojiID } = require("./utils/icons");
 const { days, shortDays } = require("../utils/constants");
 
 /**
  * Base format for forecast title
- * @param {number} i 
- * @param {Object} data 
- * @param {days|shortDays|number} outlook 
+ * @param {string} location RAW API data
+ * @param {?days|shortDays|string} outlookDay RAW API data
+ * @param {?number} outlookNum
  * @returns {string}
  */
-const baseForecastTitle = (i, data, outlook) => { return `${getIconEmojiID("fine")} __**${Number(outlook) && outlook > 1 ? outlook.toString() + "-Day" : data.days[i].dow} Forecast for ${data.locationIPS.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
+const baseForecastTitle = (location, outlookDay, outlookNum) => { return `${getIconEmojiID("fine")} __**${outlookNum ? outlookNum + "-Day" : outlookDay} Forecast for ${location.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
 
 /**
  * Base format for all forecasts
- * @param {number} i 
- * @param {Object} data 
+ * @param {Object} data RAW API forecast day data
+ * @param {boolean} isToday
  * @returns {string}
  */
-const baseForecast = (i, data) => {
-    const d = new Date(data.days[i].issuedAtRaw);
+const baseForecast = (data, isToday) => {
+    const d = new Date(data.issuedAtRaw);
     let partDayData = null;
 
-    if (data.days[i].partDayData) {
-        partDayData = `| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmojiID(data.days[i].partDayData.overnight.forecastWord, data.days[i].partDayData.overnight.iconType)}       |      ${getIconEmojiID(data.days[i].partDayData.morning.forecastWord, data.days[i].partDayData.morning.iconType)}      |        ${getIconEmojiID(data.days[i].partDayData.afternoon.forecastWord, data.days[i].partDayData.afternoon.iconType)}        |      ${getIconEmojiID(data.days[i].partDayData.evening.forecastWord, data.days[i].partDayData.evening.iconType)}     |`;
+    if (data.partDayData) {
+        partDayData = `| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmojiID(data.partDayData.overnight.forecastWord, data.partDayData.overnight.iconType)}       |      ${getIconEmojiID(data.partDayData.morning.forecastWord, data.partDayData.morning.iconType)}      |        ${getIconEmojiID(data.partDayData.afternoon.forecastWord, data.partDayData.afternoon.iconType)}        |      ${getIconEmojiID(data.partDayData.evening.forecastWord, data.partDayData.evening.iconType)}     |`;
     }
     
-    return "\n\n" + `${getIconEmojiID(data.days[i].forecastWord)} **${i === 0 ? "Today" : data.days[i].dowTLA}** ${data.days[i].date} | High: ${data.days[i].max}°, Low: ${data.days[i].min}°\n${partDayData ? partDayData + "\n\n" + data.days[i].forecast : data.days[i].forecast}\n*Issued: ${data.days[i].issuedAt.split(" ")[0]} ${shortDays[d.getDay() - 1]} ${data.days[i].issuedAt.split(" ")[1]} ${data.days[i].issuedAt.split(" ")[2]}*`;
+    return "\n\n" + `${getIconEmojiID(data.forecastWord)} **${isToday ? "Today" : data.dowTLA}** ${data.date} | High: ${data.max}°, Low: ${data.min}°\n${partDayData ? partDayData + "\n\n" + data.forecast : data.forecast}\n*Issued: ${data.issuedAt.split(" ")[0]} ${shortDays[d.getDay() > 0 ? d.getDay() - 1 : 6]} ${data.issuedAt.split(" ")[1]} ${data.issuedAt.split(" ")[2]}*`;
 }
 
 /**
  * Base format for warning title
- * @param {Object} data
+ * @param {string} location RAW API data
  * @returns {string}
  */
-const baseWarningTitle = (data) => { return `${getIconEmojiID("warning_orange")} __**Warning(s) for ${data.locationName}**__`; }
+const baseWarningTitle = (location) => { return `${getIconEmojiID("warning_orange")} __**Warning(s) for ${location}**__`; }
 
 /**
  * Base format for all warnings
- * @param {number} i 
- * @param {Object} data 
+ * @param {Object} data RAW API warning data
  * @returns {string}
  */
-const baseWarning = (i, data) => { return "\n\n" + `${getIconEmojiID("warning_" + data.warnings[i].warnLevel)} **${data.warnings[i].name}**\n${data.warnings[i].editions[0].datum.text}`; }
+const baseWarning = (data) => { return "\n\n" + `${getIconEmojiID("warning_" + data.warnLevel)} **${data.name}**\n${data.editions[0].datum.text}`; }
 
 /**
  * Base format for all local observations
- * @param {Object} data 
+ * @param {Object} data RAW API data
  * @returns {EmbedBuilder}
  */
 const baseLocalObservation = (data) => {
     const embed = new EmbedBuilder()
-        .setColor("GREY")
+        .setColor("Grey")
         .setAuthor({
             name: "Current Conditions at " + data.location
         })
@@ -92,4 +91,4 @@ const baseLocalObservation = (data) => {
     return embed;
 }
 
-module.exports = { baseForecastTitle, baseForecast, baseWarningTitle, baseWarning, baseLocalObservation }
+module.exports = { baseForecastTitle, baseForecast, baseWarningTitle, baseWarning, baseTSOutlookTitle, baseSWOutlookTitle, baseLocalObservation }

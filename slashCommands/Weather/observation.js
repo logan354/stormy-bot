@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseLocalObservation } = require("../../src/baseFormats");
-const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
+const { apiBaseURL, apiOptions } = require("../../src/utils/constants");
 
 module.exports = {
     name: "observation",
@@ -31,7 +31,7 @@ module.exports = {
         // Fetch data from MetService API
         interaction.deferReply();
         try {
-            const response = await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_OBS + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBS + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {

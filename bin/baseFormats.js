@@ -1,11 +1,11 @@
 const { EmbedBuilder } = require("discord.js");
-const { METSERVICE_BASE } = require("../utils/constants");
+const { apiBaseURL } = require("../src/utils/constants");
 
 /**
  * Creates a formatted sun protection alert from MetService data
  */
 const sunProtectionAlert = new EmbedBuilder()
-    .setColor("GREY")
+    .setColor("Grey")
     .setAuthor({
         name: "Sun Protection Alert for " + data.spaData[0].location
     })
@@ -36,7 +36,7 @@ const tides = null;
  * Creates formatted rise times from MetService data
  */
 const riseTimes = new EmbedBuilder()
-    .setColor("GREY")
+    .setColor("Grey")
     .setAuthor({
         name: "Rise Times at " + data.location
     })
@@ -71,7 +71,7 @@ if (data.moonSet) embed.addField("Moon Set", data.moonSet, true);
  * Creates formatted pollen levels from MetService data
  */
 const pollenLevels = new EmbedBuilder()
-    .setColor("GREY")
+    .setColor("Grey")
     .setAuthor({
         name: "Pollen Levels for " + data.location.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")
     })
@@ -87,8 +87,8 @@ const climate = null; /** Use embed to display one */
  * Creates a formatted radar image from MetService data
  */
 const rainRadar = new EmbedBuilder()
-    .setColor("GREY")
+    .setColor("Grey")
     .setAuthor({
         name: data[0].url.split("/publicData/rainRadar/image/")[1].split("/")[0] + " Radar Image " + data[0].longDateTime
     })
-    .setImage(METSERVICE_BASE + data[0].url.split("/publicData/")[1]);
+    .setImage(apiBaseURL + data[0].url.split("/publicData/")[1]);

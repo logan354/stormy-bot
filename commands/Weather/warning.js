@@ -1,8 +1,7 @@
 const { Client, Message, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseWarningTitle, baseWarning } = require("../../src/baseFormats");
-const { getIconEmojiID } = require("../../src/icons");
-const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
+const { apiBaseURL, apiOptions } = require("../../src/utils/constants");
 
 module.exports = {
     name: "warning",
@@ -25,7 +24,7 @@ module.exports = {
 
         // Fetch data from MetService API
         try {
-            const response = await fetch(METSERVICE_BASE + API_OPTIONS.WARNINGS + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.REGIONAL_WARNINGS + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
@@ -41,17 +40,17 @@ module.exports = {
         let k = 0;
 
         for (let i = 0; i < data.warnings.length; i++) {
-            if (i === 0) finalData[k] = baseWarningTitle(data);
+            if (i === 0) finalData[k] = baseWarningTitle(data.locationName);
 
-            if (finalData[k].length + baseWarning(i, data).length > charLimit) {
+            if (finalData[k].length + baseWarning(data.warnings[i]).length > charLimit) {
                 k++
-                finalData[k] = baseWarning(i, data);
+                finalData[k] = baseWarning(data.warnings[i]);
             } else {
-                finalData[k] += baseWarning(i, data);
+                finalData[k] += baseWarning(data.warnings[i]);
             }
         }
 
-        if (!finalData.length) finalData[k] = baseWarningTitle(data) + "\n\nNo warnings for this region";
+        if (!finalData.length) finalData[k] = baseWarningTitle(data.locationName) + "\n\nNo warnings for this region";
 
         // Iterate through formatted data array
         for (let i of finalData) {
