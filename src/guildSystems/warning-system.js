@@ -1,8 +1,7 @@
 const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
 const { baseWarningTitle, baseWarning } = require("../baseFormats");
-const { location, guildChannels } = require("./utils/constants");
+const { apiBaseURL, apiOptions, location, guildChannels } = require("../utils/constants");
 
 /**
  * @param {Client} client 
@@ -13,7 +12,7 @@ module.exports = (client) => {
     async function warningSystem() {
         // Fetch data from MetService API
         try {
-            const response = await fetch(METSERVICE_BASE + API_OPTIONS.WARNINGS + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.WARNINGS + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
@@ -29,13 +28,13 @@ module.exports = (client) => {
         let k = 0;
 
         for (let i = 0; i < data.warnings.length; i++) {
-            if (i === 0) finalData[k] = "[ @everyone ]\n" + baseWarningTitle(data);
+            if (i === 0) finalData[k] = "[ @everyone ]\n" + baseWarningTitle(data.locationName);
 
-            if (finalData[k].length + baseWarning(i, data).length > charLimit) {
+            if (finalData[k].length + baseWarning(data.warnings[i]).length > charLimit) {
                 k++
-                finalData[k] = baseWarning(i, data);
+                finalData[k] = baseWarning(data.warnings[i]);
             } else {
-                finalData[k] += baseWarning(i, data);
+                finalData[k] += baseWarning(data.warnings[i]);
             }
         }
 
@@ -43,7 +42,9 @@ module.exports = (client) => {
 
         // Iterate through formatted data array
         for (let i of finalData) {
-            client.channels.cache.get(guildChannels.WARNING_CHANNEL).send(i);
+            client.channels.cache.get(guildChannels.WARNING_CHANNEL).send(i)
+            .then(message => message.crosspost())
+            .catch(e => console.error(e));
         }
 
         perviousWarning = finalData.join();

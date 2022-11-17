@@ -1,16 +1,15 @@
 const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { METSERVICE_BASE, API_OPTIONS } = require("../../utils/constants");
 const { baseForecastTitle, baseForecast, baseLocalObservation } = require("../baseFormats");
-const { location, guildChannels } = require("./utils/constants");
+const { apiBaseURL, apiOptions, location, guildChannels } = require("../utils/constants");
 
 /**
  * @param {Client} client 
  */
 module.exports = (client) => {
-    function timeManager() {
+    function manager() {
         const time = new Date().toLocaleTimeString();
-        
+
         if (time === "6:00:00 PM") {
             //-------"6:00:00 AM NZDT"
             localForecastSystem();
@@ -25,7 +24,7 @@ module.exports = (client) => {
     async function localForecastSystem() {
         // Fetch data from MetService API
         try {
-            const response = await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_FORECAST + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
@@ -37,71 +36,95 @@ module.exports = (client) => {
         }
 
         let outlook = 1;
-        let finalData = [];
+        const finalData = [];
         const charLimit = 2000;
         let k = 0;
+        let isToday = false;
 
         for (let i = 0; i < outlook; i++) {
-            if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
-
-            if (finalData[k].length + baseForecast(i, data).length > charLimit) {
-                k++
-                finalData[k] = baseForecast(i, data);
+            if (i === 0) {
+                isToday = true;
+                finalData[k] = baseForecastTitle(data.locationIPS, null, outlook);
             } else {
-                finalData[k] += baseForecast(i, data);
+                isToday = false;
+            }
+
+            if (finalData[k].length + baseForecast(data.days[i], isToday).length > charLimit) {
+                k++
+                finalData[k] = baseForecast(data.days[i], isToday);
+            } else {
+                finalData[k] += baseForecast(data.days[i], isToday);
             }
         }
 
         // Iterate through formatted data array
         for (let i of finalData) {
-            client.channels.cache.get(guildChannels.DAILY_FORECAST_CHANNEL).send(i);
+            client.channels.cache.get(guildChannels.DAILY_FORECAST_CHANNEL).send(i)
+                .then(message => message.crosspost())
+                .catch(e => console.error(e));
         }
 
         outlook = 3;
         finalData = [];
         k = 0;
+        isToday = false;
 
         for (let i = 0; i < outlook; i++) {
-            if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
-
-            if (finalData[k].length + baseForecast(i, data).length > charLimit) {
-                k++
-                finalData[k] = baseForecast(i, data);
+            if (i === 0) {
+                isToday = true;
+                finalData[k] = baseForecastTitle(data.locationIPS, null, outlook);
             } else {
-                finalData[k] += baseForecast(i, data);
+                isToday = false;
+            }
+
+            if (finalData[k].length + baseForecast(data.days[i], isToday).length > charLimit) {
+                k++
+                finalData[k] = baseForecast(data.days[i], isToday);
+            } else {
+                finalData[k] += baseForecast(data.days[i], isToday);
             }
         }
 
         // Iterate through formatted data array
         for (let i of finalData) {
-            client.channels.cache.get(guildChannels.THREE_DAY_FORECAST_CHANNEL).send(i);
+            client.channels.cache.get(guildChannels.THREE_DAY_FORECAST_CHANNEL).send(i)
+                .then(message => message.crosspost())
+                .catch(e => console.error(e));
         }
 
         outlook = 5;
         finalData = [];
         k = 0;
+        isToday = false;
 
         for (let i = 0; i < outlook; i++) {
-            if (i === 0) finalData[k] = baseForecastTitle(i, data, outlook);
-
-            if (finalData[k].length + baseForecast(i, data).length > charLimit) {
-                k++
-                finalData[k] = baseForecast(i, data);
+            if (i === 0) {
+                isToday = true;
+                finalData[k] = baseForecastTitle(data.locationIPS, null, outlook);
             } else {
-                finalData[k] += baseForecast(i, data);
+                isToday = false;
+            }
+
+            if (finalData[k].length + baseForecast(data.days[i], isToday).length > charLimit) {
+                k++
+                finalData[k] = baseForecast(data.days[i], isToday);
+            } else {
+                finalData[k] += baseForecast(data.days[i], isToday);
             }
         }
 
         // Iterate through formatted data array
         for (let i of finalData) {
-            client.channels.cache.get(guildChannels.FIVE_DAY_FORECAST_CHANNEL).send(i);
+            client.channels.cache.get(guildChannels.FIVE_DAY_FORECAST_CHANNEL).send(i)
+                .then(message => message.crosspost())
+                .catch(e => console.error(e));
         }
     }
 
     async function localObservationSystem() {
-         // Fetch data from MetService API
-         try {
-            const response = await fetch(METSERVICE_BASE + API_OPTIONS.LOCAL_OBS + location.replace(" ", "-"));
+        // Fetch data from MetService API
+        try {
+            const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBS + location.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
@@ -113,8 +136,10 @@ module.exports = (client) => {
         }
 
         const embed = baseLocalObservation(data);
-        client.channels.cache.get(guildChannels.HOURLY_OBSERVATION_CHANNEL).send({ embeds: [embed] });
+        client.channels.cache.get(guildChannels.THREE_HOUR_OBSERVATION_CHANNEL).send({ embeds: [embed] })
+            .then(message => message.crosspost())
+            .catch(e => console.error(e));
     }
 
-    setInterval(timeManager, 1000);
+    setInterval(manager, 1000);
 }

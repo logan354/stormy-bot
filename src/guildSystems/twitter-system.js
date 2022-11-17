@@ -22,8 +22,8 @@ module.exports = (client) => {
         const url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
         if (tweet.user.screen_name === "MetService") {
-            client.channels.fetch(guildChannels.METSERVICE_CHANNEL)
-                .then(channel => channel.send(url))
+            client.channels.cache.get(guildChannels.METSERVICE_CHANNEL).send(url)
+                .then(message => message.crosspost())
                 .catch(e => console.error(e));
         }
     });
@@ -35,8 +35,8 @@ module.exports = (client) => {
         const url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
         if (tweet.user.screen_name === "MetServiceWARN") {
-            client.channels.fetch(guildChannels.METSERVICEWARN_CHANNEL)
-                .then(channel => channel.send(url))
+            client.channels.cache.get(guildChannels.METSERVICEWARN_CHANNEL).send(url)
+                .then(message => message.crosspost())
                 .catch(e => console.error(e));
         }
     });
