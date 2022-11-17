@@ -4,16 +4,16 @@ const { days, shortDays } = require("../utils/constants");
 
 /**
  * Base format for forecast title
- * @param {string} location RAW API data
- * @param {?days|shortDays|string} outlookDay RAW API data
+ * @param {string} location RAW API location data
+ * @param {?days|shortDays|string} outlookDay
  * @param {?number} outlookNum
  * @returns {string}
  */
 const baseForecastTitle = (location, outlookDay, outlookNum) => { return `${getIconEmojiID("fine")} __**${outlookNum ? outlookNum + "-Day" : outlookDay} Forecast for ${location.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
 
 /**
- * Base format for all forecasts
- * @param {Object} data RAW API forecast day data
+ * Base format for forecast
+ * @param {Object} data RAW API days data
  * @param {boolean} isToday
  * @returns {string}
  */
@@ -30,17 +30,17 @@ const baseForecast = (data, isToday) => {
 
 /**
  * Base format for warning title
- * @param {string} location RAW API data
+ * @param {string} location RAW API location data
  * @returns {string}
  */
-const baseWarningTitle = (location) => { return `${getIconEmojiID("warning_orange")} __**Warning(s) for ${location}**__`; }
+const baseWarningTitle = (location) => { return `${getIconEmojiID("Warning orange")} __**Warning(s) for ${location}**__`; }
 
 /**
- * Base format for all warnings
- * @param {Object} data RAW API warning data
+ * Base format for warning
+ * @param {Object} data RAW API warnings data
  * @returns {string}
  */
-const baseWarning = (data) => { return "\n\n" + `${getIconEmojiID("warning_" + data.warnLevel)} **${data.name}**\n${data.editions[0].datum.text}`; }
+const baseWarning = (data) => { return "\n\n" + `${getIconEmojiID("warning " + data.warnLevel)} **${data.name}**\n${data.editions[0].datum.text}`; }
 
 /**
  * Base format for all local observations
@@ -91,4 +91,4 @@ const baseLocalObservation = (data) => {
     return embed;
 }
 
-module.exports = { baseForecastTitle, baseForecast, baseWarningTitle, baseWarning, baseTSOutlookTitle, baseSWOutlookTitle, baseLocalObservation }
+module.exports = { baseForecastTitle, baseForecast, baseWarningTitle, baseWarning, baseLocalObservation }
