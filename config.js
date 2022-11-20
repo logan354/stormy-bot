@@ -1,8 +1,8 @@
 module.exports = {
     app: {
         // Prefix settings
-        mentionPrefix: `<@822342435941908480>`,
-        slashPrefix: "/",
+        prefix: "@Stormy",
+        mention: `<@822342435941908480>`,
 
         // Invite
         invite: "https://discord.com/oauth2/authorize?client_id=822342435941908480&scope=bot+applications.commands&permissions=347144",

@@ -8,7 +8,7 @@ module.exports = {
     aliases: ["obs", "weather"],
     category: "Weather",
     description: "Displays the current weather observation for a specified location in New Zealand.",
-    utilisation: "{prefix}observation <location>",
+    utilisation: "{mention}observation <location>",
 
     /**
      * @param {Client} client 

@@ -7,6 +7,7 @@ module.exports = {
     name: "warning",
     category: "Weather",
     description: "Displays the current MetService issued warnings for a specified location in New Zealand.",
+    utilisation: "{slash}warning <location>",
     options: [
         {
             type: ApplicationCommandOptionType.String,

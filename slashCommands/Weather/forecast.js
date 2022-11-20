@@ -8,6 +8,7 @@ module.exports = {
     name: "forecast",
     category: "Weather",
     description: "Displays the forecast for a specified location in New Zealand.",
+    utilisation: "{slash}forecast <location> [outlook]",
     options: [
         {
             type: ApplicationCommandOptionType.String,

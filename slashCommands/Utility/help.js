@@ -1,9 +1,11 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const { getApplicationCommandID } = require("../../utils/util");
 
 module.exports = {
     name: "help",
     category: "Utility",
     description: "Shows information about Stormy",
+    utilisation: "{slash}help [command]",
     options: [
         {
             name: "command",
@@ -18,23 +20,23 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {CommandInteractionOptionResolver} args 
      */
-    execute(client, interaction, args) {
+    async execute(client, interaction, args) {
         const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
         if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
         if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
 
         if (!args.getString("command")) {
             // Command categories
-            const weather = client.commands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`");
-            const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
+            const weather = client.slashCommands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`");
+            const utility = client.slashCommands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
 
             const embed = new EmbedBuilder()
-                .setColor("BLACK")
+                .setColor("Default")
                 .setAuthor({
-                    name: "Stormy's Commands",
+                    name: "Stormy's Help Centre",
                     iconURL: client.config.app.logo
                 })
-                .setDescription("My current prefix in this server is `" + client.config.app.slash_prefix + "` type `" + client.config.app.slash_prefix + this.name + "` to get information about a specific command.")
+                .setDescription("**Hello <@" + interaction.user.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType </" + this.name + ":" + await getApplicationCommandID(client, this.name) + "> `" + this.utilisation.replace(`{slash}${this.name} `, "") + "` to get information about a specific command.")
                 .setThumbnail(interaction.guild.iconURL())
                 .setFields(
                     {
@@ -53,12 +55,12 @@ module.exports = {
 
             interaction.reply({ embeds: [embed] });
         } else {
-            const command = client.commands.get(args.getString("command").toLowerCase());
+            const command = client.slashCommands.get(args.getString("command").toLowerCase());
 
             if (!command) return interaction.reply(client.emotes.error + " **I could not find that command**");
 
             const embed = new EmbedBuilder()
-                .setColor("BLACK")
+                .setColor("Default")
                 .setAuthor({
                     name: `${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`,
                     iconURL: client.config.app.logo
@@ -76,13 +78,8 @@ module.exports = {
                         inline: true
                     },
                     {
-                        name: "Aliase(s)",
-                        value: command.aliases.length === 0 ? "`None`" : command.aliases.map((aliase) => "`" + aliase + "`").join(", "),
-                        inline: true
-                    },
-                    {
                         name: "Utilisation",
-                        value: "`" + command.utilisation.replace("{prefix}", client.config.app.prefix) + "`",
+                        value: "</" + command.name + ":" + await getApplicationCommandID(client, command.name) + "> `" + command.utilisation.replace(`{slash}${command.name} `, "") + "`",
                         inline: true
                     }
                 )

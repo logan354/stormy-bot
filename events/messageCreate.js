@@ -7,11 +7,11 @@ const { Client, Message, ChannelType } = require("discord.js");
 module.exports = async (client, message) => {
     if (message.author.bot || message.channel.type === ChannelType.DM) return;
 
-    const prefix = client.config.app.mentionPrefix;
+    const mention = client.config.app.mention;
 
-    if (message.content.indexOf(prefix) !== 0) return;
+    if (message.content.indexOf(mention) !== 0) return;
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const args = message.content.slice(mention.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     const cmd = client.commands.get(command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));

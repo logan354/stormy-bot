@@ -5,7 +5,7 @@ module.exports = {
     aliases: [],
     category: "Utility",
     description: "Shows information about Stormy",
-    utilisation: "{prefix}help [command]",
+    utilisation: "{mention}help [command]",
 
     /**
      * @param {Client} client 
@@ -23,12 +23,12 @@ module.exports = {
             const utility = client.commands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
 
             const embed = new EmbedBuilder()
-                .setColor("BLACK")
+                .setColor("Default")
                 .setAuthor({
-                    name: "Stormy's Commands",
+                    name: "Stormy's Help Centre",
                     iconURL: client.config.app.logo
                 })
-                .setDescription("My current prefix in this server is `" + client.config.app.prefix + "` type `" + this.utilisation.replace("{prefix}", client.config.app.prefix) + "` to get information about a specific command.")
+                .setDescription("**Hello <@" + message.author.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType " + client.config.app.mention +  " `" + this.utilisation.replace("{mention}", "") + "` to get information about a specific command.")
                 .setThumbnail(message.guild.iconURL())
                 .setFields(
                     {
@@ -52,7 +52,7 @@ module.exports = {
             if (!command) return message.channel.send(client.emotes.error + " **I could not find that command**");
 
             const embed = new EmbedBuilder()
-                .setColor("BLACK")
+                .setColor("Default")
                 .setAuthor({
                     name: `${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`,
                     iconURL: client.config.app.logo
@@ -76,7 +76,7 @@ module.exports = {
                     },
                     {
                         name: "Utilisation",
-                        value: "`" + command.utilisation.replace("{prefix}", client.config.app.prefix) + "`",
+                        value: client.config.app.mention +  " `" + this.utilisation.replace("{mention}", "") + "`",
                         inline: true
                     }
                 )

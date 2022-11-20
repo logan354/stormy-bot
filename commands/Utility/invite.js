@@ -5,7 +5,7 @@ module.exports = {
     aliases: ["links"],
     category: "Utility",
     description: "Shows information on how to invite Stormy",
-    utilisation: "{prefix}invite",
+    utilisation: "{mention}invite",
 
     /**
      * @param {Client} client 
@@ -17,7 +17,7 @@ module.exports = {
         if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
 
         const embed = new EmbedBuilder()
-            .setColor("BLACK")
+            .setColor("Default")
             .setAuthor({
                 name: "About Me"
             })
@@ -30,7 +30,7 @@ module.exports = {
                 },
                 {
                     name: "Support Server",
-                    value: "[`Click Here`](" + client.config.app.support_server + ")"
+                    value: "[`Click Here`](" + client.config.app.supportServer + ")"
                 }
             )
             .setTimestamp(new Date())

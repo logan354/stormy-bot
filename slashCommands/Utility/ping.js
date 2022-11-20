@@ -4,6 +4,7 @@ module.exports = {
     name: "ping",
     category: "Utility",
     description: "Checks Stormy's response time to Discord",
+    utilisation: "{slash}ping",
 
     /**
      * @param {Client} client 

@@ -6,6 +6,7 @@ module.exports = {
     name: "statistics",
     category: "Utility",
     description: "Shows information about Stormy's statistics",
+    utilisation: "{slash}statistics",
 
     /**
      * @param {Client} client 
@@ -19,7 +20,7 @@ module.exports = {
         if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
 
         const embed = new EmbedBuilder()
-            .setColor("BLACK")
+            .setColor("Default")
             .setAuthor({
                 name: "-- Stormy's Statistics --",
                 iconURL: client.config.app.logo
