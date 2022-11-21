@@ -7,7 +7,7 @@ const { Client, Message, ChannelType } = require("discord.js");
 module.exports = async (client, message) => {
     if (message.author.bot || message.channel.type === ChannelType.DM) return;
 
-    const mention = client.config.app.mention;
+    const mention = `<@${client.user.id}>`;
 
     if (message.content.indexOf(mention) !== 0) return;
 

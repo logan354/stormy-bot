@@ -28,7 +28,7 @@ module.exports = {
                     name: "Stormy's Help Centre",
                     iconURL: client.config.app.logo
                 })
-                .setDescription("**Hello <@" + message.author.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType " + client.config.app.mention +  " `" + this.utilisation.replace("{mention}", "") + "` to get information about a specific command.")
+                .setDescription("**Hello <@" + message.author.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType <@" + client.user.id + "> `" + this.utilisation.replace("{mention}", "") + "` to get information about a specific command.")
                 .setThumbnail(message.guild.iconURL())
                 .setFields(
                     {
@@ -76,7 +76,7 @@ module.exports = {
                     },
                     {
                         name: "Utilisation",
-                        value: client.config.app.mention +  " `" + this.utilisation.replace("{mention}", "") + "`",
+                        value: "<@" + client.user.id + "> `" + this.utilisation.replace("{mention}", "") + "`",
                         inline: true
                     }
                 )
