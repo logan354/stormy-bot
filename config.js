@@ -1,8 +1,7 @@
 module.exports = {
     app: {
-        // Prefix settings
-        prefix: "@Stormy",
-        mention: `<@822342435941908480>`,
+        // Client ID
+        clientId: "822342435941908480",
 
         // Invite
         invite: "https://discord.com/oauth2/authorize?client_id=822342435941908480&scope=bot+applications.commands&permissions=347144",
@@ -16,6 +15,7 @@ module.exports = {
         // Support server
         supportServer: "https://discord.gg/ja4KJAj3sU",
 
+        // Switch for guild systems
         startGuildSystems: true
     },
 

@@ -2,7 +2,7 @@ const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const { Client, GatewayIntentBits, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Collection, REST, Routes } = require("discord.js");
 
 const client = new Client({
     intents: [
@@ -59,5 +59,31 @@ for (const file of events) {
     console.log(`-> Loaded event ${file.split(".")[0]}`);
     client.on(file.split(".")[0], event.bind(null, client));
 }
+
+
+/**
+ * Deploying slash commands
+ */
+console.log("Registering slash commands...");
+
+// Construct and prepare an instance of the REST module
+const rest = new REST({ version: '10' }).setToken(process.env.token);
+
+// and deploy your commands!
+(async () => {
+    try {
+        console.log(`Started refreshing ${client.slashCommands.size} application (/) commands.`);
+
+        // The put method is used to fully refresh all commands in the guild with the current set
+        const data = await rest.put(
+            Routes.applicationCommands(client.config.app.clientId),
+            { body: client.slashCommands },
+        );
+
+        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+    } catch (e) {
+        console.error(e);
+    }
+})();
 
 client.login(process.env.token);
