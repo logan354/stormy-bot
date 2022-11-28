@@ -5,7 +5,7 @@ module.exports = {
     aliases: ["links"],
     category: "Utility",
     description: "Shows information on how to invite Stormy",
-    utilisation: "{mention}invite",
+    utilisation: "invite",
 
     /**
      * @param {Client} client 

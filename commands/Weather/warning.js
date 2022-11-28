@@ -8,7 +8,7 @@ module.exports = {
     aliases: ["warn", "w"],
     category: "Weather",
     description: "Displays the current MetService issued warnings for a specified location in New Zealand.",
-    utilisation: "{mention}warning <location>",
+    utilisation: "warning <location>",
 
     /**
      * @param {Client} client 

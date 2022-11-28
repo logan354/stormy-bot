@@ -5,7 +5,7 @@ module.exports = {
     aliases: [],
     category: "Utility",
     description: "Checks Stormy's response time to Discord",
-    utilisation: "{mention}ping",
+    utilisation: "ping",
 
     /**
      * @param {Client} client 

@@ -5,7 +5,7 @@ module.exports = {
     name: "help",
     category: "Utility",
     description: "Shows information about Stormy",
-    utilisation: "{slash}help [command]",
+    utilisation: "help [command]",
     options: [
         {
             name: "command",
@@ -36,7 +36,7 @@ module.exports = {
                     name: "Stormy's Help Centre",
                     iconURL: client.config.app.logo
                 })
-                .setDescription("**Hello <@" + interaction.user.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType </" + this.name + ":" + await getApplicationCommandID(client, this.name) + "> `" + this.utilisation.replace(`{slash}${this.name} `, "") + "` to get information about a specific command.")
+                .setDescription("**Hello <@" + interaction.user.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType </" + this.name + ":" + await getApplicationCommandID(client, this.name) + "> `" + this.utilisation.replace(this.name, "") + "` to get information about a specific command.")
                 .setThumbnail(interaction.guild.iconURL())
                 .setFields(
                     {
@@ -79,7 +79,7 @@ module.exports = {
                     },
                     {
                         name: "Utilisation",
-                        value: "</" + command.name + ":" + await getApplicationCommandID(client, command.name) + "> `" + command.utilisation.replace(`{slash}${command.name} `, "") + "`",
+                        value: "</" + command.name + ":" + await getApplicationCommandID(client, command.name) + "> `" + command.utilisation.replace(command.name, "") + "`",
                         inline: true
                     }
                 )

@@ -5,7 +5,7 @@ module.exports = {
     aliases: [],
     category: "Utility",
     description: "Shows information about Stormy",
-    utilisation: "{mention}help [command]",
+    utilisation: "help [command]",
 
     /**
      * @param {Client} client 
@@ -28,7 +28,7 @@ module.exports = {
                     name: "Stormy's Help Centre",
                     iconURL: client.config.app.logo
                 })
-                .setDescription("**Hello <@" + message.author.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType <@" + client.user.id + "> `" + this.utilisation.replace("{mention}", "") + "` to get information about a specific command.")
+                .setDescription("**Hello <@" + message.author.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType <@" + client.user.id + "> `" + this.utilisation + "` to get information about a specific command.")
                 .setThumbnail(message.guild.iconURL())
                 .setFields(
                     {
@@ -76,7 +76,7 @@ module.exports = {
                     },
                     {
                         name: "Utilisation",
-                        value: "<@" + client.user.id + "> `" + this.utilisation.replace("{mention}", "") + "`",
+                        value: "<@" + client.user.id + "> `" + this.utilisation + "`",
                         inline: true
                     }
                 )

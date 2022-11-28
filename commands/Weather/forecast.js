@@ -9,7 +9,7 @@ module.exports = {
     aliases: ["f"],
     category: "Weather",
     description: "Displays the forecast for a specified location in New Zealand.",
-    utilisation: "{mention}forecast <location> [outlook]",
+    utilisation: "forecast <location> [outlook]",
 
     /**
      * @param {Client} client 

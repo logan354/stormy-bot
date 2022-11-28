@@ -4,7 +4,7 @@ module.exports = {
     name: "invite",
     category: "Utility",
     description: "Shows information on how to invite Stormy",
-    utilisation: "{slash}invite",
+    utilisation: "invite",
 
     /**
      * @param {Client} client 

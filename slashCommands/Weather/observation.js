@@ -7,7 +7,7 @@ module.exports = {
     name: "observation",
     category: "Weather",
     description: "Displays the current weather observation for a specified location in New Zealand.",
-    utilisation: "{slash}observation <location>",
+    utilisation: "observation <location>",
     options: [
         {
             type: ApplicationCommandOptionType.String,

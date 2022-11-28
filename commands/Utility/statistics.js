@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["stats"],
     category: "Utility",
     description: "Shows information about Stormy's statistics",
-    utilisation: "{mention}statistics",
+    utilisation: "statistics",
 
     /**
      * @param {Client} client 
