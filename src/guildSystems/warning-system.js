@@ -1,7 +1,7 @@
 const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseWarningTitle, baseWarning } = require("../baseFormats");
-const { apiBaseURL, apiOptions, location, guildChannels } = require("../utils/constants");
+const { apiBaseURL, apiOptions, guildLocation, guildChannels } = require("../utils/constants");
 
 /**
  * @param {Client} client 
@@ -12,7 +12,7 @@ module.exports = (client) => {
     async function warningSystem() {
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiBaseURL + apiOptions.WARNINGS + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.WARNINGS + guildLocation.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {

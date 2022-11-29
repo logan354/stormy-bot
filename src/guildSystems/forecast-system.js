@@ -1,7 +1,7 @@
 const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseForecastTitle, baseForecast, baseLocalObservation } = require("../baseFormats");
-const { apiBaseURL, apiOptions, location, guildChannels } = require("../utils/constants");
+const { apiBaseURL, apiOptions, guildLocation, guildChannels } = require("../utils/constants");
 
 /**
  * @param {Client} client 
@@ -24,7 +24,7 @@ module.exports = (client) => {
     async function localForecastSystem() {
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + guildLocation.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
@@ -124,7 +124,7 @@ module.exports = (client) => {
     async function localObservationSystem() {
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBS + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBS + guildLocation.replace(" ", "-"));
             var data = await response.json();
         } catch (e) {
             if (e.name === "FetchError" && e.type === "invalid-json") {

@@ -60,9 +60,8 @@ for (const file of events) {
     client.on(file.split(".")[0], event.bind(null, client));
 }
 
-
 /**
- * Deploying slash commands
+ * Deploying application commands
  */
 console.log("Registering slash commands...");
 

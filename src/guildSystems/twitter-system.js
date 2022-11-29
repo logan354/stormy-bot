@@ -1,6 +1,6 @@
 const { Client } = require("discord.js");
 const Twit = require("twit");
-const { guildChannels } = require("./utils/constants");
+const { guildChannels } = require("../utils/constants");
 
 /**
  * @param {Client} client 
