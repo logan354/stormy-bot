@@ -110,17 +110,11 @@ const icons = [
 function getIconURL(query, type = "day") {
     for (let iconObj of icons) {
         if (iconObj[0].toLowerCase() === query.toLowerCase()) {
-            if (type.toLowerCase() === "night") {
-                if (iconObj.length > 3) {
-                    return iconObj[3][0];
-                }
-                else {
-                    return "https://metservice.com";
-                }
+            if (type.toLowerCase() === "night" || iconObj.length > 3) {
+                return iconObj[3][0];
             }
-            else {
-                return iconObj[1];
-            }
+
+            return iconObj[1];
         }
     }
 }
@@ -134,17 +128,11 @@ function getIconURL(query, type = "day") {
 function getIconEmojiID(query, type = "day") {
     for (let iconObj of icons) {
         if (iconObj[0].toLowerCase() === query.toLowerCase()) {
-            if (type.toLowerCase() === "night") {
-                if (iconObj.length > 3) {
-                    return iconObj[3][1];
-                }
-                else {
-                    return "X";
-                }
+            if (type.toLowerCase() === "night" && iconObj.length > 3) {
+                return iconObj[3][1];
             }
-            else {
-                return iconObj[2];
-            }
+
+            return iconObj[2];
         }
     }
 }
