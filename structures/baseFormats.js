@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { getIconEmojiID } = require("./utils/icons");
+const { getIconEmojiID } = require("./icons");
 const { days, shortDays } = require("../utils/constants");
 
 /**

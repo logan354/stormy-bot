@@ -4,7 +4,7 @@ module.exports = {
     name: "ping",
     aliases: [],
     category: "Utility",
-    description: "Checks Stormy's response time to Discord",
+    description: "Checks Stormy's response time to Discord.",
     utilisation: "ping",
 
     /**

@@ -1,8 +1,7 @@
-const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
+const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseForecastTitle, baseForecast } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../structures/utils/constants");
-const { days, shortDays } = require("../../utils/constants");
+const { apiBaseURL, apiOptions, days, shortDays } = require("../../utils/constants");
 
 module.exports = {
     name: "forecast",
@@ -11,16 +10,16 @@ module.exports = {
     utilisation: "forecast <location> [outlook]",
     options: [
         {
-            type: ApplicationCommandOptionType.String,
             name: "location",
             description: "Location in New Zealand.",
-            required: true,
+            type: ApplicationCommandOptionType.String,
+            required: true
         },
         {
-            type: ApplicationCommandOptionType.String,
             name: "outlook",
             description: "Outlook in number or day format.",
-            required: false,
+            type: ApplicationCommandOptionType.String,
+            required: false
         }
     ],
 

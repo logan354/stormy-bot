@@ -1,7 +1,7 @@
-const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
+const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseLocalObservation } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../structures/utils/constants");
+const { apiBaseURL, apiOptions } = require("../../utils/constants");
 
 module.exports = {
     name: "observation",
@@ -10,10 +10,10 @@ module.exports = {
     utilisation: "observation <location>",
     options: [
         {
-            type: ApplicationCommandOptionType.String,
             name: "location",
             description: "Location in New Zealand.",
-            required: true,
+            type: ApplicationCommandOptionType.String,
+            required: true
         }
     ],
 

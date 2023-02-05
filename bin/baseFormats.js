@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { apiBaseURL } = require("../structures/utils/constants");
+const { apiBaseURL } = require("../utils/constants");
 
 /**
  * Creates a formatted sun protection alert from MetService data

@@ -2,9 +2,9 @@ const { Client, Message, PermissionsBitField, EmbedBuilder } = require("discord.
 
 module.exports = {
     name: "invite",
-    aliases: ["links"],
+    aliases: [],
     category: "Utility",
-    description: "Shows information on how to invite Stormy",
+    description: "Displays invite information about Stormy.",
     utilisation: "invite",
 
     /**
@@ -14,12 +14,13 @@ module.exports = {
      */
     execute(client, message, args) {
         const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** <#" + message.channel.id + ">");
 
         const embed = new EmbedBuilder()
             .setColor("Default")
             .setAuthor({
-                name: "About Me"
+                name: "About Me",
+                iconURL: client.user.avatarURL()
             })
             .setDescription(client.config.app.slogan.split(".").join(".\n"))
             .setThumbnail(message.guild.iconURL())
@@ -35,8 +36,8 @@ module.exports = {
             )
             .setTimestamp(new Date())
             .setFooter({
-                text: "Thanks For Choosing Stormy",
-                iconURL: client.config.app.logo
+                text: "Thanks For choosing Stormy",
+                iconURL: client.user.avatarURL()
             });
 
         message.channel.send({ embeds: [embed] });

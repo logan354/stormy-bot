@@ -1,7 +1,7 @@
 const { Client, Message, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseWarningTitle, baseWarning } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../structures/utils/constants");
+const { apiBaseURL, apiOptions } = require("../../utils/constants");
 
 module.exports = {
     name: "warning",

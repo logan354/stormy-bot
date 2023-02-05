@@ -3,22 +3,23 @@ const { Client, CommandInteraction, CommandInteractionOptionResolver, Permission
 module.exports = {
     name: "invite",
     category: "Utility",
-    description: "Shows information on how to invite Stormy",
+    description: "Displays invite information about Stormy.",
     utilisation: "invite",
 
     /**
      * @param {Client} client 
-     * @param {CommandInteraction} interaction 
+     * @param {CommandInteraction} interaction
      * @param {CommandInteractionOptionResolver} args 
      */
     execute(client, interaction, args) {
         const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** <#" + interaction.channel.id + ">");
 
         const embed = new EmbedBuilder()
             .setColor("Default")
             .setAuthor({
-                name: "About Me"
+                name: "About Me",
+                iconURL: client.user.avatarURL()
             })
             .setDescription(client.config.app.slogan.split(".").join(".\n"))
             .setThumbnail(interaction.guild.iconURL())
@@ -34,8 +35,8 @@ module.exports = {
             )
             .setTimestamp(new Date())
             .setFooter({
-                text: "Thanks For Choosing Stormy",
-                iconURL: client.config.app.logo
+                text: "Thanks For choosing Stormy",
+                iconURL: client.user.avatarURL()
             });
 
         interaction.reply({ embeds: [embed] });

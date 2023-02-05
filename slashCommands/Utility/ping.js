@@ -3,12 +3,12 @@ const { Client, CommandInteraction, CommandInteractionOptionResolver } = require
 module.exports = {
     name: "ping",
     category: "Utility",
-    description: "Checks Stormy's response time to Discord",
+    description: "Checks Stormy's response time to Discord.",
     utilisation: "ping",
 
     /**
      * @param {Client} client 
-     * @param {CommandInteraction} interaction 
+     * @param {CommandInteraction} interaction
      * @param {CommandInteractionOptionResolver} args 
      */
     execute(client, interaction, args) {

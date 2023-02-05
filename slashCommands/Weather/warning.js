@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseWarningTitle, baseWarning } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../structures/utils/constants");
+const { apiBaseURL, apiOptions } = require("../../utils/constants");
 
 module.exports = {
     name: "warning",
@@ -10,10 +10,10 @@ module.exports = {
     utilisation: "warning <location>",
     options: [
         {
-            type: ApplicationCommandOptionType.String,
             name: "location",
             description: "Location in New Zealand.",
-            required: true,
+            type: ApplicationCommandOptionType.String,
+            required: true
         }
     ],
 

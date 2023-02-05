@@ -1,17 +1,17 @@
-const { Client, CommandInteraction, CommandInteractionOptionResolver, ApplicationCommandOptionType, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField, EmbedBuilder, } = require("discord.js");
 const { getApplicationCommandID } = require("../../utils/util");
 
 module.exports = {
     name: "help",
     category: "Utility",
-    description: "Shows information about Stormy",
+    description: "Displays help information about Stormy.",
     utilisation: "help [command]",
     options: [
         {
             name: "command",
             description: "Enter a command",
-            required: false,
-            type: ApplicationCommandOptionType.String
+            type: ApplicationCommandOptionType.String,
+            required: false
         }
     ],
 
@@ -22,21 +22,20 @@ module.exports = {
      */
     async execute(client, interaction, args) {
         const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + interaction.channel.name + "`");
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + interaction.channel.name + "`");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** <#" + interaction.channel.id + ">");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(client.emotes.permissionError + " **I do not have permission to Embed Links in** <#" + interaction.channel.id + ">");
 
         if (!args.getString("command")) {
-            // Command categories
-            const weather = client.slashCommands.filter(x => x.category == "Weather").map((x) => "`" + x.name + "`");
-            const utility = client.slashCommands.filter(x => x.category == "Utility").map((x) => "`" + x.name + "`");
+            const utility = client.slashCommands.filter(x => x.category === "Utility").map((x) => "`" + x.name + "`");
+            const weather = client.slashCommands.filter(x => x.category === "Weather").map((x) => "`" + x.name + "`");
 
             const embed = new EmbedBuilder()
                 .setColor("Default")
                 .setAuthor({
-                    name: "Stormy's Help Centre",
-                    iconURL: client.config.app.logo
+                    name: "Help Centre",
+                    iconURL: client.user.avatarURL()
                 })
-                .setDescription("**Hello <@" + interaction.user.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType </" + this.name + ":" + await getApplicationCommandID(client, this.name) + "> `" + this.utilisation.replace(this.name, "") + "` to get information about a specific command.")
+                .setDescription("**Hello <@" + interaction.user.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands\nType </" + this.name + ":" + await getApplicationCommandID(client, this.name) + "> `" + this.utilisation.replace(`${this.name} `, "") + "` to get information about a specific command.")
                 .setThumbnail(interaction.guild.iconURL())
                 .setFields(
                     {
@@ -63,7 +62,7 @@ module.exports = {
                 .setColor("Default")
                 .setAuthor({
                     name: `${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`,
-                    iconURL: client.config.app.logo
+                    iconURL: client.user.avatarURL()
                 })
                 .setDescription("Required arguments `<>`, optional arguments `[]`")
                 .setThumbnail(interaction.guild.iconURL())
@@ -79,7 +78,7 @@ module.exports = {
                     },
                     {
                         name: "Utilisation",
-                        value: "</" + command.name + ":" + await getApplicationCommandID(client, command.name) + "> `" + command.utilisation.replace(command.name, "") + "`",
+                        value: "</" + command.name + ":" + await getApplicationCommandID(client, command.name) + "> `" + command.utilisation.replace(`${command.name} `, "") + "`",
                         inline: true
                     }
                 )

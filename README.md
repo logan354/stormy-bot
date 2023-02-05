@@ -1,4 +1,4 @@
-<img width="25%" height="25%" align="left" style="float: left; margin: 0 10px 0 0;" alt="Atlanta" src="https://cdn.discordapp.com/emojis/879598918919393310.png?v=1">
+<img src="https://cdn.discordapp.com/emojis/879598918919393310.png?v=1" align="left">
 
 # Stormy
 The best weather bot for New Zealand on Discord. Connecting directly to the MetService API!
@@ -6,12 +6,12 @@ The best weather bot for New Zealand on Discord. Connecting directly to the MetS
 
 ## Features
 
-* ✅ Built on Discord.js v14
-* ✅ Connects directly to the MetService API
+- ✅ Built on Discord.js v14
+- ✅ Connects directly to the MetService API
 
 ## Commands
 
 Stormy has 2 main command categories
 
-*   🌦️ **Weather**: `forecast`, `observation`, `warning`
-*   ⚙️ **Utility**: `help`, `invite`, `ping`, `statistics`
+- 🌦️ **Weather**: `forecast`, `observation`, `warning`
+- ⚙️ **Utility**: `help`, `invite`, `ping`, `statistics`
