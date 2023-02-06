@@ -22,7 +22,7 @@ const baseForecast = (data, isToday) => {
     let partDayData = null;
 
     if (data.partDayData) {
-        partDayData = `| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmojiID(data.partDayData.overnight.forecastWord, data.partDayData.overnight.iconType)}       |      ${getIconEmojiID(data.partDayData.morning.forecastWord, data.partDayData.morning.iconType)}      |        ${getIconEmojiID(data.partDayData.afternoon.forecastWord, data.partDayData.afternoon.iconType)}        |      ${getIconEmojiID(data.partDayData.evening.forecastWord, data.partDayData.evening.iconType)}     |`;
+        partDayData = `| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmojiID(data.partDayData.overnight.forecastWord, data.partDayData.overnight.iconType)}        |      ${getIconEmojiID(data.partDayData.morning.forecastWord, data.partDayData.morning.iconType)}      |         ${getIconEmojiID(data.partDayData.afternoon.forecastWord, data.partDayData.afternoon.iconType)}        |      ${getIconEmojiID(data.partDayData.evening.forecastWord, data.partDayData.evening.iconType)}     |`;
     }
     
     return "\n\n" + `${getIconEmojiID(data.forecastWord)} **${isToday ? "Today" : data.dowTLA}** ${data.date} | High: ${data.max}°, Low: ${data.min}°\n${partDayData ? partDayData + "\n\n" + data.forecast : data.forecast}\n*Issued: ${data.issuedAt.split(" ")[0]} ${shortDays[d.getDay() > 0 ? d.getDay() - 1 : 6]} ${data.issuedAt.split(" ")[1]} ${data.issuedAt.split(" ")[2]}*`;

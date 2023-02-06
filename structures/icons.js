@@ -117,6 +117,8 @@ function getIconURL(query, type = "day") {
             return iconObj[1];
         }
     }
+
+    return "https://metservice.com";
 }
 
 /**
@@ -135,6 +137,8 @@ function getIconEmojiID(query, type = "day") {
             return iconObj[2];
         }
     }
+
+    return "X";
 }
 
 module.exports = { getIconURL, getIconEmojiID }

@@ -11,7 +11,7 @@ The best weather bot for New Zealand on Discord. Connecting directly to the MetS
 
 ## Commands
 
-Stormy has 2 main command categories
+Stormy has 2 command categories
 
 - 🌦️ **Weather**: `forecast`, `observation`, `warning`
 - ⚙️ **Utility**: `help`, `invite`, `ping`, `statistics`
