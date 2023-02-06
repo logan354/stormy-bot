@@ -32,6 +32,4 @@ module.exports = async (client) => {
             system(client);
         }
     }
-
-    console.log(client.user.avatarURL())
 }
