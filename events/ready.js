@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { Client, ActivityType } = require("discord.js");
-const { guildId } = require("../structures/utils/constants");
+const { guildId } = require("../utils/constants");
 
 /**
  * @param {Client} client 
@@ -33,5 +33,5 @@ module.exports = async (client) => {
         }
     }
 
-    console.log("Successful startup...");
+    console.log(client.user.avatarURL())
 }
