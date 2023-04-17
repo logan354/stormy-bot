@@ -1,4 +1,4 @@
-const { Client } = require("discord.js");
+const { Client, WebhookClient } = require("discord.js");
 const Twit = require("twit");
 const { guildChannels } = require("../../utils/constants");
 
@@ -15,29 +15,32 @@ module.exports = (client) => {
         strictSSL: true,     // optional - requires SSL certificates to be valid.
     });
 
-    // @MetService
+    const metserviceWebhook = new WebhookClient({ id: "1095134383263989861", token: process.env.METSERVICE_WEBHOOK_TOKEN });
+    const metserviceWARNWebhook = new WebhookClient({ id: "1095135096685740084", token: process.env.METSERVICEWARN_WEBHOOK_TOKEN });
+
+    // MetService
     const MetServiceStream = T.stream("statuses/filter", { follow: ["18436379"] });
 
     MetServiceStream.on("tweet", (tweet) => {
         const url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
         if (tweet.user.screen_name === "MetService") {
-            client.channels.cache.get(guildChannels.METSERVICE_CHANNEL).send(url)
+            metserviceWebhook.send(url)
                 .then(message => message.crosspost())
-                .catch(e => console.error(e));
+                .catch(error => console.error(error));
         }
     });
 
-    // @MetServiceWARN
+    // MetServiceWARN
     const MetServiceWARNStream = T.stream("statuses/filter", { follow: ["75957576"] });
 
     MetServiceWARNStream.on("tweet", (tweet) => {
         const url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 
         if (tweet.user.screen_name === "MetServiceWARN") {
-            client.channels.cache.get(guildChannels.METSERVICEWARN_CHANNEL).send(url)
+            metserviceWARNWebhook.send(url)
                 .then(message => message.crosspost())
-                .catch(e => console.error(e));
+                .catch(error => console.error(error));
         }
     });
 }

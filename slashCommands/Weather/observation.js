@@ -34,12 +34,12 @@ module.exports = {
         try {
             const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBS + location.replace(" ", "-"));
             var data = await response.json();
-        } catch (e) {
+        } catch (error) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
                 return interaction.editReply(client.emotes.error + " **Invalid location**");
             } else {
-                console.error(e);
-                return interaction.editReply(client.emotes.error + " **Error** `" + e.message + "`");
+                console.error(error);
+                return interaction.editReply(client.emotes.error + " **Error** `" + error.message + "`");
             }
         }
 

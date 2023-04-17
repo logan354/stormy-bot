@@ -7,11 +7,11 @@ const { apiBaseURL, apiOptions, guildLocation, guildChannels } = require("../../
  * @param {Client} client 
  */
 module.exports = (client) => {
-    function manager() {
+    function run() {
         const time = new Date().toLocaleTimeString();
 
         if (time === "6:00:00 PM") {
-            //-------"6:00:00 AM NZDT"
+            //-------"6:00:00 AM NZST"
             localForecastSystem();
         }
 
@@ -26,12 +26,12 @@ module.exports = (client) => {
         try {
             const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + guildLocation.replace(" ", "-"));
             var data = await response.json();
-        } catch (e) {
+        } catch (error) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
                 return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Invalid location**");
             } else {
-                console.error(e);
-                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error(Guild System: Local Forecast System)** `" + e.message + "`");
+                console.error(error);
+                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error(Guild System: Local Forecast System)** `" + error.message + "`");
             }
         }
 
@@ -61,7 +61,7 @@ module.exports = (client) => {
         for (let i of finalData) {
             client.channels.cache.get(guildChannels.DAILY_FORECAST_CHANNEL).send(i)
                 .then(message => message.crosspost())
-                .catch(e => console.error(e));
+                .catch(e => console.error(error));
         }
 
         outlook = 3;
@@ -89,7 +89,7 @@ module.exports = (client) => {
         for (let i of finalData) {
             client.channels.cache.get(guildChannels.THREE_DAY_FORECAST_CHANNEL).send(i)
                 .then(message => message.crosspost())
-                .catch(e => console.error(e));
+                .catch(e => console.error(error));
         }
 
         outlook = 5;
@@ -117,7 +117,7 @@ module.exports = (client) => {
         for (let i of finalData) {
             client.channels.cache.get(guildChannels.FIVE_DAY_FORECAST_CHANNEL).send(i)
                 .then(message => message.crosspost())
-                .catch(e => console.error(e));
+                .catch(e => console.error(error));
         }
     }
 
@@ -126,20 +126,20 @@ module.exports = (client) => {
         try {
             const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBS + guildLocation.replace(" ", "-"));
             var data = await response.json();
-        } catch (e) {
+        } catch (error) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
                 return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Invalid location**");
             } else {
-                console.error(e);
-                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error(Guild System: Local Observation System)** `" + e.message + "`");
+                console.error(error);
+                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error(Guild System: Local Observation System)** `" + error.message + "`");
             }
         }
 
         const embed = baseLocalObservation(data);
         client.channels.cache.get(guildChannels.THREE_HOUR_OBSERVATION_CHANNEL).send({ embeds: [embed] })
             .then(message => message.crosspost())
-            .catch(e => console.error(e));
+            .catch(e => console.error(error));
     }
 
-    setInterval(manager, 1000);
+    setInterval(run, 1000);
 }

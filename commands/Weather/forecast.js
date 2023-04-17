@@ -50,12 +50,12 @@ module.exports = {
         try {
             const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + location.replace(" ", "-"));
             var data = await response.json();
-        } catch (e) {
-            if (e.name === "FetchError" && e.type === "invalid-json") {
+        } catch (error) {
+            if (error.name === "FetchError" && error.type === "invalid-json") {
                 return message.channel.send(client.emotes.error + " **Invalid location**");
             } else {
-                console.error(e);
-                return message.channel.send(client.emotes.error + " **Error** `" + e.message + "`");
+                console.error(error);
+                return message.channel.send(client.emotes.error + " **Error**");
             }
         }
 

@@ -1,14 +1,14 @@
-const { Client, Message, PermissionsBitField } = require("discord.js");
+const { Client, Message, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseObservation } = require("../../structures/baseFormats");
+const { baseSevereWeatherOutlook } = require("../../structures/baseFormats");
 const { apiBaseURL, apiOptions } = require("../../utils/constants");
 
 module.exports = {
-    name: "observation",
-    aliases: ["obs", "weather"],
+    name: "severe-weather-outlook",
+    aliases: ["swo"],
     category: "Weather",
-    description: "Displays the current weather observation for a specified location in New Zealand.",
-    utilisation: "observation <location>",
+    description: "Displays the severe weather outlook for New Zealand.",
+    utilisation: "severe-weather-outlook",
 
     /**
      * @param {Client} client 
@@ -20,24 +20,27 @@ module.exports = {
         if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
         if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
 
-        const location = args.join(" ");
-        if (!location) return message.channel.send(client.emotes.error + " **A location is required**");
-
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBSERVATION + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.SEVERE_WEATHER_OUTLOOK);
             var data = await response.json();
         } catch (error) {
-            if (error.name === "FetchError" && error.type === "invalid-json") {
-                return message.channel.send(client.emotes.error + " **Invalid location**");
-            } else {
                 console.error(error);
                 return message.channel.send(client.emotes.error + " **Error**");
-            }
         }
 
-        const embed = baseObservation(data);
-        
-        message.channel.send({ embeds: [embed] });
+        const embed = baseSevereWeatherOutlook(data);
+
+        const row = new ActionRowBuilder()
+        .addComponents(
+            [
+                new ButtonBuilder()
+                .setLabel("Outlook")
+                .setURL("https://www.metservice.com/warnings/severe-weather-outlook")
+                .setStyle(ButtonStyle.Link),
+            ]
+        );
+
+        message.channel.send({ embeds: [embed], components: [row] });
     }
 }

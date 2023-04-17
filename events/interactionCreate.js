@@ -17,8 +17,8 @@ module.exports = async (client, interaction) => {
     if (cmd) {
         try {
             await cmd.execute(client, interaction, args);
-        } catch (e) {
-            console.error(e);
+        } catch (error) {
+            console.error(error);
         }
     }
 }

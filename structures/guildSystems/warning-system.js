@@ -9,17 +9,17 @@ const { apiBaseURL, apiOptions, guildLocation, guildChannels } = require("../../
 module.exports = (client) => {
     let perviousWarning = null;
     
-    async function warningSystem() {
+    async function run() {
         // Fetch data from MetService API
         try {
             const response = await fetch(apiBaseURL + apiOptions.WARNINGS + guildLocation.replace(" ", "-"));
             var data = await response.json();
-        } catch (e) {
+        } catch (error) {
             if (e.name === "FetchError" && e.type === "invalid-json") {
                 return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Invalid location**");
             } else {
-                console.error(e);
-                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error(Guild System: Warning System)** `" + e.message + "`");
+                console.error(error);
+                return client.channels.cache.get(guildChannels.SERVER_LOGS_CHANNEL).send(client.emotes.error + " **Error(Guild System: Warning System)** `" + error.message + "`");
             }
         }
 
@@ -44,11 +44,11 @@ module.exports = (client) => {
         for (let i of finalData) {
             client.channels.cache.get(guildChannels.WARNING_CHANNEL).send(i)
             .then(message => message.crosspost())
-            .catch(e => console.error(e));
+            .catch(e => console.error(error));
         }
 
         perviousWarning = finalData.join();
     }
 
-    setInterval(warningSystem, 60000);
+    setInterval(run, 60000);
 }

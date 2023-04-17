@@ -1,19 +1,19 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder } = require("discord.js");
 const { getIconEmojiID } = require("./icons");
 const { days, shortDays } = require("../utils/constants");
 
 /**
  * Base format for forecast title
- * @param {string} location RAW API location data
+ * @param {string} location
  * @param {?days|shortDays|string} outlookDay
  * @param {?number} outlookNum
  * @returns {string}
  */
-const baseForecastTitle = (location, outlookDay, outlookNum) => { return `${getIconEmojiID("fine")} __**${outlookNum ? outlookNum + "-Day" : outlookDay} Forecast for ${location.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
+const baseForecastTitle = (location, outlookDay, outlookNum) => { return `__**${outlookNum ? outlookNum + "-Day" : outlookDay} Forecast for ${location.toLowerCase().split(" ").map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(" ")}**__`; }
 
 /**
- * Base format for forecast
- * @param {Object} data RAW API days data
+ * Base format for forecasts
+ * @param {Object} data RAW API forecast element
  * @param {boolean} isToday
  * @returns {string}
  */
@@ -24,35 +24,19 @@ const baseForecast = (data, isToday) => {
     if (data.partDayData) {
         partDayData = `| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${getIconEmojiID(data.partDayData.overnight.forecastWord, data.partDayData.overnight.iconType)}        |      ${getIconEmojiID(data.partDayData.morning.forecastWord, data.partDayData.morning.iconType)}      |         ${getIconEmojiID(data.partDayData.afternoon.forecastWord, data.partDayData.afternoon.iconType)}        |      ${getIconEmojiID(data.partDayData.evening.forecastWord, data.partDayData.evening.iconType)}     |`;
     }
-    
+
     return "\n\n" + `${getIconEmojiID(data.forecastWord)} **${isToday ? "Today" : data.dowTLA}** ${data.date} | High: ${data.max}°, Low: ${data.min}°\n${partDayData ? partDayData + "\n\n" + data.forecast : data.forecast}\n*Issued: ${data.issuedAt.split(" ")[0]} ${shortDays[d.getDay() > 0 ? d.getDay() - 1 : 6]} ${data.issuedAt.split(" ")[1]} ${data.issuedAt.split(" ")[2]}*`;
 }
 
 /**
- * Base format for warning title
- * @param {string} location RAW API location data
- * @returns {string}
- */
-const baseWarningTitle = (location) => { return `${getIconEmojiID("Warning orange")} __**Warning(s) for ${location}**__`; }
-
-/**
- * Base format for warning
- * @param {Object} data RAW API warnings data
- * @returns {string}
- */
-const baseWarning = (data) => { return "\n\n" + `${getIconEmojiID("warning " + data.warnLevel)} **${data.name}**\n${data.editions[0].datum.text}`; }
-
-/**
- * Base format for all local observations
- * @param {Object} data RAW API data
+ * Base format for observations
+ * @param {Object} data RAW API observation data
  * @returns {EmbedBuilder}
  */
-const baseLocalObservation = (data) => {
+const baseObservation = (data) => {
     const embed = new EmbedBuilder()
         .setColor("Grey")
-        .setAuthor({
-            name: "Current Conditions at " + data.location
-        })
+        .setTitle("Current Conditions at " + data.location)
         .addFields(
             {
                 name: "Temperature",
@@ -83,7 +67,9 @@ const baseLocalObservation = (data) => {
                 name: "Pressure",
                 value: data.threeHour.pressure + "hPa\n" + data.threeHour.pressureTrend,
                 inline: true
-            })
+            }
+        )
+        .setTimestamp()
         .setFooter({
             text: "Weather Observation " + data.threeHour.dateTime + "\nWinds and Temperatures may slightly differ from actual conditions"
         });
@@ -91,4 +77,45 @@ const baseLocalObservation = (data) => {
     return embed;
 }
 
-module.exports = { baseForecastTitle, baseForecast, baseWarningTitle, baseWarning, baseLocalObservation }
+const baseRadar = () => { }
+
+/**
+ * Base format for warnings
+ * @param {Object} data RAW CAP info data
+ * @returns {string}
+ */
+const baseWarning = (data) => {
+    const effective = new Date(data.onset._text);
+    const expires = new Date(data.expires._text);
+
+    return `${getIconEmojiID("Warning " + data.parameter[1].value._text)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${effective} - ${expires}\n\n`;
+}
+
+/**
+ * Base format for severe weather outlook
+ * @param {Object} data RAW API outlook data
+ * @returns {EmbedBuilder}
+ */
+const baseSevereWeatherOutlook = (data) => {
+    const embed = new EmbedBuilder()
+        .setColor("Grey")
+        .setTitle("Severe Weather Outlook")
+        .setImage("https://www.metservice.com" + data.pic.url)
+        .setTimestamp();
+
+        return embed;
+}
+
+/**
+ * Base format for thunderstorm outlooks
+ * @param {Object} data RAW API outlook data
+ * @param {number} index 
+ * @returns {string}
+ */
+const baseThunderstormOutlook = (data, index) => {
+    return "https://www.metservice.com" + data.outlooks[index].url;
+}
+
+const baseTropicalCycloneActivity = () => { }
+
+module.exports = { baseForecastTitle, baseForecast, baseObservation, baseWarning, baseSevereWeatherOutlook, baseThunderstormOutlook }

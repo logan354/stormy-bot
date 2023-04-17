@@ -6,7 +6,7 @@ const { apiBaseURL, apiOptions } = require("../../utils/constants");
 module.exports = {
     name: "warning",
     category: "Weather",
-    description: "Displays the current MetService issued warnings for a specified location in New Zealand.",
+    description: "Displays the current MetService warnings for a specified location in New Zealand.",
     utilisation: "warning <location>",
     options: [
         {
@@ -33,12 +33,12 @@ module.exports = {
         try {
             const response = await fetch(apiBaseURL + apiOptions.REGIONAL_WARNINGS + location.replace(" ", "-"));
             var data = await response.json();
-        } catch (e) {
-            if (e.name === "FetchError" && e.type === "invalid-json") {
+        } catch (error) {
+            if (error.name === "FetchError" && error.type === "invalid-json") {
                 return interaction.editReply(client.emotes.error + " **Invalid location**");
             } else {
-                console.error(e);
-                return interaction.editReply(client.emotes.error + " **Error** `" + e.message + "`");
+                console.error(error);
+                return interaction.editReply(client.emotes.error + " **Error** `" + error.message + "`");
             }
         }
 
