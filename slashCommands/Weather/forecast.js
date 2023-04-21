@@ -6,18 +6,18 @@ const { apiBaseURL, apiOptions, days, shortDays } = require("../../utils/constan
 module.exports = {
     name: "forecast",
     category: "Weather",
-    description: "Displays the forecast for a specified location in New Zealand.",
+    description: "Displays the forecast for a specified location.",
     utilisation: "forecast <location> [outlook]",
     options: [
         {
             name: "location",
-            description: "Location in New Zealand.",
+            description: "Enter a location.",
             type: ApplicationCommandOptionType.String,
             required: true
         },
         {
             name: "outlook",
-            description: "Outlook in number or day format.",
+            description: "Outlook number or day.",
             type: ApplicationCommandOptionType.String,
             required: false
         }
@@ -25,7 +25,7 @@ module.exports = {
 
     /**
      * @param {Client} client 
-     * @param {CommandInteraction} interaction
+     * @param {CommandInteraction} interaction 
      * @param {CommandInteractionOptionResolver} args 
      */
     async execute(client, interaction, args) {
@@ -36,17 +36,17 @@ module.exports = {
 
         let outlook = args.getString("outlook");
 
-        // Fetch data from MetService API
         interaction.deferReply();
+        // Fetch data from MetService API
         try {
             const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + location.replace(" ", "-"));
             var data = await response.json();
         } catch (error) {
-            if (e.name === "FetchError" && e.type === "invalid-json") {
+            if (error.name === "FetchError" && error.type === "invalid-json") {
                 return interaction.editReply(client.emotes.error + " **Invalid location**");
             } else {
                 console.error(error);
-                return interaction.editReply(client.emotes.error + " **Error** `" + error.message + "`");
+                return interaction.editReply(client.emotes.error + " **Error**");
             }
         }
 

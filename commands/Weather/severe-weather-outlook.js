@@ -7,7 +7,7 @@ module.exports = {
     name: "severe-weather-outlook",
     aliases: ["swo"],
     category: "Weather",
-    description: "Displays the severe weather outlook for New Zealand.",
+    description: "Displays the severe weather outlook.",
     utilisation: "severe-weather-outlook",
 
     /**
@@ -25,21 +25,21 @@ module.exports = {
             const response = await fetch(apiBaseURL + apiOptions.SEVERE_WEATHER_OUTLOOK);
             var data = await response.json();
         } catch (error) {
-                console.error(error);
-                return message.channel.send(client.emotes.error + " **Error**");
+            console.error(error);
+            return message.channel.send(client.emotes.error + " **Error**");
         }
 
         const embed = baseSevereWeatherOutlook(data);
 
         const row = new ActionRowBuilder()
-        .addComponents(
-            [
-                new ButtonBuilder()
-                .setLabel("Outlook")
-                .setURL("https://www.metservice.com/warnings/severe-weather-outlook")
-                .setStyle(ButtonStyle.Link),
-            ]
-        );
+            .addComponents(
+                [
+                    new ButtonBuilder()
+                        .setLabel("Product")
+                        .setURL("https://www.metservice.com/warnings/severe-weather-outlook")
+                        .setStyle(ButtonStyle.Link),
+                ]
+            );
 
         message.channel.send({ embeds: [embed], components: [row] });
     }

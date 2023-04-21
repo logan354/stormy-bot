@@ -7,8 +7,8 @@ module.exports = {
     name: "thunderstorm-outlook",
     aliases: ["tso"],
     category: "Weather",
-    description: "Displays the severe weather outlook for New Zealand.",
-    utilisation: "swo",
+    description: "Displays the thunderstorm outlook.",
+    utilisation: "thunderstorm-outlook",
 
     /**
      * @param {Client} client 
@@ -42,7 +42,7 @@ module.exports = {
                 .addComponents(
                     [
                         new ButtonBuilder()
-                            .setLabel("Outlook")
+                            .setLabel("Product")
                             .setURL("https://www.metservice.com/warnings/thunderstorm-outlook")
                             .setStyle(ButtonStyle.Link),
                         new ButtonBuilder()
@@ -106,7 +106,7 @@ module.exports = {
                 .addComponents(
                     [
                         new ButtonBuilder()
-                            .setLabel("Outlook")
+                            .setLabel("Product")
                             .setURL("https://www.metservice.com/warnings/thunderstorm-outlook")
                             .setStyle(ButtonStyle.Link),
                     ]

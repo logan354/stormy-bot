@@ -7,7 +7,7 @@ module.exports = {
     name: "forecast",
     aliases: ["f"],
     category: "Weather",
-    description: "Displays the forecast for a specified location in New Zealand.",
+    description: "Displays the forecast for a specified location.",
     utilisation: "forecast <location> [outlook]",
 
     /**

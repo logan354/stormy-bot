@@ -1,20 +1,20 @@
 const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseLocalObservation } = require("../../structures/baseFormats");
+const { baseObservation } = require("../../structures/baseFormats");
 const { apiBaseURL, apiOptions } = require("../../utils/constants");
 
 module.exports = {
     name: "observation",
     category: "Weather",
-    description: "Displays the current weather observation for a specified location in New Zealand.",
+    description: "Displays the current weather observation for a specified location.",
     utilisation: "observation <location>",
     options: [
         {
             name: "location",
-            description: "Location in New Zealand.",
+            description: "Enter a location.",
             type: ApplicationCommandOptionType.String,
             required: true
-        }
+        },
     ],
 
     /**
@@ -29,21 +29,22 @@ module.exports = {
 
         const location = args.getString("location");
 
-        // Fetch data from MetService API
         interaction.deferReply();
+        // Fetch data from MetService API
         try {
-            const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBS + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.LOCAL_OBSERVATION + location.replace(" ", "-"));
             var data = await response.json();
         } catch (error) {
-            if (e.name === "FetchError" && e.type === "invalid-json") {
+            if (error.name === "FetchError" && error.type === "invalid-json") {
                 return interaction.editReply(client.emotes.error + " **Invalid location**");
             } else {
                 console.error(error);
-                return interaction.editReply(client.emotes.error + " **Error** `" + error.message + "`");
+                return interaction.editReply(client.emotes.error + " **Error**");
             }
         }
 
-        const embed = baseLocalObservation(data);
+        const embed = baseObservation(data);
+
         interaction.editReply({ embeds: [embed] });
     }
 }

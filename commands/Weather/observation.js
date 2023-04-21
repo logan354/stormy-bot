@@ -7,7 +7,7 @@ module.exports = {
     name: "observation",
     aliases: ["obs", "weather"],
     category: "Weather",
-    description: "Displays the current weather observation for a specified location in New Zealand.",
+    description: "Displays the current weather observation for a specified location.",
     utilisation: "observation <location>",
 
     /**
@@ -37,7 +37,7 @@ module.exports = {
         }
 
         const embed = baseObservation(data);
-        
+
         message.channel.send({ embeds: [embed] });
     }
 }

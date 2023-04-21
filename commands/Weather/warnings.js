@@ -121,7 +121,7 @@ module.exports = {
             collector.on("end", () => {
                 const row2 = new ActionRowBuilder(row);
                 row2.components[1].setDisabled();
-                row2.components[1].setDisabled();
+                row2.components[2].setDisabled();
 
                 response.edit({ components: [row2] });
             });
