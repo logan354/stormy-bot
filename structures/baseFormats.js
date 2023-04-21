@@ -88,7 +88,7 @@ const baseWarning = (data) => {
     const effective = new Date(data.onset._text);
     const expires = new Date(data.expires._text);
 
-    return `${getIconEmojiID("Warning " + data.parameter[1].value._text)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${effective} - ${expires}\n\n`;
+    return `${getIconEmojiID("Warning " + data.parameter[1].value._text)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${effective.toLocaleTimeString()[0] + effective.toLocaleTimeString().slice(-2)} ${effective.toString().split(" ")[0]}, ${effective.toString().split(" ")[2]} ${effective.toString().split(" ")[1]} - ${expires.toLocaleTimeString()[0] + expires.toLocaleTimeString().slice(-2)} ${expires.toString().split(" ")[0]}, ${expires.toString().split(" ")[2]} ${expires.toString().split(" ")[1]}\n\n`;
 }
 
 /**
