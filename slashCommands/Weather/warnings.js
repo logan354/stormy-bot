@@ -31,7 +31,15 @@ module.exports = {
             for (let i = 0; rawData.rss.channel.item ? i < rawData.rss.channel.item.length : i < 0; i++) {
                 const response = await fetch(rawData.rss.channel.item[i].link._text);
                 const xml = await response.text();
-                data.push(xml2js(xml, { compact: true, spaces: 4 }).alert.info);
+
+                // Correcting rank of Severe Thunderstorm Warnings/Watches for data array
+                const json = xml2js(xml, { compact: true, spaces: 4 }).alert.info;
+                if (json.headline._text.includes("Severe Thunderstorm")) {
+                    data.unshift(json);
+                }
+                else {
+                    data.push(json);
+                }
             }
         } catch (error) {
             console.error(error);
