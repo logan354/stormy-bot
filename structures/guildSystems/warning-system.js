@@ -1,7 +1,9 @@
 const { Client, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
+const { xml2js } = require("xml-js");
 const { baseWarning } = require("../baseFormats");
 const { apiBaseURL, apiOptions, capBaseURL, guildLocation, guildChannels } = require("../../utils/constants");
+const geoPointInPolygon = require('geo-point-in-polygon')
 
 /**
  * @param {Client} client 
@@ -24,6 +26,11 @@ module.exports = (client) => {
 
                 // Filter only warnings & watches for the Hamilton area
                 const formatData = xml2js(xml, { compact: true, spaces: 4 }).alert.info;
+                console.log(formatData)
+                const polygon = formatData.area.polygon._text
+                polygon.split("")
+                geoPointInPolygon(polygon)
+                
                 if (formatData.area.areaDesc._text.toLowercase().includes("hamilton") || formatData.area.areaDesc._text.toLowercase().includes("waikato")) data.push(formatData);
             }
         } catch (error) {
@@ -32,20 +39,17 @@ module.exports = (client) => {
         }
 
         const page = []
-        const pageSize = 5;
+        const charLimit = 4000;
         let currentPage = 1;
 
         // Algorithm for sorting data into format data and then pages
-        let j = 0;
         for (let i = 0; i < data.length; i++) {
-            if (j === 0) page[0] = baseWarning(data[i]);
-            else page[0] += baseWarning(data[i]);
+            if (page[0].length + baseWarning(data[i]).length > charLimit) break;
 
-            if (j === pageSize - 1) {
-                page[0] += "..."
-                break;
+            if (i === 0) page[0] = baseWarning(data[i]);
+            else {
+                page[0] += baseWarning(data[i]);
             }
-            else j++;
         }
 
         const embed = new EmbedBuilder()

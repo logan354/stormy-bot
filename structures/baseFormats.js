@@ -88,7 +88,16 @@ const baseWarning = (data) => {
     const effective = new Date(data.onset._text);
     const expires = new Date(data.expires._text);
 
-    return `${getIconEmojiID("Warning " + data.parameter[1].value._text)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${effective.toLocaleTimeString()[0] + effective.toLocaleTimeString().slice(-2)} ${effective.toString().split(" ")[0]}, ${effective.toString().split(" ")[2]} ${effective.toString().split(" ")[1]} - ${expires.toLocaleTimeString()[0] + expires.toLocaleTimeString().slice(-2)} ${expires.toString().split(" ")[0]}, ${expires.toString().split(" ")[2]} ${expires.toString().split(" ")[1]}\n\n`;
+    const dateFmt = (date) => {
+        return date.toLocaleDateString("en-GB", { hour: "numeric", hour12: true }).split(" ")[1] + date.toLocaleDateString("en-GB", { hour: "numeric", hour12: true }).split(" ")[2] + " " + date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long" });
+    }
+
+    let colourCode = null;
+    data.parameter.forEach(param => { 
+        if (param.valueName._text === "ColourCode") colourCode = param.value._text;
+    });
+
+    return `${getIconEmojiID("Warning " + colourCode)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFmt(expires) : dateFmt(effective) + " - " + dateFmt(expires)}\n\n`;
 }
 
 /**
