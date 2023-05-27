@@ -22,30 +22,4 @@ function formatFormalTime(milliseconds) {
     return `${seconds} seconds`;
 }
 
-/**
- * Formats date object to MetService timecodes
- * @param {Date} date 
- * @param {Style} style 
- */
-function metserviceTimeFormat(date, style) {
-    if (style === Style.SHORT) {
-
-    } 
-    else if (style === Style.MEDIUM) {
-        return date.toLocaleDateString("en-GB", { hour: "numeric", hour12: true }).split(" ")[1] + date.toLocaleDateString("en-GB", { hour: "numeric", hour12: true }).split(" ")[2] + " " + date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long" });
-    } 
-    else if (style === Style.LONG) {
-        
-    }
-}
-
-/**
- * The style options
- */
-const Style = {
-    SHORT: "short",
-    MEDIUM: "medium",
-    LONG: "long"
-}
-
-module.exports = { formatFormalTime, metserviceTimeFormat }
+module.exports = { formatFormalTime }

@@ -1,6 +1,7 @@
 const { EmbedBuilder, ButtonBuilder } = require("discord.js");
 const { getIconEmojiID } = require("./icons");
 const { days, shortDays } = require("../utils/constants");
+const { htmlToText } = require("html-to-text");
 
 /**
  * Base format for forecast title
@@ -13,7 +14,7 @@ const baseForecastTitle = (location, outlookDay, outlookNum) => { return `__**${
 
 /**
  * Base format for forecasts
- * @param {Object} data RAW API forecast element
+ * @param {Object} data API endpoint day data
  * @param {boolean} isToday
  * @returns {string}
  */
@@ -30,7 +31,7 @@ const baseForecast = (data, isToday) => {
 
 /**
  * Base format for observations
- * @param {Object} data RAW API observation data
+ * @param {Object} data API endpoint data
  * @returns {EmbedBuilder}
  */
 const baseObservation = (data) => {
@@ -71,7 +72,7 @@ const baseObservation = (data) => {
         )
         .setTimestamp()
         .setFooter({
-            text: "Weather Observation " + data.threeHour.dateTime + "\nWinds and Temperatures may slightly differ from actual conditions"
+            text: "Weather Observation " + data.threeHour.dateTime + "\n"
         });
 
     return embed;
@@ -81,38 +82,62 @@ const baseRadar = () => { }
 
 /**
  * Base format for warnings
- * @param {Object} data RAW CAP info data
+ * @param {Object} data CAP Alert info data
  * @returns {string}
  */
 const baseWarning = (data) => {
-    const effective = new Date(data.onset._text);
-    const expires = new Date(data.expires._text);
-
-    const dateFmt = (date) => {
-        return date.toLocaleDateString("en-GB", { hour: "numeric", hour12: true }).split(" ")[1] + date.toLocaleDateString("en-GB", { hour: "numeric", hour12: true }).split(" ")[2] + " " + date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long" });
-    }
-
     let colourCode = null;
-    data.parameter.forEach(param => { 
+    data.parameter.forEach(param => {
         if (param.valueName._text === "ColourCode") colourCode = param.value._text;
     });
 
-    return `${getIconEmojiID("Warning " + colourCode)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFmt(expires) : dateFmt(effective) + " - " + dateFmt(expires)}\n\n`;
+    const effectiveDate = new Date(data.onset._text);
+    const expiresDate = new Date(data.expires._text);
+
+    const dateFormat = (date) => {
+        const datePart = Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(date);
+
+        if (date.getHours() === 12) {
+            return "noon " + datePart;
+        }
+        else if (date.getHours() === 0) {
+            return "midnight " + datePart;
+        }
+        else {
+            return (Intl.DateTimeFormat("en-GB", { hour: "numeric", hourCycle: "h12" }).format(date)).replace(" ", "") + " " + datePart;
+        }
+       
+    }
+
+    return `${getIconEmojiID("Warning " + colourCode)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
 }
 
 /**
- * Base format for severe weather outlook
- * @param {Object} data RAW API outlook data
+ * Base format for the severe weather outlook
+ * @param {Object} data API endpoint data
  * @returns {EmbedBuilder}
  */
 const baseSevereWeatherOutlook = (data) => {
+    const issuedDate = new Date(data.issuedAtISO);
+    const validFromDate = new Date(data.validFromISO);
+    const validToDate = new Date(data.validToISO);
+
+    const issuedDateFormat = (Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", hourCycle: "h12" }).format(issuedDate)).replace(" ", "") + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(issuedDate);
+
+    const validDateFormat = (date) => {
+        return date.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(date);
+    }
+
     const embed = new EmbedBuilder()
         .setColor("Grey")
         .setTitle("Severe Weather Outlook")
+        .setDescription(htmlToText(data.mainText))
         .setImage("https://www.metservice.com" + data.pic.url)
-        .setTimestamp();
+        .setFooter({ 
+            text: `Issued: ${issuedDateFormat}\nValid from ${validDateFormat(validFromDate)} to ${validDateFormat(validToDate)}` 
+        });
 
-        return embed;
+    return embed;
 }
 
 /**
