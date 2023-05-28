@@ -106,7 +106,7 @@ const baseWarning = (data) => {
         else {
             return (Intl.DateTimeFormat("en-GB", { hour: "numeric", hourCycle: "h12" }).format(date)).replace(" ", "") + " " + datePart;
         }
-       
+
     }
 
     return `${getIconEmojiID("Warning " + colourCode)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
@@ -118,24 +118,21 @@ const baseWarning = (data) => {
  * @returns {EmbedBuilder}
  */
 const baseSevereWeatherOutlook = (data) => {
-    console.log(data)
     const issuedDate = new Date(data.issuedAtISO);
     const validFromDate = new Date(data.validFromISO);
     const validToDate = new Date(data.validToISO);
 
     const issuedDateFormat = (Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", hourCycle: "h12" }).format(issuedDate)).replace(" ", "") + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(issuedDate);
-
-    const validDateFormat = (date) => {
-        return date.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(date);
-    }
+    const validFromDateFormat = validFromDate.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(validFromDate);
+    const validToDateFormat = validToDate.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(validToDate);
 
     const embed = new EmbedBuilder()
         .setColor("Grey")
         .setTitle("Severe Weather Outlook")
         .setDescription(htmlToText(data.mainText))
         .setImage("https://www.metservice.com" + data.pic.url)
-        .setFooter({ 
-            text: `Issued: ${issuedDateFormat}\nValid from ${validDateFormat(validFromDate)} to ${validDateFormat(validToDate)}` 
+        .setFooter({
+            text: `Issued: ${issuedDateFormat}\nValid from ${validFromDateFormat} to ${validToDateFormat}`
         });
 
     return embed;
@@ -148,21 +145,16 @@ const baseSevereWeatherOutlook = (data) => {
  * @returns {EmbedBuilder}
  */
 const baseThunderstormOutlook = (data, isCurrentOutlook) => {
+    const issuedDateFormat = data.issuedAt;
+    const validToDateFormat = data.validTo;
 
-    console.log(data)
-    const issuedDate = new Date(data.issuedAtISO);
-    let validFromDate = null;
-    const validToDate = new Date(data.validToISO);
+    let validFromDateFormat = null;
 
-    const issuedDateFormat = (Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", hourCycle: "h12" }).format(issuedDate)).replace(" ", "") + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(issuedDate);
-
-    if (isCurrentOutlook) {
-        let validFromDate = validToDate;
+    if (!isCurrentOutlook) {
+        let validFromDate = new Date(data.validToISO);
         validFromDate.setHours(validFromDate.getHours() - 12);
-    }
 
-    const validDateFormat = (date) => {
-        return date.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(date);
+        validFromDateFormat = validFromDate.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(validFromDate);
     }
 
     const embed = new EmbedBuilder()
@@ -170,8 +162,8 @@ const baseThunderstormOutlook = (data, isCurrentOutlook) => {
         .setTitle("Thunderstorm Outlook")
         .setDescription(htmlToText(data.text))
         .setImage("https://www.metservice.com" + data.url)
-        .setFooter({ 
-            text: `Issued: ${issuedDateFormat}\nValid ${validFromDate ? "from " + validDateFormat(validFromDate) + " to " + validDateFormat(validToDate) : "to " + validDateFormat(validToDate) }` 
+        .setFooter({
+            text: `Issued: ${issuedDateFormat}\nValid ${validFromDateFormat ? "from " + validFromDateFormat + " to " + validToDateFormat : "to " + validToDateFormat}`
         });
 
     return embed;
