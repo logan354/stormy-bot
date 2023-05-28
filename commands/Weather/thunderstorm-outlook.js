@@ -31,11 +31,11 @@ module.exports = {
 
         let currentPage = 1;
 
-        const embed = new EmbedBuilder()
-            .setColor("Grey")
-            .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook")
-            .setImage(baseThunderstormOutlook(data, currentPage - 1))
-            .setTimestamp();
+        // Whether the outlook is the current one
+        let isCurrentOutlook = true;
+
+        const embed = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], isCurrentOutlook))
+            .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
 
         if (data.outlooks.length > 1) {
             const row = new ActionRowBuilder()
@@ -68,9 +68,11 @@ module.exports = {
                 if (i.customId === "thunderstorm-outlook-embed-previous") {
                     currentPage--;
 
-                    const embed2 = new EmbedBuilder(embed)
-                        .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook")
-                        .setImage(baseThunderstormOutlook(data, currentPage - 1))
+                    if (currentPage === 1) isCurrentOutlook = true;
+                    else isCurrentOutlook = false;
+
+                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], isCurrentOutlook))
+                        .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
 
                     const row2 = new ActionRowBuilder(row);
                     if (currentPage <= 1) row2.components[1].setDisabled();
@@ -81,9 +83,11 @@ module.exports = {
                 else if (i.customId === "thunderstorm-outlook-embed-next") {
                     currentPage++;
 
-                    const embed2 = new EmbedBuilder(embed)
-                        .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook")
-                        .setImage(baseThunderstormOutlook(data, currentPage - 1))
+                    if (currentPage === 1) isCurrentOutlook = true;
+                    else isCurrentOutlook = false;
+
+                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], isCurrentOutlook))
+                        .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
 
                     const row2 = new ActionRowBuilder(row);
                     if (currentPage >= data.outlooks.length) row2.components[2].setDisabled();

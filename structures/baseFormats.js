@@ -118,6 +118,7 @@ const baseWarning = (data) => {
  * @returns {EmbedBuilder}
  */
 const baseSevereWeatherOutlook = (data) => {
+    console.log(data)
     const issuedDate = new Date(data.issuedAtISO);
     const validFromDate = new Date(data.validFromISO);
     const validToDate = new Date(data.validToISO);
@@ -142,12 +143,38 @@ const baseSevereWeatherOutlook = (data) => {
 
 /**
  * Base format for thunderstorm outlooks
- * @param {Object} data RAW API outlook data
- * @param {number} index 
- * @returns {string}
+ * @param {Object} data API endpoint outlook data
+ * @param {boolean} isCurrentOutlook
+ * @returns {EmbedBuilder}
  */
-const baseThunderstormOutlook = (data, index) => {
-    return "https://www.metservice.com" + data.outlooks[index].url;
+const baseThunderstormOutlook = (data, isCurrentOutlook) => {
+
+    console.log(data)
+    const issuedDate = new Date(data.issuedAtISO);
+    let validFromDate = null;
+    const validToDate = new Date(data.validToISO);
+
+    const issuedDateFormat = (Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", hourCycle: "h12" }).format(issuedDate)).replace(" ", "") + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(issuedDate);
+
+    if (isCurrentOutlook) {
+        let validFromDate = validToDate;
+        validFromDate.setHours(validFromDate.getHours() - 12);
+    }
+
+    const validDateFormat = (date) => {
+        return date.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(date);
+    }
+
+    const embed = new EmbedBuilder()
+        .setColor("Grey")
+        .setTitle("Thunderstorm Outlook")
+        .setDescription(htmlToText(data.text))
+        .setImage("https://www.metservice.com" + data.url)
+        .setFooter({ 
+            text: `Issued: ${issuedDateFormat}\nValid ${validFromDate ? "from " + validDateFormat(validFromDate) + " to " + validDateFormat(validToDate) : "to " + validDateFormat(validToDate) }` 
+        });
+
+    return embed;
 }
 
 const baseTropicalCycloneActivity = () => { }
