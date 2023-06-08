@@ -13,8 +13,6 @@ const apiOptions = {
 const capBaseURL = "https://alerts.metservice.com/cap/rss";
 
 // Guild
-const guildLocation = "Hamilton";
-
 const guildId = "795129011168477205";
 
 const guildChannels = {
@@ -30,7 +28,7 @@ const guildChannels = {
     THUNDERSTORM_OUTLOOK_CHANNEL: "1108884549917749300", 
 
     // Logging Channel
-    SERVER_LOGS_CHANNEL: "795173942293692447"
+    SERVER_LOGS_CHANNEL: "1111254128543404083"
 }
 
 const days = [
@@ -45,4 +43,4 @@ const days = [
 
 const shortDays = days.map((x) => x.substring(0, 3));
 
-module.exports = { apiBaseURL, apiOptions, capBaseURL, guildLocation, guildId, guildChannels, days, shortDays }
+module.exports = { apiBaseURL, apiOptions, capBaseURL, guildId, guildChannels, days, shortDays }

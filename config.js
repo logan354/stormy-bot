@@ -13,7 +13,7 @@ module.exports = {
         supportServer: "https://discord.gg/ja4KJAj3sU",
 
         // Switch for guild systems
-        startGuildSystems: false
+        startGuildSystems: true
     },
 
     emojis: {
