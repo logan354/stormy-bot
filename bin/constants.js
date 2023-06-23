@@ -1,5 +1,5 @@
 const apiOptions = {
-    LOCAL_FORECAST: "localForecast",
+    FORECAST: "localForecast",
     SUN_PROTECTION_ALERT: "sunProtectionAlert",
     ONE_MIN_OBS: "oneMinObs_",
     HOURLY_OBS_AND_FORECAST: "hourlyObsAndForecast_",

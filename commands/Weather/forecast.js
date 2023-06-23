@@ -48,7 +48,7 @@ module.exports = {
 
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + location.replace(" ", "-"));
+            const response = await fetch(apiBaseURL + apiOptions.FORECAST + location.replace(" ", "-"));
             var data = await response.json();
         } catch (error) {
             if (error.name === "FetchError" && error.type === "invalid-json") {

@@ -1,6 +1,6 @@
 const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseForecastTitle, baseForecast } = require("../../structures/baseFormats");
+const { baseForecastTitle, baseForecast } = require("../baseFormats");
 const { apiBaseURL, apiOptions, guildChannels } = require("../../utils/constants");
 
 const locations = ["Hamilton"];
@@ -41,7 +41,7 @@ module.exports = (client) => {
 
             // Fetch data from MetService API
             try {
-                const response = await fetch(apiBaseURL + apiOptions.LOCAL_FORECAST + location.replace(" ", "-"));
+                const response = await fetch(apiBaseURL + apiOptions.FORECAST + location.replace(" ", "-"));
                 var data = await response.json();
             } catch (error) {
                 console.error(error);
