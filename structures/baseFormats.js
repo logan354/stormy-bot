@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { IconType, fetchMetServiceIcon } = require("./metservice");
+const { IconType, fetchMetServiceIcon } = require("../utils/util");
 const { days, shortDays } = require("../utils/constants");
 const { htmlToText } = require("html-to-text");
 
