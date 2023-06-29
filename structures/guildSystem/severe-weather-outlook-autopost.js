@@ -2,13 +2,12 @@ const { Client, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discor
 const { default: fetch } = require("node-fetch");
 const { apiBaseURL, apiOptions, guildChannels } = require("../../utils/constants");
 const { baseSevereWeatherOutlook } = require("../baseFormats");
+const database = require("./database/guild-system.json");
 
 /**
  * @param {Client} client 
  */
 module.exports = (client) => {
-    let cache = null;
-
     async function run() {
         // Fetch data from MetService API
         try {
@@ -32,10 +31,12 @@ module.exports = (client) => {
             );
 
         // Check if the cache data is still current
-        if (cache === data.issuedAtISO) return;
+        if (database.severeWeatherOutloookTimestamp === data.issuedAtISO) {
+            return;
+        }
         else {
             client.channels.cache.get(guildChannels.SEVERE_WEATHER_OUTLOOK_CHANNEL).send({ embeds: [embed], components: [row] });
-            cache = data.issuedAtISO;
+            database.severeWeatherOutloookTimestamp = data.issuedAtISO;
         }
 
     }

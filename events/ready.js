@@ -1,6 +1,6 @@
 const fs = require("fs");
 const { Client, ActivityType } = require("discord.js");
-const { guildId } = require("../utils/constants");
+const { guildId } = require("../structures/guildSystem/utils/constants");
 
 /**
  * @param {Client} client 
@@ -24,10 +24,10 @@ module.exports = async (client) => {
     if (client.config.app.startGuildSystems) {
         console.log("Loading " + client.guilds.cache.get(guildId).name + " guild systems...");
 
-        const systems = fs.readdirSync("./structures/guildSystems").filter(file => file.endsWith(".js"));
+        const systems = fs.readdirSync("../structures/guildSystem").filter(file => file.endsWith(".js"));
 
         for (const file of systems) {
-            const system = require(`../structures/guildSystems/${file}`);
+            const system = require(`../structures/guildSystem/${file}`);
             console.log(`-> Loaded system ${file.split(".")[0]}`);
             system(client);
         }

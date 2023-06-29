@@ -3,13 +3,12 @@ const { default: fetch } = require("node-fetch");
 const { guildChannels, capBaseURL } = require("../../utils/constants");
 const { baseWarning } = require("../baseFormats");
 const { xml2js } = require("xml-js");
+const database = require("./database/guild-system.json");
 
 /**
  * @param {Client} client 
  */
 module.exports = (client) => {
-    let cache = [];
-
     async function run() {
         // Fetch data from MetService CAP Server
         try {
@@ -17,17 +16,22 @@ module.exports = (client) => {
             const xml = await response.text();
             const rawData = xml2js(xml, { compact: true, spaces: 4 });
 
-            // CHECK ALERT ID AGAINST CACHE BEFORE FETCH ALL ALERTS
-            let alertIdArr = [];
+
+
+            // Check if all alerts are current
+            let alertIds = [];
             for (let i = 0; rawData.rss.channel.item ? i < rawData.rss.channel.item.length : i < 0; i++) {
-                alertIdArr.push(rawData.rss.channel.item[i].guid._text)
+                alertIds.push(rawData.rss.channel.item[i].guid._text)
             }
 
-            // Check if the cache data is still current
-            if (cache.toString() === alertIdArr.toString()) return;
-            else {
-                cache = alertIdArr;
+            if (database.warningsAndWatchesIds.toString() === alertIds.toString()) {
+                return;
             }
+            else {
+                database.warningsAndWatchesIds = alertIds;
+            }
+
+
 
             var data = [];
 

@@ -2,13 +2,12 @@ const { Client, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = r
 const { default: fetch } = require("node-fetch");
 const { apiBaseURL, apiOptions, guildChannels } = require("../../utils/constants");
 const { baseThunderstormOutlook } = require("../baseFormats");
+const database = require("./database/guild-system.json");
 
 /**
  * @param {Client} client 
  */
 module.exports = (client) => {
-    let cache = null;
-
     async function run() {
         // Fetch data from MetService API
         try {
@@ -32,10 +31,12 @@ module.exports = (client) => {
             );
 
         // Check if the cache data is still current
-        if (cache === data.issuedAtISO) return;
+        if (database.thunderstormOutlookTimestamp === data.issuedAtISO) {
+            return;
+        }
         else {
             client.channels.cache.get(guildChannels.THUNDERSTORM_OUTLOOK_CHANNEL).send({ embeds: [embed], components: [row] });
-            cache = data.issuedAtISO;
+            database.thunderstormOutlookTimestamp = data.issuedAtISO;
         }
 
     }

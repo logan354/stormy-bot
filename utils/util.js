@@ -1,5 +1,5 @@
 const { Client, ApplicationCommand, GuildEmoji } = require("discord.js");
-const metserviceIcons = require("./data/metservice-icons.json");
+const metserviceIcons = require("../data/metservice-icons.json");
 
 /**
  * Gets a slash commands mention

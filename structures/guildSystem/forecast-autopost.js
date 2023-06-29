@@ -2,8 +2,7 @@ const { Client } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { baseForecastTitle, baseForecast } = require("../baseFormats");
 const { apiBaseURL, apiOptions, guildChannels } = require("../../utils/constants");
-
-const locations = ["Hamilton"];
+const { locations } = require("./utils/constants");
 
 /**
  * @param {Client} client 
@@ -33,7 +32,7 @@ module.exports = (client) => {
         const d = new Date();
 
         // NZST = UTC+12
-        if (d.getUTCHours() !== 18 && d.getMinutes() !== 0) return;
+        if (d.getUTCHours() !== 6 || 12 || 18 || 24 && d.getMinutes() !== 0) return;
 
         for (let i = 0; i < channels.length; i++) {
             const outlook = 3;
