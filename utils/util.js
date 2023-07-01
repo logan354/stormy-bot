@@ -35,7 +35,7 @@ function fetchMetServiceIcon(icon, type) {
                 return metserviceIcons[i].url;
             }
             else if (type === IconType.EMOJI) {
-                return metserviceIcons[i].emojiId;
+                return metserviceIcons[i].emoji_id;
             }
         }
     }
@@ -68,10 +68,10 @@ function fetchMetServiceWeatherIcon(icon, type, isNight) {
             }
             else if (type === IconType.EMOJI) {
                 if (isNight && metserviceWeatherIcons[i].night) {
-                    return metserviceWeatherIcons[i].night.emojiId;
+                    return metserviceWeatherIcons[i].night.emoji_id;
                 }
                 else {
-                    return metserviceWeatherIcons[i].emojiId;
+                    return metserviceWeatherIcons[i].emoji_id;
                 }
             }
         }

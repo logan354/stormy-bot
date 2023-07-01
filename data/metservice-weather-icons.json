@@ -2,94 +2,94 @@
     {
         "name": "Fine",
         "url": "https://about.metservice.com/assets/img/icon-exp/_resampled/resizedimage5555-ic-condition-fine-tiny-2.png",
-        "emojiId": "<:Fine:876238436112138331>",
+        "emoji_id": "<:Fine:876238436112138331>",
         "night": {
             "url": "https://about.metservice.com/assets/Uploads/Fine-Night.png",
-            "emojiId": "<:Fine_Night:876238635920408646>"
+            "emoji_id": "<:Fine_Night:876238635920408646>"
         }
     },
     {
         "name": "Partly Cloudy",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-partly-cloudy-tiny-2.png",
-        "emojiId": "<:Partly_Cloudy:876238435885658134>",
+        "emoji_id": "<:Partly_Cloudy:876238435885658134>",
         "night": {
             "url": "https://about.metservice.com/assets/Uploads/Partly-Cloudy-Night.png",
-            "emojiId": "<:Partly_Cloudy_Night:876238635924615168>"
+            "emoji_id": "<:Partly_Cloudy_Night:876238635924615168>"
         }
     },
     {
         "name": "Cloudy",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-cloudy-tiny.png",
-        "emojiId": "<:Cloudy:876238436242182174>",
+        "emoji_id": "<:Cloudy:876238436242182174>",
         "night": null
     },
     {
         "name": "Few Showers",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-few-showers-tiny-2.png",
-        "emojiId": "<:Few_Showers:876238436028285048>",
+        "emoji_id": "<:Few_Showers:876238436028285048>",
         "night": {
             "url": "https://about.metservice.com/assets/Uploads/Few-Showers-Night.png",
-            "emojiId": "<:Few_Showers_Night:876238635396132905>"
+            "emoji_id": "<:Few_Showers_Night:876238635396132905>"
         }
     },
     {
         "name": "Showers",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-showers-tiny.png",
-        "emojiId": "<:Showers:876238435894063115>",
+        "emoji_id": "<:Showers:876238435894063115>",
         "night": null
     },
     {
         "name": "Rain",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-rain-tiny-2.png",
-        "emojiId": "<:Rain:876238436053446667>",
+        "emoji_id": "<:Rain:876238436053446667>",
         "night": null
     },
     {
         "name": "Drizzle",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-drizzle-tiny-2.png",
-        "emojiId": "<:Drizzle:876238436267360336>",
+        "emoji_id": "<:Drizzle:876238436267360336>",
         "night": null
     },
     {
         "name": "Fog",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-fog-tiny.png",
-        "emojiId": "<:Fog:876238436212834304>",
+        "emoji_id": "<:Fog:876238436212834304>",
         "night": null
     },
     {
         "name": "Snow",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-snow-tiny.png",
-        "emojiId": "<:Snow:876238436347052072>",
+        "emoji_id": "<:Snow:876238436347052072>",
         "night": null
     },
     {
         "name": "Wind",
         "url": "https://about.metservice.com/assets/Uploads/Windy.png",
-        "emojiId": "<:Wind:876238436305084436>",
+        "emoji_id": "<:Wind:876238436305084436>",
         "night": null
     },
     {
         "name": "Wind Rain",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-wind-and-rain-tiny-2.png",
-        "emojiId": "<:Wind_Rain:876238436011499611>",
+        "emoji_id": "<:Wind_Rain:876238436011499611>",
         "night": null
     },
     {
         "name": "Thunder",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-thunder-tiny-2.png",
-        "emojiId": "<:Thunder:876238436221210714>",
+        "emoji_id": "<:Thunder:876238436221210714>",
         "night": null
     },
     {
         "name": "Hail",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-hail-tiny-2.png",
-        "emojiId": "<:Hail:876238436149911582>",
+        "emoji_id": "<:Hail:876238436149911582>",
         "night": null
     },
     {
         "name": "Frost",
         "url": "https://about.metservice.com/assets/img/icon-exp/ic-condition-frost-tiny.png",
-        "emojiId": "<:Frost:876238435642404905>",
+        "emoji_id": "<:Frost:876238435642404905>",
         "night": null
     }
 ]
