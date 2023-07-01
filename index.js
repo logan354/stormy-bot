@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const { Client, GatewayIntentBits, Collection, REST, Routes } = require("discord.js");
+const { fetchMetServiceIcon } = require("./utils/util");
 
 const client = new Client({
     intents: [
@@ -84,5 +85,6 @@ const rest = new REST({ version: '10' }).setToken(process.env.token);
         console.error(error);
     }
 })();
+console.log(fetchMetServiceIcon("Rain" + "", "EMOJI"))
 
 client.login(process.env.TOKEN);

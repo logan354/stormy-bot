@@ -24,10 +24,10 @@ module.exports = async (client) => {
     if (client.config.app.startGuildSystems) {
         console.log("Loading " + client.guilds.cache.get(guildId).name + " guild systems...");
 
-        const systems = fs.readdirSync("../structures/guildSystem").filter(file => file.endsWith(".js"));
+        const systems = fs.readdirSync("./structures/guildSystem/system").filter(file => file.endsWith(".js"));
 
         for (const file of systems) {
-            const system = require(`../structures/guildSystem/${file}`);
+            const system = require(`../structures/guildSystem/system/${file}`);
             console.log(`-> Loaded system ${file.split(".")[0]}`);
             system(client);
         }

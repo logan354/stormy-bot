@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { IconType, fetchMetServiceIcon } = require("../utils/util");
+const { IconType, fetchMetServiceIcon, fetchMetServiceWeatherIcon } = require("../utils/util");
 const { days, shortDays } = require("../utils/constants");
 const { htmlToText } = require("html-to-text");
 
@@ -23,10 +23,10 @@ const baseForecast = (data, isToday) => {
     let partDayData = null;
 
     if (data.partDayData) {
-        partDayData = `| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${fetchMetServiceIcon(data.partDayData.overnight.forecastWord + data.partDayData.overnight.iconType === "NIGHT" ? "Night" : "", IconType.EMOJI)}        |      ${fetchMetServiceIcon(data.partDayData.morning.forecastWord + data.partDayData.morning.iconType === "NIGHT" ? "Night" : "", IconType.EMOJI)}      |         ${fetchMetServiceIcon(data.partDayData.afternoon.forecastWord + data.partDayData.afternoon.iconType === "NIGHT" ? "Night" : "", IconType.EMOJI)}        |      ${fetchMetServiceIcon(data.partDayData.evening.forecastWord + data.partDayData.evening.iconType === "NIGHT" ? "Night" : "", IconType.EMOJI)}     |`;
+        partDayData = `| **Overnight** | **Morning** | **Afternoon** | **Evening** |\n|        ${fetchMetServiceWeatherIcon(data.partDayData.overnight.forecastWord, IconType.EMOJI, data.partDayData.overnight.iconType === "NIGHT" ? true : false)}        |      ${fetchMetServiceWeatherIcon(data.partDayData.morning.forecastWord, IconType.EMOJI, data.partDayData.morning.iconType === "NIGHT" ? true : false)}      |         ${fetchMetServiceWeatherIcon(data.partDayData.afternoon.forecastWord, IconType.EMOJI, data.partDayData.afternoon.iconType === "NIGHT" ? true : false)}        |      ${fetchMetServiceWeatherIcon(data.partDayData.evening.forecastWord, IconType.EMOJI, data.partDayData.evening.iconType === "NIGHT" ? true : false)}     |`;
     }
 
-    return "\n\n" + `${fetchMetServiceIcon(data.forecastWord, IconType.EMOJI)} **${isToday ? "Today" : data.dowTLA}** ${data.date} | High: ${data.max}°, Low: ${data.min}°\n${partDayData ? partDayData + "\n\n" + data.forecast : data.forecast}\n*Issued: ${data.issuedAt.split(" ")[0]} ${shortDays[d.getDay() > 0 ? d.getDay() - 1 : 6]} ${data.issuedAt.split(" ")[1]} ${data.issuedAt.split(" ")[2]}*`;
+    return "\n\n" + `${fetchMetServiceWeatherIcon(data.forecastWord, IconType.EMOJI)} **${isToday ? "Today" : data.dowTLA}** ${data.date} | High: ${data.max}°, Low: ${data.min}°\n${partDayData ? partDayData + "\n\n" + data.forecast : data.forecast}\n*Issued: ${data.issuedAt.split(" ")[0]} ${shortDays[d.getDay() > 0 ? d.getDay() - 1 : 6]} ${data.issuedAt.split(" ")[1]} ${data.issuedAt.split(" ")[2]}*`;
 }
 
 /**
@@ -109,7 +109,7 @@ const baseWarning = (data) => {
 
     }
 
-    return `${getIconEmojiID("Warning " + colourCode)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
+    return `${fetchMetServiceIcon(colourCode + " Warning", IconType.EMOJI)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
 }
 
 /**

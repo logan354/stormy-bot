@@ -1,5 +1,6 @@
 const { Client, ApplicationCommand, GuildEmoji } = require("discord.js");
 const metserviceIcons = require("../data/metservice-icons.json");
+const metserviceWeatherIcons = require("../data/metservice-weather-icons.json");
 
 /**
  * Gets a slash commands mention
@@ -12,7 +13,7 @@ async function getApplicationCommandID(client, name) {
     for (let command of commands) {
         if (command[1].name === name) {
             return command[1].id;
-        } 
+        }
     }
 }
 
@@ -25,7 +26,7 @@ const IconType = {
  * Fetch a MetService icon
  * @param {string} icon 
  * @param {IconType} type
- * @returns {string|GuildEmoji#id}
+ * @returns {string|GuildEmoji.id}
  */
 function fetchMetServiceIcon(icon, type) {
     for (let i = 0; i < metserviceIcons.length; i++) {
@@ -47,4 +48,41 @@ function fetchMetServiceIcon(icon, type) {
     }
 }
 
-module.exports = { getApplicationCommandID, IconType, fetchMetServiceIcon }
+/**
+ * Fetch a MetService weather icon
+ * @param {string} icon 
+ * @param {IconType} type
+ * @param {boolean} isNight
+ * @returns {string|GuildEmoji.id}
+ */
+function fetchMetServiceWeatherIcon(icon, type, isNight) {
+    for (let i = 0; i < metserviceWeatherIcons.length; i++) {
+        if (metserviceWeatherIcons[i].name.toLowerCase() === icon.toLowerCase()) {
+            if (type === IconType.URL) {
+                if (isNight && metserviceWeatherIcons[i].night) {
+                    return metserviceWeatherIcons[i].night.url;
+                }
+                else {
+                    return metserviceWeatherIcons[i].url;
+                }
+            }
+            else if (type === IconType.EMOJI) {
+                if (isNight && metserviceWeatherIcons[i].night) {
+                    return metserviceWeatherIcons[i].night.emojiId;
+                }
+                else {
+                    return metserviceWeatherIcons[i].emojiId;
+                }
+            }
+        }
+    }
+
+    if (type === IconType.URL) {
+        return "https://www.metservice.com"
+    }
+    else if (type === IconType.EMOJI) {
+        return "X";
+    }
+}
+
+module.exports = { getApplicationCommandID, IconType, fetchMetServiceIcon, fetchMetServiceWeatherIcon }
