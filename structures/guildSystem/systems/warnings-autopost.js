@@ -96,5 +96,5 @@ module.exports = async (client) => {
     }
 
     const date = new Date();
-    setInterval(run, 3_600_000 - (date.getMinutes() * 60 + date.getSeconds()) * 1000 + date.getMilliseconds()); // Runtime set every hour exactly
+    setInterval(run, 600_000 - (date.getMinutes() * 60 + date.getSeconds()) * 1000 + date.getMilliseconds()); // Runtime set every hour exactly
 }
