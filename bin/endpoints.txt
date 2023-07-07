@@ -1,0 +1,11 @@
+localForecast
+sunProtectionAlert
+oneMinObs_
+hourlyObsAndForecast_
+localObs_
+tides_
+warningsForRegion3_urban.
+riseSet_
+pollen_town_
+climateDataDailyTown_{location}_32
+rainRadar{location}_2h_7min_300K
