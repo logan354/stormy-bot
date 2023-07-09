@@ -29,7 +29,6 @@ const IconType = {
  * @returns {string|GuildEmoji.id}
  */
 function fetchMetServiceIcon(icon, type) {
-    console.log(icon)
     for (let i = 0; i < metserviceIcons.length; i++) {
         if (metserviceIcons[i].name.toLowerCase() === icon.toLowerCase()) {
             if (type === IconType.URL) {

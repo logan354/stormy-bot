@@ -109,7 +109,7 @@ const baseWarning = (data) => {
 
     }
 
-    return `${fetchMetServiceIcon(colourCode + " " + data.headline._text.includes("Watch") ? "Watch" : "Warning", IconType.EMOJI)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
+    return `${fetchMetServiceIcon(data.headline._text.includes("Watch") ? "Watch" : colourCode + " Warning", IconType.EMOJI)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
 }
 
 /**
