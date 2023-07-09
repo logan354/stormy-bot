@@ -43,7 +43,8 @@ module.exports = (client) => {
 
             const embed = baseObservation(data);
 
-            client.channels.cache.get(guildChannels.OBSERVATION_CHANNEL).threads.cache.get(channels.get(location)).send({ embeds: [embed] });
+            client.channels.cache.get(guildChannels.OBSERVATION_CHANNEL).threads.fetch(channels.get(location))
+                .then((thread) => thread.send({ embeds: [embed]}));
         }
     }
 

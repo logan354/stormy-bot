@@ -25,9 +25,14 @@ module.exports = async (client) => {
             }
 
             // Check if the cache data is still current
-            if (capWarningIdCache.toString() === alertIdArr.toString()) return;
-            else {
+            if (!capWarningIdCache.length) { // Empty Cache
                 capWarningIdCache = alertIdArr;
+            }
+            else if (capWarningIdCache.toString() !== alertIdArr.toString()) {
+                capWarningIdCache = alertIdArr;
+            }
+            else {
+                return;
             }
 
             var data = [];

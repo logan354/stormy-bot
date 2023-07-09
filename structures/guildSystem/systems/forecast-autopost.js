@@ -88,7 +88,8 @@ module.exports = (client) => {
                 lastMessage.edit(finalData);
             }
             else {
-                lastMessage = await client.channels.cache.get(guildChannels.FORECAST_CHANNEL).threads.fetch(channels.get(location)).send(finalData);
+                lastMessage = await client.channels.cache.get(guildChannels.FORECAST_CHANNEL).threads.fetch(channels.get(location))
+                    .then((thread) => thread.send(finalData));
             }
         }
     }

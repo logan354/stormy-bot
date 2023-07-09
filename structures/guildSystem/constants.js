@@ -12,7 +12,11 @@ const guildChannels = {
 }
 
 const locations = [
-    "Hamilton"
+    "Auckland",
+    "Hamilton",
+    "Wellington",
+    "Christchurch",
+    "Dunedin"
 ]
 
 module.exports = { guildId, guildChannels, locations }
