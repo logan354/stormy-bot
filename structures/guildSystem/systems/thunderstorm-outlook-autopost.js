@@ -9,7 +9,7 @@ const { guildChannels } = require("../constants");
  */
 module.exports = async (client) => {
     issuedAtDateCache = null;
-    validFromDateCache = null;
+    validToDateCache = null;
     lastMessage = null;
 
     async function run() {
@@ -21,24 +21,24 @@ module.exports = async (client) => {
             console.error(error);
         }
 
-        if (!issuedAtDateCache || !validFromDateCache) { // Empty Caches
-            issuedAtDateCache = data.issuedAtISO;
-            validFromDateCache = data.validFromISO;
+        if (!issuedAtDateCache || !validToDateCache) { // Empty Caches
+            issuedAtDateCache = data.outlooks[0].issuedAtISO;
+            validToDateCache = data.outlooks[0].validToISO;
             lastMessage = null;
         }
-        else if (issuedAtDateCache !== data.issuedAtISO) {
-            if (validFromDateCache !== data.validFromISO) {
-                validFromDateCache = data.validFromISO;
+        else if (issuedAtDateCache !== data.outlooks[0].issuedAtISO) {
+            if (validToDateCache !== data.outlooks[0].validToISO) {
+                validToDateCache = data.outlooks[0].validToISO;
                 lastMessage = null
             }
 
-            issuedAtDateCache = data.issuedAtISO;
+            issuedAtDateCache = data.outlooks[0].issuedAtISO;
         }
         else {
             return;
         }
 
-        const embed = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[0], true));
+        const embed = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[0], null));
 
         const row = new ActionRowBuilder()
             .addComponents(
@@ -54,7 +54,7 @@ module.exports = async (client) => {
             lastMessage.edit({ embeds: [embed], components: [row] });
         }
         else {
-            lastMessage = await client.channels.cache.get(guildChannels.THUNDERSTORM_OUTLOOK).send({ embeds: [embed], components: [row] });
+            lastMessage = await client.channels.cache.get(guildChannels.THUNDERSTORM_OUTLOOK_CHANNEL).send({ embeds: [embed], components: [row] });
         }
     }
 

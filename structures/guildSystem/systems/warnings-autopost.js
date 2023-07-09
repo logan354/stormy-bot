@@ -1,8 +1,9 @@
 const { Client, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { guildChannels, capBaseURL } = require("../../utils/constants");
-const { baseWarning } = require("../baseFormats");
+const { capBaseURL } = require("../../../utils/constants");
+const { baseWarning } = require("../../baseFormats");
 const { xml2js } = require("xml-js");
+const { guildChannels } = require("../constants");
 
 /**
  * @param {Client} client 
@@ -96,5 +97,5 @@ module.exports = async (client) => {
     }
 
     const date = new Date();
-    setInterval(run, 600_000 - (date.getMinutes() * 60 + date.getSeconds()) * 1000 + date.getMilliseconds()); // Runtime set every hour exactly
+    setInterval(run, 600_000 - (date.getSeconds()) * 1000 + date.getMilliseconds()); // Runtime set every 10 minutes exactly
 }

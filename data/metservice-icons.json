@@ -2,16 +2,16 @@
     {
         "name": "Watch",
         "url": "https://about.metservice.com/assets/Uploads/_resampled/resizedimage8888-General-Watch.png",
-        "emojiId": "<:Watch:878485283316842556>"
+        "emoji_Id": "<:Watch:878485283316842556>"
     },
     {
         "name": "Orange Warning",
         "url": "https://about.metservice.com/assets/Uploads/_resampled/resizedimage9079-General-Warning.png",
-        "emojiId": "<:Orange_Warning:878485283396534313>"
+        "emoji_id": "<:Orange_Warning:878485283396534313>"
     },
     {
         "name": "Red Warning",
         "url": "https://about.metservice.com/assets/Uploads/_resampled/resizedimage8980-General-Severe-Warning.png",
-        "emojiId": "<:Red_Warning:878485282947731488>"
+        "emoji_id": "<:Red_Warning:878485282947731488>"
     }
 ]

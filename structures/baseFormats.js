@@ -109,7 +109,7 @@ const baseWarning = (data) => {
 
     }
 
-    return `${fetchMetServiceIcon(colourCode + " Warning", IconType.EMOJI)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
+    return `${fetchMetServiceIcon(colourCode + " " + data.headline._text.includes("Watch") ? "Watch" : "Warning", IconType.EMOJI)} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + dateFormat(expiresDate) : dateFormat(effectiveDate) + " - " + dateFormat(expiresDate)}\n\n`;
 }
 
 /**
@@ -144,18 +144,9 @@ const baseSevereWeatherOutlook = (data) => {
  * @param {boolean} isCurrentOutlook
  * @returns {EmbedBuilder}
  */
-const baseThunderstormOutlook = (data, isCurrentOutlook) => {
+const baseThunderstormOutlook = (data, validFromDateFormat) => {
     const issuedDateFormat = data.issuedAt;
     const validToDateFormat = data.validTo;
-
-    let validFromDateFormat = null;
-
-    if (!isCurrentOutlook) {
-        let validFromDate = new Date(data.validToISO);
-        validFromDate.setHours(validFromDate.getHours() - 12);
-
-        validFromDateFormat = validFromDate.getHours() === 12 ? "noon" : "midnight" + " " + Intl.DateTimeFormat("en-GB", { weekday: "short", month: "long", day: "numeric" }).format(validFromDate);
-    }
 
     const embed = new EmbedBuilder()
         .setColor("Grey")

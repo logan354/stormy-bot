@@ -31,10 +31,10 @@ module.exports = {
 
         let currentPage = 1;
 
-        // Whether the outlook is the current one
-        let isCurrentOutlook = true;
+        // The date to enter as the current outlooks valid from date fromat
+        let previousValidToDateFormat = null;
 
-        const embed = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], isCurrentOutlook))
+        const embed = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], previousValidToDateFormat))
             .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
 
         if (data.outlooks.length > 1) {
@@ -68,10 +68,14 @@ module.exports = {
                 if (i.customId === "thunderstorm-outlook-embed-previous") {
                     currentPage--;
 
-                    if (currentPage === 1) isCurrentOutlook = true;
-                    else isCurrentOutlook = false;
+                    if (currentPage > 1) {
+                        previousValidToDateFormat = data.outlooks[currentPage - 2].validTo;
+                    }
+                    else {
+                        previousValidToDateFormat = null;
+                    }
 
-                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], isCurrentOutlook))
+                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], previousValidToDateFormat))
                         .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
 
                     const row2 = new ActionRowBuilder(row);
@@ -83,10 +87,14 @@ module.exports = {
                 else if (i.customId === "thunderstorm-outlook-embed-next") {
                     currentPage++;
 
-                    if (currentPage === 1) isCurrentOutlook = true;
-                    else isCurrentOutlook = false;
+                    if (currentPage > 1) {
+                        previousValidToDateFormat = data.outlooks[currentPage - 2].validTo;
+                    }
+                    else {
+                        previousValidToDateFormat = null;
+                    }
 
-                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], isCurrentOutlook))
+                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], previousValidToDateFormat))
                         .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
 
                     const row2 = new ActionRowBuilder(row);
