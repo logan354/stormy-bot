@@ -9,7 +9,7 @@ const { guildChannels } = require("../constants");
  * @param {Client} client 
  */
 module.exports = async (client) => {
-    let capWarningIdCache = [];
+    let capWarningIdCache = null;
 
     const run = async () => {
         // Fetch data from MetService CAP Server
@@ -25,7 +25,7 @@ module.exports = async (client) => {
             }
 
             // Check if the cache data is still current
-            if (!capWarningIdCache.length) { // Empty Cache
+            if (!capWarningIdCache) { // Empty Cache
                 capWarningIdCache = alertIdArr;
             }
             else if (capWarningIdCache.toString() !== alertIdArr.toString()) {
