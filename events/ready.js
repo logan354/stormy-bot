@@ -1,35 +1,25 @@
-const fs = require("fs");
-const { Client, ActivityType } = require("discord.js");
-const { guildId } = require("../structures/guildSystem/constants");
+const { Events, Client, ActivityType } = require("discord.js");
+const Bot = require("../struct/Bot");
 
-/**
- * @param {Client} client 
- */
-module.exports = async (client) => {
-    console.log(`Logged to the client ${client.user.username}\n-> Ready on ${client.guilds.cache.size} servers for a total of ${client.users.cache.size} users`);
-
-    client.user.setPresence({
-        activities: [
-            {
-                name: "🌧️ MetService",
-                type: ActivityType.Watching
-            }
-        ],
-        status: "online"
-    });
+module.exports = {
+    name: Events.ClientReady,
+    once: true,
 
     /**
-     * Loading all guild systems
+     * @param {Bot} bot
+     * @param {Client} client 
      */
-    if (client.config.app.startGuildSystems) {
-        console.log("Loading " + client.guilds.cache.get(guildId).name + " guild systems...");
+    execute(bot, client) {
+        console.log(`Logged into the client ${client.user.username}\n-> Ready on ${client.guilds.cache.size} servers for a total of ${client.users.cache.size} users`);
 
-        const systems = fs.readdirSync("./structures/guildSystem/systems").filter(file => file.endsWith(".js"));
-
-        for (const file of systems) {
-            const system = require(`../structures/guildSystem/systems/${file}`);
-            console.log(`-> Loaded system ${file.split(".")[0]}`);
-            system(client);
-        }
+        client.user.setPresence({
+            activities: [
+                {
+                    name: "MetService",
+                    type: ActivityType.Watching
+                }
+            ],
+            status: "online"
+        });
     }
 }

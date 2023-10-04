@@ -1,5 +1,5 @@
 const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField, EmbedBuilder, } = require("discord.js");
-const { getApplicationCommandID } = require("../../utils/util");
+const { getApplicationCommandID } = require("../../util/util");
 
 module.exports = {
     name: "help",

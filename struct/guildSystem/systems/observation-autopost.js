@@ -1,7 +1,7 @@
 const { Client } = require("discord.js");
 const { locations, guildChannels } = require("../constants");
 const { default: fetch } = require("node-fetch");
-const { apiBaseURL, apiOptions } = require("../../../utils/constants");
+const { apiBaseURL, apiOptions } = require("../../../util/constants");
 const { baseObservation } = require("../../baseFormats");
 
 /**

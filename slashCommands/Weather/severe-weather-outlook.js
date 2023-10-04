@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseSevereWeatherOutlook } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../utils/constants");
+const { baseSevereWeatherOutlook } = require("../../struct/baseFormats");
+const { apiBaseURL, apiOptions } = require("../../util/constants");
 
 module.exports = {
     name: "severe-weather-outlook",

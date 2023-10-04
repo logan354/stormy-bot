@@ -1,32 +1,31 @@
-const { Client, Message, PermissionsBitField, EmbedBuilder } = require("discord.js");
-const { formatFormalTime } = require("../../utils/formatters");
+const { Message, PermissionsBitField, EmbedBuilder, Colors } = require("discord.js");
+const Bot = require("../../struct/Bot");
+const emojis = require("../../data/emojis.json");
+const { formatFormalTime } = require("../../util/formatters");
 const { version, dependencies } = require("../../package.json");
 
 module.exports = {
     name: "statistics",
     aliases: ["stats"],
+    description: "Displays statistical information about Bass.",
     category: "Utility",
-    description: "Displays statistic information about Stormy.",
     utilisation: "statistics",
 
     /**
-     * @param {Client} client 
+     * @param {Bot} bot 
      * @param {Message} message 
      * @param {string[]} args 
      */
-    execute(client, message, args) {
+    execute(bot, message, args) {
         const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** <#" + message.channel.id + ">");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(emojis.permissionError + " **I do not have permission to Embed Links in** <#" + message.channel.id + ">");
 
         let members = 0;
         client.guilds.cache.forEach(x => members += x.memberCount)
 
         const embed = new EmbedBuilder()
-            .setColor("Default")
-            .setAuthor({
-                name: "Information",
-                iconURL: client.user.avatarURL()
-            })
+            .setColor(Colors.DarkGreen)
+            .setTitle("Statistics")
             .setFields(
                 {
                     name: ":joystick: Bot Statistics",
@@ -42,10 +41,6 @@ module.exports = {
                 }
             )
             .setTimestamp(new Date())
-            .setFooter({
-                text: "Thanks For choosing Stormy",
-                iconURL: client.user.avatarURL()
-            });
 
         message.channel.send({ embeds: [embed] });
     }

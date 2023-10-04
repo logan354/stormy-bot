@@ -1,13 +1,13 @@
-const { Client, Message, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { Client, Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseSevereWeatherOutlook } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../utils/constants");
+const { severeWeatherOutlookFormat } = require("../../struct/baseFormats");
+const { apiBaseURL, apiOptions } = require("../../util/constants");
 
 module.exports = {
     name: "severe-weather-outlook",
     aliases: ["swo"],
+    description: "Displays the severe weather outlook product.",
     category: "Weather",
-    description: "Displays the severe weather outlook.",
     utilisation: "severe-weather-outlook",
 
     /**
@@ -16,31 +16,30 @@ module.exports = {
      * @param {string[]} args 
      */
     async execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+        let data = null;
 
         // Fetch data from MetService API
         try {
             const response = await fetch(apiBaseURL + apiOptions.SEVERE_WEATHER_OUTLOOK);
-            var data = await response.json();
+            data = await response.json();
         } catch (error) {
             console.error(error);
-            return message.channel.send(client.emotes.error + " **Error**");
+            return message.channel.send(emojis.fail + " **Error**");
         }
 
-        const embed = baseSevereWeatherOutlook(data);
+        // Format
+        const payload = severeWeatherOutlookFormat(data);
 
         const row = new ActionRowBuilder()
-            .addComponents(
-                [
-                    new ButtonBuilder()
-                        .setLabel("Product")
-                        .setURL("https://www.metservice.com/warnings/severe-weather-outlook")
-                        .setStyle(ButtonStyle.Link),
-                ]
-            );
+        .addComponents(
+            [
+                new ButtonBuilder()
+                    .setLabel("Product")
+                    .setURL("https://www.metservice.com/warnings/severe-weather-outlook")
+                    .setStyle(ButtonStyle.Link),
+            ]
+        );
 
-        message.channel.send({ embeds: [embed], components: [row] });
+        message.channel.send({ embeds: payload[0], files: [payload[1]], components: [row] });
     }
 }

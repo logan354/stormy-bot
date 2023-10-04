@@ -1,6 +1,6 @@
 const { Client, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { capBaseURL } = require("../../../utils/constants");
+const { capBaseURL } = require("../../../util/constants");
 const { baseWarning } = require("../../baseFormats");
 const { xml2js } = require("xml-js");
 const { guildChannels } = require("../constants");

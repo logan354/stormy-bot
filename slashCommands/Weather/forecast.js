@@ -1,7 +1,7 @@
 const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseForecastTitle, baseForecast } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions, days, shortDays } = require("../../utils/constants");
+const { baseForecastTitle, baseForecast } = require("../../struct/baseFormats");
+const { apiBaseURL, apiOptions, days, shortDays } = require("../../util/constants");
 
 module.exports = {
     name: "forecast",

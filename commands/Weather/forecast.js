@@ -1,7 +1,7 @@
-const { Client, Message, PermissionsBitField } = require("discord.js");
+const { Client, Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseForecastTitle, baseForecast } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions, days, shortDays } = require("../../utils/constants");
+const { forecastFormat } = require("../../struct/baseFormats");
+const { apiBaseURL, apiOptions, days, shortDays } = require("../../util/constants");
 
 module.exports = {
     name: "forecast",
@@ -16,9 +16,7 @@ module.exports = {
      * @param {string[]} args 
      */
     async execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
-
+        // Handle outlook parameter
         let lastElement;
         let lastElementFmt;
         let outlook;
@@ -43,13 +41,19 @@ module.exports = {
             }
         }
 
+        if (!outlook) outlook = 1;
+
+        // Handle location parameter
         const location = args.join(" ");
         if (!location) return message.channel.send(client.emotes.error + " **A location is required**");
+
+
+        let data = null;
 
         // Fetch data from MetService API
         try {
             const response = await fetch(apiBaseURL + apiOptions.FORECAST + location.replace(" ", "-"));
-            var data = await response.json();
+            data = await response.json();
         } catch (error) {
             if (error.name === "FetchError" && error.type === "invalid-json") {
                 return message.channel.send(client.emotes.error + " **Invalid location**");
@@ -59,15 +63,10 @@ module.exports = {
             }
         }
 
-        const finalData = [];
-        const charLimit = 2000;
-        let k = 0;
-        let isToday = false;
-
-        if (!outlook || outlook === 1) outlook = data.days[0].dow;
+        let payload = null;
+        const truelocation = data.locationIPS.charAt(0).toUpperCase() + data.locationIPS.slice(1).toLowerCase();
 
         if (!Number(outlook)) {
-            // Format outlook
             outlook = outlook.charAt(0).toUpperCase() + outlook.slice(1).toLowerCase();
 
             if (!days.includes(outlook) && !shortDays.includes(outlook)) {
@@ -75,14 +74,8 @@ module.exports = {
             }
 
             for (let i = 0; i < 7; i++) {
-                if (i === 0) {
-                    isToday = true;
-                } else {
-                    isToday = false;
-                }
-
                 if (data.days[i].dow.toLowerCase() === outlook.toLowerCase() || data.days[i].dowTLA.toLowerCase() === outlook.toLowerCase()) {
-                    finalData.push(baseForecastTitle(data.locationIPS, data.days[i].dow, null) + baseForecast(data.days[i], isToday));
+                    payload = forecastFormat(data.days[i], truelocation, i === 0 ? true : false);
                     break;
                 }
             }
@@ -91,26 +84,107 @@ module.exports = {
                 return message.channel.send(client.emotes.error + " **Invalid outlook number. Must be between 1 and " + data.days.length + "**");
             }
 
+            const data2 = [];
             for (let i = 0; i < outlook; i++) {
-                if (i === 0) {
-                    isToday = true;
-                    finalData[k] = baseForecastTitle(data.locationIPS, null, outlook);
-                } else {
-                    isToday = false;
-                }
-
-                if (finalData[k].length + baseForecast(data.days[i], isToday).length > charLimit) {
-                    k++
-                    finalData[k] = baseForecast(data.days[i], isToday);
-                } else {
-                    finalData[k] += baseForecast(data.days[i], isToday);
-                }
+                data2.push(data.days[i]);
             }
+
+            payload = forecastFormat(data2, truelocation, true);
         }
 
-        // Iterate through formatted data array
-        for (let i of finalData) {
-            message.channel.send(i);
+
+
+        const row = new ActionRowBuilder()
+            .addComponents(
+                [
+                    new ButtonBuilder()
+                        .setLabel("Forecasts")
+                        .setURL("https://www.metservice.com/national")
+                        .setStyle(ButtonStyle.Link),
+                ]
+            );
+
+        const row2 = new ActionRowBuilder()
+            .addComponents(
+                [
+                    new ButtonBuilder()
+                        .setLabel("Forecasts")
+                        .setURL("https://www.metservice.com/national")
+                        .setStyle(ButtonStyle.Link),
+                    new ButtonBuilder()
+                        .setCustomId("forecast-button-previous")
+                        .setEmoji("⬅️")
+                        .setStyle(ButtonStyle.Secondary)
+                        .setDisabled(),
+                    new ButtonBuilder()
+                        .setCustomId("forecast-button-next")
+                        .setEmoji("➡️")
+                        .setStyle(ButtonStyle.Secondary)
+                ]
+            );
+
+        if (payload[0].length < 2) {
+            message.channel.send({ embeds: payload[0], components: [row] });
+        }
+        else {
+            let index = 0;
+
+            // Edit the first embed
+            const embed = new EmbedBuilder(payload[0][0])
+                .setTitle(embed.data.title + " (" + (index + 1) + "/" + payload[0].length + ")");
+
+            const response = await message.channel.send({ embeds: [embed], components: [row2] });
+
+            // Collect button responses for a certain period of time
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 900000 });
+
+            // Collector
+            collector.on("collect", (i) => {
+                if (i.customId === "forecast-button-previous") {
+                    index--;
+
+                    // Edit the indexable embed
+                    const embed = new EmbedBuilder(payload[0][index])
+                        .setTitle(embed.data.title + " (" + (index + 1) + "/" + payload[0].length + ")");
+
+                    const newRow2 = new ActionRowBuilder(row2);
+
+                    // Button validation
+                    if (index <= 0) {
+                        newRow2.components[1].setDisabled();
+                    }
+
+                    newRow2.components[2].setDisabled(false);
+
+                    i.update({ embeds: [embed], components: [row2] });
+                }
+                else if (i.customId === "forecast-button-next") {
+                    index++;
+
+                    // Edit the indexable embed
+                    const embed = new EmbedBuilder(payload[0][index])
+                        .setTitle(embed.data.title + " (" + (index + 1) + "/" + payload[0].length + ")");
+
+                    const newRow2 = new ActionRowBuilder(row2);
+
+                    // Button validation
+                    if (index >= data.outlooks.length - 1) {
+                        newRow2.components[2].setDisabled();
+                    }
+
+                    newRow2.components[1].setDisabled(false);
+
+                    i.update({ embeds: [embed], components: [row2] });
+                }
+            });
+
+            collector.on("end", (collected, reason) => {
+                const newRow2 = new ActionRowBuilder(row2);
+                newRow2.components[1].setDisabled();
+                newRow2.components[2].setDisabled();
+
+                response.edit({ components: [newRow2] });
+            });
         }
     }
 }

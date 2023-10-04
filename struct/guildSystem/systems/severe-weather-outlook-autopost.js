@@ -1,6 +1,6 @@
 const { Client, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { apiBaseURL, apiOptions } = require("../../../utils/constants");
+const { apiBaseURL, apiOptions } = require("../../../util/constants");
 const { baseSevereWeatherOutlook } = require("../../baseFormats");
 const { guildChannels } = require("../constants");
 

@@ -1,24 +1,29 @@
-const { Client, Interaction, ChannelType } = require("discord.js");
+const { Events, ChatInputCommandInteraction } = require("discord.js");
+const Bot = require("../struct/Bot");
 
-/**
- * @param {Client} client 
- * @param {Interaction} interaction 
- */
-module.exports = async (client, interaction) => {
-    if (!interaction.isCommand()) return;
-    
-    if (interaction.user.bot || interaction.channel.type === ChannelType.DM) return;
+module.exports = {
+    name: Events.InteractionCreate,
+    once: false,
 
-    const args = interaction.options;
-    const slashCommand = interaction.commandName;
+    /**
+     * 
+     * @param {Bot} bot 
+     * @param {ChatInputCommandInteraction} interaction 
+     */
+    async execute(bot, interaction) {
+        if (!interaction.isChatInputCommand()) return;
 
-    const cmd = client.slashCommands.get(slashCommand);
+        const command = bot.slashCommands.get(interaction.commandName);
 
-    if (cmd) {
-        try {
-            await cmd.execute(client, interaction, args);
-        } catch (error) {
-            console.error(error);
+        // TODO: Permissions Checker
+
+        if (command) {
+            try {
+                await command.execute(bot, interaction);
+            }
+            catch (error) {
+                console.error(error);
+            }
         }
     }
 }

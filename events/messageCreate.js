@@ -1,25 +1,30 @@
-const { Client, Message, ChannelType } = require("discord.js");
+const { Events, Message } = require("discord.js");
+const Bot = require("../struct/Bot");
 
-/**
- * @param {Client} client 
- * @param {Message} message 
- */
-module.exports = async (client, message) => {
-    if (message.author.bot || message.channel.type === ChannelType.DM) return;
+module.exports = {
+    name: Events.MessageCreate,
+    once: false,
 
-    const mention = `<@${client.user.id}>`;
+    /**
+     * @param {Bot} bot 
+     * @param {Message} message 
+     */
+    async execute(bot, message) {
+        const mention = `<@${bot.client.user.id}>`;
 
-    if (message.content.indexOf(mention) !== 0) return;
+        if (!message.content.startsWith(mention) || message.author.bot) return;
 
-    const args = message.content.slice(mention.length).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
+        const args = message.content.slice(mention.length).trim().split(/ +/);
+        const commandName = args.shift().toLowerCase();
 
-    const cmd = client.commands.get(command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
+        const command = bot.commands.get(commandName) || bot.commands.find(x => x.aliases && x.aliases.includes(commandName));
 
-    if (cmd) {
+        // TODO: Permissions Checker
+
         try {
-            await cmd.execute(client, message, args);
-        } catch (error) {
+            await command.execute(bot, message, args);
+        }
+        catch (error) {
             console.error(error);
         }
     }

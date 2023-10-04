@@ -1,6 +1,4 @@
-<img src="https://cdn.discordapp.com/avatars/822342435941908480/a3c0cca56a555c86392104c622b6acdd.webp" align="left">
-
-# Stormy
+# Stormy-bot
 The best weather bot for New Zealand on Discord. Using the MetService API.
 
 ## Commands

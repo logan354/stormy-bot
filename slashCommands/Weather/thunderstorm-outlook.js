@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseThunderstormOutlook } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../utils/constants");
+const { baseThunderstormOutlook } = require("../../struct/baseFormats");
+const { apiBaseURL, apiOptions } = require("../../util/constants");
 
 module.exports = {
     name: "thunderstorm-outlook",

@@ -1,13 +1,13 @@
-const { Client, Message, PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
+const { Client, Message, ComponentType, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseThunderstormOutlook } = require("../../structures/baseFormats");
-const { apiBaseURL, apiOptions } = require("../../utils/constants");
+const { thunderstormOutlookFormat } = require("../../struct/baseFormats");
+const { apiBaseURL, apiOptions } = require("../../util/constants");
 
 module.exports = {
     name: "thunderstorm-outlook",
     aliases: ["tso"],
+    description: "Displays the thunderstorm outlook product.",
     category: "Weather",
-    description: "Displays the thunderstorm outlook.",
     utilisation: "thunderstorm-outlook",
 
     /**
@@ -16,115 +16,130 @@ module.exports = {
      * @param {string[]} args 
      */
     async execute(client, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Use External Emojis in** " + "`" + message.channel.name + "`");
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(client.emotes.permissionError + " **I do not have permission to Embed Links in** " + "`" + message.channel.name + "`");
+        let data = null;
 
         // Fetch data from MetService API
         try {
             const response = await fetch(apiBaseURL + apiOptions.THUNDERSTORM_OUTLOOK);
-            var data = await response.json();
+            data = await response.json();
         } catch (error) {
             console.error(error);
-            return message.channel.send(client.emotes.error + " **Error**");
+            return message.channel.send(emojis.fail + " **Error**");
         }
 
-        let currentPage = 1;
+        // Format the first indexable outlook data
+        const payload = thunderstormOutlookFormat(0, null);
 
-        // The date to enter as the current outlooks valid from date fromat
-        let previousValidToDateFormat = null;
+        const row1 = new ActionRowBuilder()
+            .addComponents(
+                [
+                    new ButtonBuilder()
+                        .setLabel("Product")
+                        .setURL("https://www.metservice.com/warnings/thunderstorm-outlook")
+                        .setStyle(ButtonStyle.Link),
+                ]
+            );
 
-        const embed = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], previousValidToDateFormat))
-            .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
+        const row2 = new ActionRowBuilder()
+            .addComponents(
+                [
+                    new ButtonBuilder()
+                        .setLabel("Product")
+                        .setURL("https://www.metservice.com/warnings/thunderstorm-outlook")
+                        .setStyle(ButtonStyle.Link),
+                    new ButtonBuilder()
+                        .setCustomId("thunderstorm-outlook-button-previous")
+                        .setEmoji("⬅️")
+                        .setStyle(ButtonStyle.Secondary)
+                        .setDisabled(),
+                    new ButtonBuilder()
+                        .setCustomId("thunderstorm-outlook-button-next")
+                        .setEmoji("➡️")
+                        .setStyle(ButtonStyle.Secondary)
+                ]
+            );
 
-        if (data.outlooks.length > 1) {
-            const row = new ActionRowBuilder()
-                .addComponents(
-                    [
-                        new ButtonBuilder()
-                            .setLabel("Product")
-                            .setURL("https://www.metservice.com/warnings/thunderstorm-outlook")
-                            .setStyle(ButtonStyle.Link),
-                        new ButtonBuilder()
-                            .setCustomId("thunderstorm-outlook-embed-previous")
-                            .setEmoji("⬅️")
-                            .setStyle(ButtonStyle.Secondary)
-                            .setDisabled(),
-                        new ButtonBuilder()
-                            .setCustomId("thunderstorm-outlook-embed-next")
-                            .setEmoji("➡️")
-                            .setStyle(ButtonStyle.Secondary)
-                    ]
-                );
-
-            const response = await message.channel.send({
-                embeds: [embed],
-                components: [row]
-            });
-
-            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 900000 });
-
-            collector.on("collect", async i => {
-                if (i.customId === "thunderstorm-outlook-embed-previous") {
-                    currentPage--;
-
-                    if (currentPage > 1) {
-                        previousValidToDateFormat = data.outlooks[currentPage - 2].validTo;
-                    }
-                    else {
-                        previousValidToDateFormat = null;
-                    }
-
-                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], previousValidToDateFormat))
-                        .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
-
-                    const row2 = new ActionRowBuilder(row);
-                    if (currentPage <= 1) row2.components[1].setDisabled();
-                    row2.components[2].setDisabled(false);
-
-                    await i.update({ embeds: [embed2], components: [row2] });
-                }
-                else if (i.customId === "thunderstorm-outlook-embed-next") {
-                    currentPage++;
-
-                    if (currentPage > 1) {
-                        previousValidToDateFormat = data.outlooks[currentPage - 2].validTo;
-                    }
-                    else {
-                        previousValidToDateFormat = null;
-                    }
-
-                    const embed2 = new EmbedBuilder(baseThunderstormOutlook(data.outlooks[currentPage - 1], previousValidToDateFormat))
-                        .setTitle(data.outlooks.length > 1 ? "Thunderstorm Outlook (" + currentPage + "/" + data.outlooks.length + ")" : "Thunderstorm Outlook");
-
-                    const row2 = new ActionRowBuilder(row);
-                    if (currentPage >= data.outlooks.length) row2.components[2].setDisabled();
-                    row2.components[1].setDisabled(false);
-
-                    await i.update({ embeds: [embed2], components: [row2] });
-                }
-            });
-
-            collector.on("end", () => {
-                const row2 = new ActionRowBuilder(row);
-                row2.components[1].setDisabled();
-                row2.components[2].setDisabled();
-
-                response.edit({ components: [row2] });
-            });
+        if (data.outlooks.length < 2) {
+            message.channel.send({ embeds: payload[0], files: [payload[1]], components: [row1] });
         }
         else {
-            const row2 = new ActionRowBuilder()
-                .addComponents(
-                    [
-                        new ButtonBuilder()
-                            .setLabel("Product")
-                            .setURL("https://www.metservice.com/warnings/thunderstorm-outlook")
-                            .setStyle(ButtonStyle.Link),
-                    ]
-                );
+            let index = 0;
+            let previousValidToDateFormat = null;
 
-            message.channel.send({ embeds: [embed], components: [row2] });
+            // Edit the first embed
+            const embed1 = new EmbedBuilder(payload[0][0])
+                .setTitle("Thunderstorm Outlook (" + (index + 1) + "/" + data.outlooks.length + ")");
+
+            const response = await message.channel.send({ embeds: [embed1, payload[0][1]], files: [payload[1]], components: [row2] });
+
+            // Collect button responses for a certain period of time
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 900000 });
+
+            // Collector
+            collector.on("collect", (i) => {
+                if (i.customId === "thunderstorm-outlook-button-previous") {
+                    index--;
+
+                    // Format the next indexable outlook data
+                    if (index > 0) {
+                        previousValidToDateFormat = data.outlooks[index - 1].validTo;
+                    }
+                    else {
+                        previousValidToDateFormat = null;
+                    }
+                    const payload = thunderstormOutlookFormat(data.outlooks[index], previousValidToDateFormat);
+
+                    // Edit the first embed
+                    const embed1 = new EmbedBuilder(payload[0][0])
+                        .setTitle("Thunderstorm Outlook (" + (index + 1) + "/" + data.outlooks.length + ")");
+
+                    const newRow2 = new ActionRowBuilder(row2);
+
+                    // Button validation
+                    if (index <= 0) {
+                        newRow2.components[1].setDisabled();
+                    }
+
+                    newRow2.components[2].setDisabled(false);
+
+                    i.update({ embeds: [embed1, payload[0][1]], files: [payload[1]], components: [newRow2] });
+                }
+                else if (i.customId === "thunderstorm-outlook-button-next") {
+                    index++;
+
+                    // Format the next indexable outlook data
+                    if (index > 0) {
+                        previousValidToDateFormat = data.outlooks[index - 1].validTo;
+                    }
+                    else {
+                        previousValidToDateFormat = null;
+                    }
+                    const payload = thunderstormOutlookFormat(data.outlooks[index], previousValidToDateFormat);
+
+                    // Edit the first embed
+                    const embed1 = new EmbedBuilder(payload[0][0])
+                        .setTitle("Thunderstorm Outlook (" + (index + 1) + "/" + data.outlooks.length + ")");
+
+                    const newRow2 = new ActionRowBuilder(row2);
+
+                    // Button validation
+                    if (index >= data.outlooks.length - 1) {
+                        newRow2.components[2].setDisabled();
+                    }
+
+                    newRow2.components[1].setDisabled(false);
+
+                    i.update({ embeds: [embed1, payload[0][1]], files: [payload[1]], components: [newRow2] });
+                }
+            });
+
+            collector.on("end", (collected, reason) => {
+                const newRow2 = new ActionRowBuilder(row2);
+                newRow2.components[1].setDisabled();
+                newRow2.components[2].setDisabled();
+
+                response.edit({ components: [newRow2] });
+            });
         }
     }
 }
