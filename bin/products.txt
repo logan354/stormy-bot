@@ -1,7 +1,0 @@
-Forecasts - Forecasts for specific locations
-Observations - Current weather observations from weather stations
-Radar - Radar images for New Zealand and specific locations
-Warnings - Severe weather warnings for New Zealand
-Severe Weather Outlook - Outlook for New Zealand
-Thunderstorms Oulook - Outlook for New Zealand
-Tropical Cyclone Activity - Outlook for New Zealand

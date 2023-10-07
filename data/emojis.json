@@ -1,7 +1,7 @@
 {
-    "success": "<:Success:896608983568228364>",
-    "neutral": "<:Neutral:896608983429808129>",
-    "fail": "<:Fail:896608983505326101>",
+    "success": "<:success:896608983568228364>",
+    "neutral": "<:neutral:896608983429808129>",
+    "fail": "<:fail:896608983505326101>",
     "permission_fail": ":no_entry:",
     "temperature_high": ":small_red_triangle:",
     "temperature_low": ":small_red_triangle_down:"
