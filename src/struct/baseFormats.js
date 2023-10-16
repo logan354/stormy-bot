@@ -2,7 +2,7 @@ const { EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const { IconType, fetchMetServiceIcon, fetchMetServiceWeatherIcon } = require("../util/Util");
 const { days, shortDays } = require("../util/Constants");
 const { htmlToText } = require("html-to-text");
-const emojis = require("../data/emojis.json")
+const emojis = require("../../data/emojis.json")
 
 /**
  * Converts date to MetService date & time standard

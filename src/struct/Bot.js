@@ -1,7 +1,8 @@
-const config = require("dotenv").config();
+require("dotenv").config();
 const { join } = require("node:path");
 const { readdirSync } = require("node:fs");
 const { Client, GatewayIntentBits, Collection, REST, Routes } = require("discord.js");
+const config = require("../../config.json");
 
 
 class Bot {

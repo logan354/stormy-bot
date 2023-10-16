@@ -1,15 +1,21 @@
-const { Message, PermissionsBitField, EmbedBuilder, Colors } = require("discord.js");
+const { PermissionsBitField, Message, EmbedBuilder } = require("discord.js");
 const Bot = require("../../struct/Bot");
 const emojis = require("../../../data/emojis.json");
-const { formatFormalTime } = require("../../util/formats");
+const { formatFormalTime } = require("../../util/util");
 const { version, dependencies } = require("../../../package.json");
 
 module.exports = {
     name: "statistics",
     aliases: ["stats"],
-    description: "Displays statistical information about Bass.",
+    description: "Displays statistical information about the bot.",
     category: "Utility",
     utilisation: "statistics",
+    permissions: {
+        client: [
+            ["Embed Links", PermissionsBitField.Flags.EmbedLinks]
+        ],
+        member: []
+    },
 
     /**
      * @param {Bot} bot 
@@ -17,14 +23,11 @@ module.exports = {
      * @param {string[]} args 
      */
     execute(bot, message, args) {
-        const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return message.channel.send(emojis.permissionError + " **I do not have permission to Embed Links in** <#" + message.channel.id + ">");
-
-        let members = 0;
+        let totalGuildMembers = 0;
         client.guilds.cache.forEach(x => members += x.memberCount)
 
         const embed = new EmbedBuilder()
-            .setColor(Colors.DarkGreen)
+            .setColor("Grey")
             .setTitle("Statistics")
             .setFields(
                 {

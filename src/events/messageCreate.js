@@ -21,29 +21,29 @@ module.exports = {
         const command = bot.commands.get(commandName) || bot.commands.find(x => x.aliases && x.aliases.includes(commandName));
 
 
-        // // Permission Checker
-        // const botPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
-        // const memberPermissionsFor = message.channel.permissionsFor(message.author);
+        // Permission Checker
+        const clientPermissionsFor = message.channel.permissionsFor(message.guild.members.me);
+        const memberPermissionsFor = message.channel.permissionsFor(message.author);
 
-        // // Check bot channel permissions
-        // // Basic permissions
-        // if (!botPermissionsFor.has([PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages])) {
-        //     return;
-        // }
+        // Check client permissions
+        // Basic permissions
+        if (!clientPermissionsFor.has([PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages])) {
+            return;
+        }
 
-        // // Advanced permissions
-        // for (let i = 0; i < command.permissions.channel.length; i++) {
-        //     if (!botPermissionsFor.has(command.permissions.channel[i][1])) {
-        //         return message.channel.send(emojis.permission_fail + " **I do not have permission to " + command.permissions.channel[i][0] + " in** <#" + message.channel.id + ">");
-        //     }
-        // }
+        // Advanced permissions
+        for (let i = 0; i < command.permissions.client.length; i++) {
+            if (!clientPermissionsFor.has(command.permissions.client[i][1])) {
+                return message.channel.send(emojis.permission_fail + " **I do not have permission to " + command.permissions.client[i][0] + " in** <#" + message.channel.id + ">");
+            }
+        }
 
-        // // Check member channel permissions
-        // for (let i = 0; i < command.permissions.member.length; i++) {
-        //     if (!botPermissionsFor.has(command.permissions.member[i][1])) {
-        //         return message.channel.send(emojis.permission_fail + " **This command requires you to have the " + command.permissions.member[i][0] + " in** <#" + message.channel.id + ">");
-        //     }
-        // }
+        // Check member permissions
+        for (let i = 0; i < command.permissions.member.length; i++) {
+            if (!memberPermissionsFor.has(command.permissions.member[i][1])) {
+                return message.channel.send(emojis.permission_fail + " **This command requires you to have the " + command.permissions.member[i][0] + " in** <#" + message.channel.id + ">");
+            }
+        }
 
 
         // Execute

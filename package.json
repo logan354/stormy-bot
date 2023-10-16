@@ -2,8 +2,7 @@
   "name": "stormy-bot",
   "description": "A Discord bot for weather in New Zealand.",
   "version": "4.0.0-dev.1",
-  "main": "index.js",
-  "type": "module",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

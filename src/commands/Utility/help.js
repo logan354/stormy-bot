@@ -1,6 +1,6 @@
-const { Message, PermissionsBitField, EmbedBuilder, Colors } = require("discord.js");
+const { PermissionsBitField, Message, EmbedBuilder } = require("discord.js");
 const Bot = require("../../struct/Bot");
-const emojis = require("../../data/emojis.json");
+const emojis = require("../../../data/emojis.json");
 
 module.exports = {
     name: "help",
@@ -9,7 +9,9 @@ module.exports = {
     category: "Utility",
     utilisation: "help [command]",
     permissions: {
-        channel: [],
+        client: [
+            ["Embed Links", PermissionsBitField.Flags.EmbedLinks]
+        ],
         member: []
     },
 
@@ -21,7 +23,7 @@ module.exports = {
     execute(bot, message, args) {
         if (!args[0]) {
             const embed = new EmbedBuilder()
-                .setColor(Colors.DarkGreen)
+                .setColor("Grey")
                 .setTitle("Help Centre")
                 .setDescription("**Hello <@" + message.author.id + ">, welcome to the Help Centre.**\n\nBelow is a list of all my commands. Type <@" + bot.client.user.id + "> `" + this.utilisation + "` to get information about a specific command.")
                 .setThumbnail(message.guild.iconURL())
@@ -36,7 +38,9 @@ module.exports = {
                     }
                 )
                 .setTimestamp(new Date())
-                .setFooter({ text: "Total commands: " + bot.commands.size });
+                .setFooter({ 
+                    text: "Total commands: " + bot.commands.size 
+                });
 
             message.channel.send({ embeds: [embed] });
         }
@@ -46,7 +50,7 @@ module.exports = {
             if (!command) return message.channel.send(emojis.fail + " **I could not find that command**");
 
             const embed = new EmbedBuilder()
-                .setColor(Colors.DarkGreen)
+                .setColor("Grey")
                 .setTitle(command.name.charAt(0).toUpperCase() + command.name.slice(1) + " Command")
                 .setDescription("Required arguments `<>`, optional arguments `[]`")
                 .setThumbnail(message.guild.iconURL())
@@ -69,6 +73,10 @@ module.exports = {
                         name: "Utilisation",
                         value: "<@" + bot.client.user.id + "> `" + this.utilisation + "`",
                         inline: true
+                    },
+                    {
+                        name: "Permission(s)",
+                        value: command.permissions.member.length === 0 ? "`None`" : command.permissions.member.map((x) => "`" + x[0] + "`").join(", ")
                     }
                 )
                 .setTimestamp(new Date());
