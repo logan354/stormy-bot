@@ -62,7 +62,7 @@ module.exports = {
             data = await response.json();
         } catch (error) {
             if (error.name === "FetchError" && error.type === "invalid-json") {
-                return message.channel.send(client.emotes.error + " **Invalid location**");
+                return message.channel.send(client.emotes.error + " **Unknown/Invalid location**");
             } else {
                 console.error(error);
                 return message.channel.send(client.emotes.error + " **Error**");
