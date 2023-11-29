@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseSevereWeatherOutlook } = require("../../struct/baseFormats");
-const { apiURL, ApiEndpoints } = require("../../util/constants");
+const { baseSevereWeatherOutlook } = require("../../struct/messageBuilders");
+const { apiURL, APIEndpoints } = require("../../util/constants");
 
 module.exports = {
     name: "severe-weather-outlook",
@@ -22,7 +22,7 @@ module.exports = {
         interaction.deferReply();
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiURL + ApiEndpoints.SEVERE_WEATHER_OUTLOOK);
+            const response = await fetch(apiURL + APIEndpoints.SEVERE_WEATHER_OUTLOOK);
             var data = await response.json();
         } catch (error) {
             console.error(error);

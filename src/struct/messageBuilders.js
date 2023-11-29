@@ -1,4 +1,4 @@
-const { EmbedBuilder, AttachmentBuilder } = require("discord.js");
+const { EmbedBuilder, AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { IconType, fetchMetServiceIcon } = require("../util/util");
 const { days, shortDays } = require("../util/constants");
 const { htmlToText } = require("html-to-text");
@@ -48,13 +48,24 @@ function formatDate(date, useTime, options = { useWeekday: true, useNoon: false,
 
 
 /**
- * The discord message format for weather forecasts
- * @param {Object} data
- * @param {string} location
- * @param {boolean} hasToday
+ * Builds the discord message for weather forecasts from MetService API JSON data
+ * @param {Object} data MetService API JSON data
+ * @param {number} startDay The start forecast day
+ * @param {number} endDay The end forecast day
  * @returns {Array<Array<EmbedBuilder>>}
  */
-function forecastFormat(data, location, hasToday) {
+function buildForecastMessage(data, startDay, endDay) {
+    // Format and Define location
+    const rawLocation = data.locationIPS;
+    const rawLocationSplit = rawLocation.toLowerCase().split(" ");
+
+    for (let i = 0; i < rawLocationSplit.length; i++) {
+        rawLocationSplit[i] = rawLocationSplit[i].charAt(0).toUpperCase() + rawLocationSplit[i].substring(1);
+    }
+
+    const location = rawLocationSplit.join(" ");
+
+    // Message format
     const format = (data, isToday) => {
         const heading = `${fetchMetServiceIcon(data.forecastWord, IconType.EMOJI)} **${isToday ? "Today" : data.dowTLA}** ${data.date} | ${emojis.temperature_high} ${data.max}° ${emojis.temperature_low} ${data.min}°\n`;
         const paragraph = `${data.forecast}`;
@@ -62,52 +73,49 @@ function forecastFormat(data, location, hasToday) {
         return heading + paragraph + "\n\n";
     }
 
-    let isToday = true;
-
-    if (hasToday) {
-        isToday = true
-    }
-    else {
-        isToday = false
-    }
-
-    // Algorithm for formatting and sorting data into pages
-    const pages = []
     const charLimit = 4096;
+    const pages = []
     let j = 0;
 
-    for (let i = 0; i < data.length; i++) {
-        if (pages.length && pages[j].length + format(data[i], isToday).length > charLimit) {
+    for (let i = startDay; i <= endDay; i++) {
+        let isToday = i === 0 ? true : false;
+
+        if (pages.length && pages[j].length + format(data.days[i], isToday).length > charLimit) {
             j++
-            k++
-            pages[j] = format(data[i], isToday);
+            pages[j] = format(data.days[i], isToday);
         }
         else {
             if (pages[j] === undefined) {
-                pages[j] = format(data[i], isToday);
+                pages[j] = format(data.days[i], isToday);
             }
             else {
-                pages[j] += format(data[i], isToday);
+                pages[j] += format(data.days[i], isToday);
             }
         }
-
-        // Reset isToday variable
-        isToday = false;
     }
 
     const embeds = [];
+
     for (let i = 0; i < pages.length; i++) {
         const embed = new EmbedBuilder()
             .setColor("DarkBlue")
+            .setAuthor({
+                iconURL: "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ",
+                name: "MetService"
+            })
             .setTitle("Forecast for " + location)
             .setDescription(pages[i])
             .setTimestamp();
 
-        if (data.length === 1) {
-            embed.setTitle(data[0].dow + " " + embed.data.title)
-        } 
+        if (endDay - startDay === 0) {
+            embed.setTitle(data.days[startDay].dow + " " + embed.data.title)
+        }
         else {
-            embed.setTitle(data.length + "-Day " + embed.data.title)
+            embed.setTitle(((endDay - startDay) + 1) + "-Day " + embed.data.title)
+        }
+
+        if (pages.length > 1) {
+            embed.setTitle(embed.data.title + " (" + (i + 1) + "/" + pages.length + ")");
         }
 
         embeds.push(embed);
@@ -117,13 +125,17 @@ function forecastFormat(data, location, hasToday) {
 }
 
 /**
- * The discord message format for weather observations
- * @param {Object} data 
- * @returns {Array<EmbedBuilder>}
+ * Builds the discord message for weather observations from MetService API JSON data
+ * @param {Object} data MetService API JSON data
+ * @returns {Array<Array<EmbedBuilder>>}
  */
-function observationFormat(data) {
+function buildObservationMessage(data) {
     const embed = new EmbedBuilder()
-        .setColor("Grey")
+        .setColor("DarkBlue")
+        .setAuthor({
+            iconURL: "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ",
+            name: "MetService"
+        })
         .setTitle("Current Conditions at " + data.location)
         .addFields(
             {
@@ -223,7 +235,8 @@ function warningFormat(data) {
 }
 
 /**
- * The discord message format for the severe weather outlook product
+ * The discord message format for the severe weather outlook product\
+ * OUTDATED, WAITING ON METSERVICE FOR FIX
  * @param {Object} data
  * @returns {Array<Array<EmbedBuilder, EmbedBuilder>, AttachmentBuilder>}
  */
@@ -262,32 +275,45 @@ function severeWeatherOutlookFormat(data) {
 }
 
 /**
- * The discord message format for the thunderstorm outlook product
- * @param {Object} data
- * @param {boolean} previousValidToDate
- * @returns {Array<Array<EmbedBuilder, EmbedBuilder>, AttachmentBuilder}
+ * Builds the discord message for weather observations from MetService API JSON data
+ * @param {Object} data MetService API JSON data
+ * @param {number} startOutlook The start outlook
+ * @param {number} endOutlook the end outlook
+ * @returns {Array<Array<EmbedBuilder>, Array<AttachmentBuilder>>}
  */
-function thunderstormOutlookFormat(data, previousValidToDateFormat) {
-    const issuedDateFormat = data.issuedAt;
-    const validToDateFormat = data.validTo;
+function buildThunderstormOutlookMessage(data, startOutlook, endOutlook) {
+    const charLimit = 4096;
+    const pages = [];
+    let j = 0;
 
-    const attachment = new AttachmentBuilder()
-        .setFile("https://www.metservice.com" + data.url)
-        .setName(data.url.split("/").splice(-1)[0] + ".png")
+    for (let i = startOutlook - 1; i <= endOutlook; i++) {
+        
+    }
+    const issuedDateFormat = data2.issuedAt;
+    const previousValidToDateFormat = data.outlooks[outlook - 1] ? data.outlooks[outlook - 1].validTo : null;
+    const validToDateFormat = data2.validTo;
 
     const embed1 = new EmbedBuilder()
         .setColor("Grey")
+        .setAuthor({
+            iconURL: "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ",
+            name: "MetService"
+        })
         .setTitle("Thunderstorm Outlook")
-        .setDescription(`### Valid ${previousValidToDateFormat ? "from " + previousValidToDateFormat + " to " + validToDateFormat : "to " + validToDateFormat}\n` + htmlToText(data.text))
+        .setDescription(`**Valid ${previousValidToDateFormat ? "from " + previousValidToDateFormat + " to " + validToDateFormat : "to " + validToDateFormat}**\n` + htmlToText(data2.text))
         .setFooter({
             text: "Issued: " + issuedDateFormat
         });
+
+    const attachment = new AttachmentBuilder()
+        .setFile("https://www.metservice.com" + data2.url)
+        .setName(data2.url.split("/").splice(-1)[0] + ".png")
 
     const embed2 = new EmbedBuilder()
         .setColor("Grey")
         .setImage("attachment://" + attachment.name);
 
-    return [[embed1, embed2], attachment];
+    return [[embed1, embed2], [attachment]];
 }
 
-module.exports = { forecastFormat, observationFormat, warningFormat, severeWeatherOutlookFormat, thunderstormOutlookFormat }
+module.exports = { buildForecastMessage, buildObservationMessage, warningFormat, severeWeatherOutlookFormat, buildThunderstormOutlookMessage }

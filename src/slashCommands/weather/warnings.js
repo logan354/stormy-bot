@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
 const { default: fetch } = require("node-fetch");
 const { xml2js } = require("xml-js");
-const { baseWarning } = require("../../struct/baseFormats");
+const { baseWarning } = require("../../struct/messageBuilders");
 const { capURL } = require("../../util/constants");
 
 module.exports = {

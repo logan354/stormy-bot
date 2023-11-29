@@ -1,7 +1,7 @@
 const { Client, Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { severeWeatherOutlookFormat } = require("../../struct/baseFormats");
-const { apiURL, ApiEndpoints } = require("../../util/constants");
+const { severeWeatherOutlookFormat } = require("../../struct/messageBuilders");
+const { apiURL, APIEndpoints } = require("../../util/constants");
 
 module.exports = {
     name: "severe-weather-outlook",
@@ -20,7 +20,7 @@ module.exports = {
 
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiURL + ApiEndpoints.SEVERE_WEATHER_OUTLOOK);
+            const response = await fetch(apiURL + APIEndpoints.SEVERE_WEATHER_OUTLOOK);
             data = await response.json();
         } catch (error) {
             console.error(error);

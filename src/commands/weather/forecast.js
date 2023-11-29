@@ -1,7 +1,7 @@
 const { Client, Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { forecastFormat } = require("../../struct/baseFormats");
-const { apiURL, ApiEndpoints, days, shortDays } = require("../../util/constants");
+const { forecastFormat, buildForecastMessage } = require("../../struct/messageBuilders");
+const { apiURL, APIEndpoints, days, shortDays } = require("../../util/constants");
 
 module.exports = {
     name: "forecast",
@@ -58,7 +58,7 @@ module.exports = {
 
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiURL + ApiEndpoints.FORECAST + location.replace(" ", "-"));
+            const response = await fetch(apiURL + APIEndpoints.FORECAST + location.replace(" ", "-"));
             data = await response.json();
         } catch (error) {
             if (error.name === "FetchError" && error.type === "invalid-json") {
@@ -70,7 +70,6 @@ module.exports = {
         }
 
         let payload = null;
-        const truelocation = data.locationIPS.charAt(0).toUpperCase() + data.locationIPS.slice(1).toLowerCase();
 
         if (!Number(outlook)) {
             outlook = outlook.charAt(0).toUpperCase() + outlook.slice(1).toLowerCase();
@@ -81,7 +80,7 @@ module.exports = {
 
             for (let i = 0; i < 7; i++) {
                 if (data.days[i].dow.toLowerCase() === outlook.toLowerCase() || data.days[i].dowTLA.toLowerCase() === outlook.toLowerCase()) {
-                    payload = forecastFormat(data.days[i], truelocation, i === 0 ? true : false);
+                    payload = buildForecastMessage(data, i, i);
                     break;
                 }
             }
@@ -90,15 +89,8 @@ module.exports = {
                 return message.channel.send(client.emotes.error + " **Invalid outlook number. Must be between 1 and " + data.days.length + "**");
             }
 
-            const data2 = [];
-            for (let i = 0; i < outlook; i++) {
-                data2.push(data.days[i]);
-            }
-
-            payload = forecastFormat(data2, truelocation, true);
+            payload = buildForecastMessage(data, 0, outlook - 1);
         }
-
-
 
         const row = new ActionRowBuilder()
             .addComponents(
@@ -128,7 +120,7 @@ module.exports = {
                         .setStyle(ButtonStyle.Secondary)
                 ]
             );
-
+        
         if (payload[0].length < 2) {
             message.channel.send({ embeds: payload[0], components: [row] });
         }

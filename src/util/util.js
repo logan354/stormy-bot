@@ -48,27 +48,25 @@ function fetchMetServiceIcon(icon, type) {
 }
 
 /**
- * Formats milliseconds to formal time 
- * e.g 3 hours 2 minutes 30 seconds
+ * Formats an uptime string
  * @param {number} milliseconds 
  * @returns {string}
  */
-function formatFormalTime(milliseconds) {
-    if (!milliseconds || !parseInt(milliseconds)) return undefined;
+function formatUptime(milliseconds) {
     const seconds = Math.floor(milliseconds % 60000 / 1000);
     const minutes = Math.floor(milliseconds % 3600000 / 60000);
     const hours = Math.floor(milliseconds / 3600000);
     const days = Math.floor(milliseconds / 86400000);
     if (days > 0) {
-        return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+        return `${days}:${hours}:${minutes}:${seconds}`;
     }
     if (hours > 0) {
-        return `${hours} hours ${minutes} minutes ${seconds} seconds`;
+        return `0:${hours}:${minutes}:${seconds}`;
     }
     if (minutes > 0) {
-        return `${minutes} minutes ${seconds} seconds`
+        return `0:00:${minutes}:${seconds}`
     }
-    return `${seconds} seconds`;
+    return `0:00:00:${seconds}`;
 }
 
-module.exports = { getApplicationCommandID, IconType, fetchMetServiceIcon, formatFormalTime }
+module.exports = { getApplicationCommandID, IconType, fetchMetServiceIcon, formatUptime }

@@ -1,7 +1,7 @@
 const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseForecastTitle, baseForecast } = require("../../struct/baseFormats");
-const { apiURL, ApiEndpoints, days, shortDays } = require("../../util/constants");
+const { baseForecastTitle, baseForecast } = require("../../struct/messageBuilders");
+const { apiURL, APIEndpoints, days, shortDays } = require("../../util/constants");
 
 module.exports = {
     name: "forecast",
@@ -39,7 +39,7 @@ module.exports = {
         interaction.deferReply();
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiURL + ApiEndpoints.FORECAST + location.replace(" ", "-"));
+            const response = await fetch(apiURL + APIEndpoints.FORECAST + location.replace(" ", "-"));
             var data = await response.json();
         } catch (error) {
             if (error.name === "FetchError" && error.type === "invalid-json") {

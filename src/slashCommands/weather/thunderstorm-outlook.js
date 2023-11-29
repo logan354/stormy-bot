@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseThunderstormOutlook } = require("../../struct/baseFormats");
-const { apiURL, ApiEndpoints } = require("../../util/constants");
+const { baseThunderstormOutlook } = require("../../struct/messageBuilders");
+const { apiURL, APIEndpoints } = require("../../util/constants");
 
 module.exports = {
     name: "thunderstorm-outlook",
@@ -22,7 +22,7 @@ module.exports = {
         interaction.deferReply();
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiURL + ApiEndpoints.THUNDERSTORM_OUTLOOK);
+            const response = await fetch(apiURL + APIEndpoints.THUNDERSTORM_OUTLOOK);
             var data = await response.json();
         } catch (error) {
             console.error(error);

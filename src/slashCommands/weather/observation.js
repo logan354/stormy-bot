@@ -1,7 +1,7 @@
 const { ApplicationCommandOptionType, Client, CommandInteraction, CommandInteractionOptionResolver, PermissionsBitField } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { baseObservation } = require("../../struct/baseFormats");
-const { apiURL, ApiEndpoints } = require("../../util/constants");
+const { baseObservation } = require("../../struct/messageBuilders");
+const { apiURL, APIEndpoints } = require("../../util/constants");
 
 module.exports = {
     name: "observation",
@@ -32,7 +32,7 @@ module.exports = {
         interaction.deferReply();
         // Fetch data from MetService API
         try {
-            const response = await fetch(apiURL + ApiEndpoints.OBSERVATION + location.replace(" ", "-"));
+            const response = await fetch(apiURL + APIEndpoints.OBSERVATION + location.replace(" ", "-"));
             var data = await response.json();
         } catch (error) {
             if (error.name === "FetchError" && error.type === "invalid-json") {

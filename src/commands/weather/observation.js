@@ -1,13 +1,19 @@
-const { Client, Message } = require("discord.js");
+const { Client, Message, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { default: fetch } = require("node-fetch");
-const { observationFormat } = require("../../struct/baseFormats");
-const { apiURL, ApiEndpoints } = require("../../util/constants");
+const { apiURL, APIEndpoints } = require("../../util/constants");
+const { buildObservationMessage } = require("../../struct/messageBuilders");
 
 module.exports = {
     name: "observation",
     aliases: ["obs", "weather"],
     description: "Displays the current weather observation for a specified location.",
     category: "Weather",
+    permissions: {
+        client: [
+            ["Embed Links", PermissionsBitField.Flags.EmbedLinks]
+        ],
+        member: []
+    },
     utilisation: "observation <location>",
 
     /**
@@ -21,22 +27,31 @@ module.exports = {
 
         let data = null;
 
-        // Fetch data from MetService API
+        // Fetch MetService API JSON data  
         try {
-            const response = await fetch(apiURL + ApiEndpoints.OBSERVATION + location.replace(" ", "-"));
+            const response = await fetch(apiURL + APIEndpoints.OBSERVATION + location.replace(" ", "-"));
             data = await response.json();
         } catch (error) {
             if (error.name === "FetchError" && error.type === "invalid-json") {
-                return message.channel.send(client.emotes.error + " **Invalid location**");
+                return message.channel.send(client.emotes.error + " **Unknown/Invalid location**");
             } else {
                 console.error(error);
                 return message.channel.send(client.emotes.error + " **Error**");
             }
         }
 
-        // Format
-        const payload = observationFormat(data);
+        const payload = buildObservationMessage(data);
 
-        message.channel.send({ embeds: payload });
+        const row = new ActionRowBuilder()
+        .addComponents(
+            [
+                new ButtonBuilder()
+                    .setLabel("Observations")
+                    .setURL("https://www.metservice.com/national")
+                    .setStyle(ButtonStyle.Link),
+            ]
+        )
+
+        message.channel.send({ embeds: payload, components: [row] });
     }
 }
