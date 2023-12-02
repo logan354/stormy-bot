@@ -1,7 +1,5 @@
 const apiURL = "http://metservice.com/publicData/";
 
-const capURL = "https://alerts.metservice.com/cap/rss";
-
 const APIEndpoints = {
     FORECAST: "localForecast",
     OBSERVATION: "localObs_",
@@ -10,16 +8,6 @@ const APIEndpoints = {
     THUNDERSTORM_OUTLOOK: "thunderstormOutlook"
 }
 
-const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-]
+const capURL = "https://alerts.metservice.com/cap/rss";
 
-const shortDays = days.map((x) => x.substring(0, 3));
-
-module.exports = { apiURL, capURL, APIEndpoints, days, shortDays }
+module.exports = { apiURL, APIEndpoints, capURL }

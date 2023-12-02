@@ -1,4 +1,5 @@
 const { Client, Message, PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const emojis = require("../../../data/emojis.json");
 const { default: fetch } = require("node-fetch");
 const { apiURL, APIEndpoints } = require("../../util/constants");
 const { buildObservationMessage } = require("../../struct/messageBuilders");
@@ -22,36 +23,44 @@ module.exports = {
      * @param {string[]} args 
      */
     async execute(client, message, args) {
+        // Define location parameter
         const location = args.join(" ");
-        if (!location) return message.channel.send(client.emotes.error + " **A location is required**");
+        if (!location) return message.channel.send(emojis.fail + " **A location is required**");
 
+        // Fetch MetService API JSON data
         let data = null;
 
-        // Fetch MetService API JSON data  
         try {
             const response = await fetch(apiURL + APIEndpoints.OBSERVATION + location.replace(" ", "-"));
-            data = await response.json();
-        } catch (error) {
-            if (error.name === "FetchError" && error.type === "invalid-json") {
-                return message.channel.send(client.emotes.error + " **Unknown/Invalid location**");
-            } else {
-                console.error(error);
-                return message.channel.send(client.emotes.error + " **Error**");
+
+            if (response.ok) {
+                data = await response.json();
             }
+            else {
+                if (response.status === 404) {
+                    return message.channel.send(emojis.fail + " **Invalid/Unknown location**");
+                }
+                else {
+                    return message.channel.send(emojis.fail + " **Error**")
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            return message.channel.send(emojis.fail + " **Error**");
         }
 
         const payload = buildObservationMessage(data);
 
         const row = new ActionRowBuilder()
-        .addComponents(
-            [
-                new ButtonBuilder()
-                    .setLabel("Observations")
-                    .setURL("https://www.metservice.com/national")
-                    .setStyle(ButtonStyle.Link),
-            ]
-        )
+            .addComponents(
+                [
+                    new ButtonBuilder()
+                        .setLabel("Observations")
+                        .setURL("https://www.metservice.com/national")
+                        .setStyle(ButtonStyle.Link),
+                ]
+            )
 
-        message.channel.send({ embeds: payload, components: [row] });
+        message.channel.send({ embeds: [payload], components: [row] });
     }
 }
