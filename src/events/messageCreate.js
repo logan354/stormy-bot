@@ -18,7 +18,7 @@ module.exports = {
         const args = message.content.slice(mention.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
 
-        const command = bot.commands.get(commandName) || bot.commands.find(x => x.aliases && x.aliases.includes(commandName));
+        const command = bot.messageCommands.get(commandName) || bot.messageCommands.find(x => x.aliases && x.aliases.includes(commandName));
 
 
         // Permission Checker

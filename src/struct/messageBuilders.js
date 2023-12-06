@@ -50,8 +50,8 @@ function formatDate(date, useTime, options = { useWeekday: true, useNoon: false,
 /**
  * Builds the discord message for weather forecasts
  * @param {Object} data MetService API JSON data
- * @param {number} startDay The start forecast day. Index from 0.
- * @param {number} endDay The end forecast day. Index from 0.
+ * @param {number} [startDay] The start forecast day.
+ * @param {number} [endDay] The end forecast day.
  * @returns {EmbedBuilder}
  */
 function buildForecastMessage(data, startDay, endDay) {
@@ -59,6 +59,14 @@ function buildForecastMessage(data, startDay, endDay) {
         throw new Error();
     }
 
+    if (!startDay) {
+        startDay = 1;
+    }
+
+    if (!endDay) {
+        endDay = data.days.length;
+    }
+    
     // Format and Define location
     const rawLocation = data.locationIPS;
     const rawLocationSplit = rawLocation.toLowerCase().split(" ");
@@ -78,27 +86,27 @@ function buildForecastMessage(data, startDay, endDay) {
     }
 
     // Format data within start and end day parameters
-    let description;
+    let section;
     const charLimit = 4096;
 
     for (let i = startDay; i <= endDay; i++) {
         let isToday = i === 0 ? true : false;
-        const formatData = format(data[i], isToday);
+        const formatData = format(data.days[i], isToday);
 
-        if (!description) {
-            if (description.length + formatData.length > charLimit) {
+        if (!section) {
+            if (0 + formatData.length > charLimit) {
                 ". . ."
             }
             else {
-                description = formatData;
+                section = formatData;
             }
         }
         else {
-            if (description.length + formatData.length > charLimit) {
+            if (section.length + formatData.length > charLimit) {
                 ". . ."
             }
             else {
-                description += formatData;
+                section += formatData;
             }
         }
     }
@@ -111,7 +119,7 @@ function buildForecastMessage(data, startDay, endDay) {
             name: "MetService"
         })
         .setTitle("Forecast for " + location)
-        .setDescription(description)
+        .setDescription(section)
         .setTimestamp();
 
     if (endDay - startDay === 0) {
@@ -130,10 +138,6 @@ function buildForecastMessage(data, startDay, endDay) {
  * @returns {EmbedBuilder}
  */
 function buildObservationMessage(data) {
-    if (!data) {
-        throw new Error();
-    }
-
     const embed = new EmbedBuilder()
         .setColor("DarkBlue")
         .setAuthor({
@@ -185,7 +189,7 @@ function buildObservationMessage(data) {
  * @param {Array} data MetService CAP XML data
  * @returns {Array<EmbedBuilder>}
  */
-function warningFormat(data) {
+function buildWarningMessage(data) {
     const format = (data) => {
         let colourCode = null;
         data.parameter.forEach(param => {
@@ -251,10 +255,6 @@ function buildSevereWeatherOutlookMessage() { }
  * @returns {Array<Array<Array<EmbedBuilder>>, Array<AttachmentBuilder>>}
  */
 function buildThunderstormOutlookMessage(data, startOutlook, endOutlook) {
-    if (!data) {
-        throw new Error();
-    }
-
     const embeds = [];
     const attachments = [];
     const charLimit = 4096;
@@ -277,7 +277,7 @@ function buildThunderstormOutlookMessage(data, startOutlook, endOutlook) {
                 iconURL: "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ",
                 name: "MetService"
             })
-            .setTitle("Thunderstorm Outlook")
+            .setTitle(endOutlook - startOutlook !== 0 ? "Thunderstorm Outlook (" + (i + 1) + "/" + endOutlook - startOutlook +")": "Thunderstorm Outlook")
             .setDescription(description)
             .setFooter({
                 text: "Issued: " + issuedDate

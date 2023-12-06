@@ -19,10 +19,10 @@ class Bot {
         });
 
         /**
-         * The commands collection of this bot
+         * The message commands collection of this bot
          * @type {Collection}
          */
-        this.commands = new Collection();
+        this.messageCommands = new Collection();
 
         /**
          * The slash commands collection of this bot
@@ -31,8 +31,8 @@ class Bot {
         this.slashCommands = new Collection();
     }
 
-    start() {
-        this.handleCommands();
+    create() {
+        this.handleMessageCommands();
         this.handleSlashCommands();
         this.handleEvents();
         //this.registerSlashCommands();
@@ -44,17 +44,17 @@ class Bot {
         this.client.destroy();
     }
 
-    handleCommands() {
-        console.log("Loading commands...");
+    handleMessageCommands() {
+        console.log("Loading message commands...");
 
-        const path = join(__dirname, "../commands");
+        const path = join(__dirname, "../commands/message");
 
         readdirSync(path).forEach(dir => {
             const files = readdirSync(`${path}/${dir}`).filter(file => file.endsWith(".js"));
 
             for (const file of files) {
                 const command = require(`${path}/${dir}/${file}`);
-                this.commands.set(command.name, command);
+                this.messageCommands.set(command.name, command);
                 console.log(`-> Loaded command ${command.name.toLowerCase()}`);
             }
         });
@@ -63,7 +63,7 @@ class Bot {
     handleSlashCommands() {
         console.log("Loading slash commands...");
 
-        const path = join(__dirname, "../slashCommands");
+        const path = join(__dirname, "../commands/slash");
 
         readdirSync(path).forEach(dir => {
             const files = readdirSync(`${path}/${dir}`).filter(file => file.endsWith(".js"));
