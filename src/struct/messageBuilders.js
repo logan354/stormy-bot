@@ -66,7 +66,7 @@ function buildForecastMessage(data, startDay, endDay) {
     if (!endDay) {
         endDay = data.days.length;
     }
-    
+
     // Format and Define location
     const rawLocation = data.locationIPS;
     const rawLocationSplit = rawLocation.toLowerCase().split(" ");
@@ -85,30 +85,19 @@ function buildForecastMessage(data, startDay, endDay) {
         return heading + paragraph + "\n\n";
     }
 
-    // Format data within start and end day parameters
-    let section;
+    // Format loop
+    let section = "";
     const charLimit = 4096;
 
-    for (let i = startDay; i <= endDay; i++) {
+    for (let i = startDay - 1; i <= endDay - 1; i++) {
         let isToday = i === 0 ? true : false;
-        const formatData = format(data.days[i], isToday);
 
-        if (!section) {
-            if (0 + formatData.length > charLimit) {
-                ". . ."
-            }
-            else {
-                section = formatData;
-            }
-        }
-        else {
-            if (section.length + formatData.length > charLimit) {
-                ". . ."
-            }
-            else {
-                section += formatData;
-            }
-        }
+        section += format(data.days[i], isToday);
+    }
+
+    // Section exceeds character limit
+    if (section > charLimit) {
+        section = section.slice(charLimit - 5) + ". . .";
     }
 
     // Create embed
@@ -138,6 +127,10 @@ function buildForecastMessage(data, startDay, endDay) {
  * @returns {EmbedBuilder}
  */
 function buildObservationMessage(data) {
+    if (!data) {
+        throw new Error();
+    }
+
     const embed = new EmbedBuilder()
         .setColor("DarkBlue")
         .setAuthor({
@@ -259,16 +252,17 @@ function buildThunderstormOutlookMessage(data, startOutlook, endOutlook) {
     const attachments = [];
     const charLimit = 4096;
 
+    // Format loop
     for (let i = startOutlook - 1; i <= endOutlook - 1; i++) {
         const issuedDate = data.outlooks[i].issuedAt;
         const previousValidToDate = data.outlooks[i - 1] ? data.outlooks[i - 1].validTo : null;
         const validToDate = data.outlooks[i].validTo;
 
-        let description = `**Valid ${previousValidToDate ? "from " + previousValidToDate + " to " + validToDate : "to " + validToDate}**\n` + htmlToText(data.outlooks[i].text);
+        let section = `**Valid ${previousValidToDate ? "from " + previousValidToDate + " to " + validToDate : "to " + validToDate}**\n` + htmlToText(data.outlooks[i].text);
 
-        // Edit description if it exceeds character limit
-        if (description.length > charLimit) {
-            description = description.slice(charLimit - 5) + ". . .";
+        // Section exceeds character limit
+        if (section.length > charLimit) {
+            section = section.slice(charLimit - 5) + ". . .";
         }
 
         const embed1 = new EmbedBuilder()
@@ -277,8 +271,8 @@ function buildThunderstormOutlookMessage(data, startOutlook, endOutlook) {
                 iconURL: "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ",
                 name: "MetService"
             })
-            .setTitle(endOutlook - startOutlook !== 0 ? "Thunderstorm Outlook (" + (i + 1) + "/" + endOutlook - startOutlook +")": "Thunderstorm Outlook")
-            .setDescription(description)
+            .setTitle(endOutlook - startOutlook !== 0 ? "Thunderstorm Outlook (" + (i + 1) + "/" + endOutlook - startOutlook + ")" : "Thunderstorm Outlook")
+            .setDescription(section)
             .setFooter({
                 text: "Issued: " + issuedDate
             });

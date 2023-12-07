@@ -61,16 +61,16 @@ module.exports = {
         let payload = null;
 
         if (!outlook) {
-            payload = buildForecastMessage(data, 0, data.days.length - 1);
+            payload = buildForecastMessage(data, 1, data.days.length);
         }
         else if (!Number(outlook)) {
             let found = false;
-            let dayNumber = 0;
+            let dayNumber = 1;
 
             for (let i = 0; i < 7; i++) {
                 if (data.days[i].dow.toLowerCase() === outlook.toLowerCase()) {
                     found = true;
-                    dayNumber = i;
+                    dayNumber = i + 1;
                     break;
                 }
             }
@@ -79,7 +79,7 @@ module.exports = {
                 return message.channel.send(emojis.fail + " **Invalid outlook date. Must be Monday, Tuesday, etc**");
             }
             else {
-                payload = buildForecastMessage(data, i, i);
+                payload = buildForecastMessage(data, dayNumber, dayNumber);
             }
         }
         else {
@@ -87,7 +87,7 @@ module.exports = {
                 return message.channel.send(emojis.fail + " **Invalid outlook number. Must be between 1 and " + data.days.length + "**");
             }
             else {
-                payload = buildForecastMessage(data, 0, outlook - 1);
+                payload = buildForecastMessage(data, 1, outlook);
             }
         }
 
