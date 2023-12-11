@@ -4,16 +4,16 @@ const emojis = require("../../../../data/emojis.json");
 
 module.exports = {
     name: "help",
-    aliases: [],
-    description: "Displays help information about the bot.",
+    description: "Displays information and commands.",
     category: "Utility",
+    usage: "help [command]",
+    aliases: [],
     permissions: {
         client: [
             ["Embed Links", PermissionsBitField.Flags.EmbedLinks]
         ],
         member: []
     },
-    utilisation: "help [command]",
 
     /**
      * @param {Bot} bot
@@ -29,26 +29,17 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor("Grey")
                 .setTitle(command.name.charAt(0).toUpperCase() + command.name.slice(1) + " Command")
-                .setDescription("Required arguments: `<>` | Optional arguments: `[]`")
+                .setDescription("Required arguments: `<>` | Optional arguments: `[]`\n\n" + command.description)
                 .setThumbnail(message.guild.iconURL())
                 .setFields(
                     {
-                        name: "Description",
-                        value: command.description,
+                        name: "Usage",
+                        value: "<@" + bot.client.user.id + "> `" + this.utilisation + "`",
+                        inline: true
                     },
                     {
                         name: "Category",
                         value: "`" + command.category + "`",
-                        inline: true
-                    },
-                    {
-                        name: "Aliase(s)",
-                        value: command.aliases.length === 0 ? "`None`" : command.aliases.map((aliase) => "`" + aliase + "`").join(", "),
-                        inline: true
-                    },
-                    {
-                        name: "Utilisation",
-                        value: "<@" + bot.client.user.id + "> `" + this.utilisation + "`",
                         inline: true
                     },
                     {

@@ -3,16 +3,16 @@ const Bot = require("../../../struct/Bot");
 
 module.exports = {
     name: "ping",
-    aliases: [],
     description: "Displays the bot's response time to Discord.",
     category: "Utility",
+    usage: "ping",
+    aliases: [],
     permissions: {
         client: [
             ["Embed Links", PermissionsBitField.Flags.EmbedLinks]
         ],
         member: []
     },
-    utilisation: "ping",
 
     /**
      * @param {Bot} bot
