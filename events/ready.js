@@ -1,5 +1,5 @@
 const { Events, Client, ActivityType } = require("discord.js");
-const Bot = require("../struct/Bot");
+const Bot = require("../structures/Bot");
 
 module.exports = {
     name: Events.ClientReady,

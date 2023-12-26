@@ -1,5 +1,5 @@
 const { PermissionsBitField, Message, EmbedBuilder } = require("discord.js");
-const Bot = require("../../../struct/Bot");
+const Bot = require("../../../structures/Bot");
 
 module.exports = {
     name: "ping",

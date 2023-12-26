@@ -3,9 +3,6 @@
     "forecast": [
         ["1167330761519681598", "Hamilton"]
     ],
-    "observation": [
-        ["1167332430131232809", "Hamilton"]
-    ],
     "warnings": "1108884700849782804",
     "severe_weather_outlook": "1108884615063687229",
     "thunderstorm_outlook": "1108884549917749300"

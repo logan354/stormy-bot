@@ -1,6 +1,6 @@
 const { Events, Message, PermissionsBitField } = require("discord.js");
-const Bot = require("../struct/Bot");
-const emojis = require("../../data/emojis.json");
+const Bot = require("../structures/Bot");
+const emojis = require("../data/emojis.json");
 
 module.exports = {
     name: Events.MessageCreate,
@@ -19,6 +19,10 @@ module.exports = {
         const commandName = args.shift().toLowerCase();
 
         const command = bot.messageCommands.get(commandName) || bot.messageCommands.find(x => x.aliases && x.aliases.includes(commandName));
+
+        if (!command) {
+            return;
+        }
 
 
         // Permission Checker

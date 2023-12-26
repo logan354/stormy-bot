@@ -1,9 +1,9 @@
 const { PermissionsBitField, Message, ComponentType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const Bot = require("../../../struct/Bot");
+const Bot = require("../../../structures/Bot");
 const { default: fetch } = require("node-fetch");
-const { buildThunderstormOutlookMessage } = require("../../../struct/messageBuilders");
+const { buildThunderstormOutlookMessage } = require("../../../structures/messageBuilders");
 const { apiURL, APIEndpoints } = require("../../../util/constants");
-const emojis = require("../../../../data/emojis.json");
+const emojis = require("../../../data/emojis.json");
 
 module.exports = {
     name: "thunderstorm-outlook",

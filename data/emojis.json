@@ -4,5 +4,26 @@
     "fail": "<:fail:896608983505326101>",
     "permission_fail": ":no_entry:",
     "temperature_high": ":small_red_triangle:",
-    "temperature_low": ":small_red_triangle_down:"
+    "temperature_low": ":small_red_triangle_down:",
+
+    "fine": "<:fine:876238436112138331>",
+    "fine_night": "<:fine_night:876238635920408646>",
+    "partly_cloudy": "<:partly_cloudy:876238435885658134>",
+    "partly_cloudy_night": "<:partly_cloudy_night:876238635924615168>",
+    "cloudy": "<:cloudy:876238436242182174>",
+    "few_showers": "<:few_showers:876238436028285048>",
+    "few_showers_night": "<:few_showers_night:876238635396132905>",
+    "showers": "<:showers:876238435894063115>",
+    "rain": "<:rain:876238436053446667>",
+    "dizzle": "<:drizzle:876238436267360336>",
+    "fog": "<:fog:876238436212834304>",
+    "snow": "<:snow:876238436347052072>",
+    "wind": "<:wind:876238436305084436>",
+    "wind_rain": "<:wind_rain:876238436011499611>",
+    "thunder": "<:thunder:876238436221210714>",
+    "hail": "<:hail:876238436149911582>",
+    "frost": "<:frost:876238435642404905>",
+    "watch": "<:watch:878485283316842556>",
+    "orange_warning": "<:orange_warning:878485283396534313>",
+    "red_warning": "<:red_warning:878485282947731488>"
 }

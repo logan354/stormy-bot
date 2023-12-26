@@ -1,7 +1,7 @@
 const fs = require("node:fs")
-const Bot = require("./Bot");
+const Bot = require("../Bot");
 const { default: fetch } = require("node-fetch");
-const { apiURL, APIEndpoints } = require("../util/constants");
+const { apiURL, APIEndpoints } = require("../../util/constants");
 const { forecastFormat, observationFormat, severeWeatherOutlookFormat } = require("./messagePayloads");
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const guildSystemConfig = require("../../guild-system-config.json");

@@ -1,5 +1,5 @@
 const { Events, ChatInputCommandInteraction } = require("discord.js");
-const Bot = require("../struct/Bot");
+const Bot = require("../structures/Bot");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -11,11 +11,9 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction 
      */
     async execute(bot, interaction) {
-        if (!interaction.isChatInputCommand()) return;
+        if (!interaction.isCommand()) return;
 
         const command = bot.slashCommands.get(interaction.commandName);
-
-        // TODO: Permissions Checker
 
         if (command) {
             try {

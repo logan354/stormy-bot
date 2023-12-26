@@ -1,8 +1,8 @@
 const { EmbedBuilder, AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { IconType, fetchMetServiceIcon } = require("../util/util");
-const { days, shortDays } = require("../util/constants");
+const { ForecastPeriodType } = require("../util/constants");
 const { htmlToText } = require("html-to-text");
-const emojis = require("../../data/emojis.json");
+const emojis = require("../data/emojis.json");
 
 /**
  * Converts date to MetService date & time standard
@@ -48,24 +48,21 @@ function formatDate(date, useTime, options = { useWeekday: true, useNoon: false,
 
 
 /**
- * Builds the discord message for weather forecasts
+ * Builds the Discord message for weather forecasts from MetService
  * @param {Object} data MetService API JSON data
- * @param {number} [startDay] The start forecast day.
- * @param {number} [endDay] The end forecast day.
+ * @param {ForecastPeriodType} [period] 
  * @returns {EmbedBuilder}
  */
-function buildForecastMessage(data, startDay, endDay) {
+function buildForecastMessage(data, period) {
     if (!data) {
         throw new Error();
     }
 
-    if (!startDay) {
-        startDay = 1;
+    if (!period) {
+        period = ForecastPeriodType.SEVEN_DAYS;
     }
 
-    if (!endDay) {
-        endDay = data.days.length;
-    }
+    console.log(period)
 
     // Format and Define location
     const rawLocation = data.locationIPS;
@@ -85,44 +82,56 @@ function buildForecastMessage(data, startDay, endDay) {
         return heading + paragraph + "\n\n";
     }
 
-    // Format loop
+    // Format data within peroid and character limit
     let section = "";
     const charLimit = 4096;
 
-    for (let i = startDay - 1; i <= endDay - 1; i++) {
+    let days = 0;
+    if (period === ForecastPeriodType.SEVEN_DAYS) {
+        days = 7;
+    }
+    else if (period === ForecastPeriodType.FORTY_EIGHT_HOURS) {
+        days = 2;
+    }
+    else if (period === ForecastPeriodType.EXTENDED) {
+        days = data.days.length;
+    }
+
+    for (let i = 0; i <= days - 1; i++) {
         let isToday = i === 0 ? true : false;
 
         section += format(data.days[i], isToday);
     }
 
-    // Section exceeds character limit
     if (section > charLimit) {
         section = section.slice(charLimit - 5) + ". . .";
     }
 
-    // Create embed
     const embed = new EmbedBuilder()
         .setColor("DarkBlue")
         .setAuthor({
             iconURL: "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ",
             name: "MetService"
         })
-        .setTitle("Forecast for " + location)
+        .setURL("https://www.metservice.com/national")
         .setDescription(section)
         .setTimestamp();
 
-    if (endDay - startDay === 0) {
-        embed.setTitle(data.days[startDay].dow + " " + embed.data.title)
-    }
-    else {
-        embed.setTitle(((endDay - startDay) + 1) + "-Day " + embed.data.title)
-    }
+        if (period === ForecastPeriodType.SEVEN_DAYS) {
+            embed.setTitle(location + " - 7 Days");
+        }
+        else if (period === ForecastPeriodType.FORTY_EIGHT_HOURS) {
+            embed.setTitle(location + " - 48 Hours");
+        }
+        else if (period === ForecastPeriodType.EXTENDED) {
+            embed.setTitle(location + " - Extended");
+        }
 
     return embed;
 }
 
 /**
- * Builds the discord message for weather observations
+ * Builds the Discord message for weather observations from MetService
  * @param {Object} data MetService API JSON data
  * @returns {EmbedBuilder}
  */
@@ -178,7 +187,7 @@ function buildObservationMessage(data) {
 }
 
 /**
- * Builds the discord message for weather warnings
+ * Builds the Discord message for severe weather warnings from MetService
  * @param {Array} data MetService CAP XML data
  * @returns {Array<EmbedBuilder>}
  */
@@ -241,26 +250,23 @@ function buildWarningMessage(data) {
 function buildSevereWeatherOutlookMessage() { }
 
 /**
- * Builds the discord message for the thunderstorm outlook
+ * Builds the Discord message for the thunderstorm outlook
  * @param {Object} data MetService API JSON data
- * @param {number} startOutlook The start outlook
- * @param {number} endOutlook the end outlook
  * @returns {Array<Array<Array<EmbedBuilder>>, Array<AttachmentBuilder>>}
  */
-function buildThunderstormOutlookMessage(data, startOutlook, endOutlook) {
+function buildThunderstormOutlookMessage(data) {
     const embeds = [];
     const attachments = [];
     const charLimit = 4096;
 
     // Format loop
-    for (let i = startOutlook - 1; i <= endOutlook - 1; i++) {
+    for (let i = 0; i < data.outlooks.length; i++) {
         const issuedDate = data.outlooks[i].issuedAt;
         const previousValidToDate = data.outlooks[i - 1] ? data.outlooks[i - 1].validTo : null;
         const validToDate = data.outlooks[i].validTo;
 
         let section = `**Valid ${previousValidToDate ? "from " + previousValidToDate + " to " + validToDate : "to " + validToDate}**\n` + htmlToText(data.outlooks[i].text);
-
-        // Section exceeds character limit
+        
         if (section.length > charLimit) {
             section = section.slice(charLimit - 5) + ". . .";
         }
@@ -271,7 +277,7 @@ function buildThunderstormOutlookMessage(data, startOutlook, endOutlook) {
                 iconURL: "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ",
                 name: "MetService"
             })
-            .setTitle(endOutlook - startOutlook !== 0 ? "Thunderstorm Outlook (" + (i + 1) + "/" + endOutlook - startOutlook + ")" : "Thunderstorm Outlook")
+            .setTitle("Thunderstorm Outlook (" + (i + 1) + "/" + data.outlooks.length + ")")
             .setDescription(section)
             .setFooter({
                 text: "Issued: " + issuedDate

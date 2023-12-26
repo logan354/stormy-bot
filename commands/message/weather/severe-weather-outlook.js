@@ -1,6 +1,6 @@
 const { PermissionsBitField, Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const Bot = require("../../../struct/Bot");
-const emojis = require("../../../../data/emojis.json");
+const Bot = require("../../../structures/Bot");
+const emojis = require("../../../data/emojis.json");
 
 module.exports = {
     name: "severe-weather-outlook",
