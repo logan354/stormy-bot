@@ -1,5 +1,5 @@
 const { Message, EmbedBuilder } = require("discord.js");
-const Bot = require("../../../structures/Bot");
+const Bot = require("../../../../structures/Bot");
 const emojis = require("../../../data/emojis.json");
 
 module.exports = {
