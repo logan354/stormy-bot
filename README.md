@@ -8,21 +8,21 @@ A MetService bot for Discord. Forecasts, warnings & watches, and much more.
 - MetService CAP RSS
 - discord.js v14
 
-## Setup
-### Prerequisites
-### Installation
-## Contributing
-
-## Command Guide
+### Command Guide
 Format: **name** &lt;required&gt; [optional]
 
-### Weather
+#### Weather
 - **forecast** &lt;location&gt; [interval]
 - **observation** &lt;location&gt;
 - **warnings** 
 - **severe-weather-outlook** [outlook-days]
 - **thunderstorm-outlook** [outlook-days]
 
-### Utility
+#### Utility
 - **ping**
 - **help** [command]
+
+## Setup
+### Prerequisites
+### Installation
+## Contributing
