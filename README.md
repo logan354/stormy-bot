@@ -25,8 +25,4 @@ Format: **name** &lt;required&gt; [optional]
 
 ### Utility
 - **ping**
-<<<<<<< Updated upstream
 - **help** [command]
-=======
-- **help** [command]
->>>>>>> Stashed changes
