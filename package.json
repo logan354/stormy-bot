@@ -1,17 +1,23 @@
 {
   "name": "stormy-bot",
-  "description": "A Discord bot for weather in New Zealand.",
-  "version": "4.0.0-dev.4",
-  "main": "index.js",
+  "description": "A MetService bot for Discord. Forecasts, warnings & watches, and much more.",
+  "version": "4.0.0-alpha.1",
+  "main": "dist/src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc && node dist/src/index.js",
+    "build": "tsc",
+    "start": "node dist/src/index.js"
   },
   "author": "Block354",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.3.1",
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.5.0",
     "html-to-text": "^9.0.5",
     "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
   }
 }
