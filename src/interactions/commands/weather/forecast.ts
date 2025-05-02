@@ -95,11 +95,7 @@ export default {
             days = data.days.length;
         }
 
-        const embeds: EmbedBuilder[] = [];
-
-        let day = 0;
-        for (let i = 0; i < Math.ceil(days / 7); i++) {
-            const embed = new EmbedBuilder()
+        const embed = new EmbedBuilder()
                 .setAuthor({
                     name: "MetService",
                     iconURL: METSERVICE_ICON
@@ -107,23 +103,50 @@ export default {
                 .setTitle(locationStr + " - " + periodStr)
                 .setTimestamp();
 
-            let description = "";
+        let description = "";
 
-            while (day < days && day < (i + 1) * 7) {
-                const dayData = data.days[day];
+        for (let day = 0; day < days; day++) {
+            const dayData = data.days[day];
 
-                const line1 = `${getMetServiceIconEmoji(formatSnakeCase(dayData.forecastWord))} **${day === 0 ? "Today" : dayData.dowTLA}** ${dayData.date} | ${emojis.temperature_high} ${dayData.max}° ${emojis.temperature_low} ${dayData.min}°\n`;
-                const line2 = dayData.forecast;
+            const line1 = `${getMetServiceIconEmoji(formatSnakeCase(dayData.forecastWord))} **${day === 0 ? "Today" : dayData.dowTLA}** ${dayData.date} | ${emojis.temperature_high} ${dayData.max}° ${emojis.temperature_low} ${dayData.min}°\n`;
+            const line2 = dayData.forecast;
 
-                description += line1 + line2 + "\n\n";
-
-                day++;
-            }
-
-            embed.setDescription(description);
-            embeds.push(embed);
+            description += line1 + line2 + "\n\n";
         }
 
-        await interaction.editReply({ embeds: embeds });
+        embed.setDescription(description);
+
+        await interaction.editReply({ embeds: [embed] });
+
+        // const embeds: EmbedBuilder[] = [];
+
+        // let day = 0;
+        // for (let i = 0; i < Math.ceil(days / 7); i++) {
+        //     const embed = new EmbedBuilder()
+        //         .setAuthor({
+        //             name: "MetService",
+        //             iconURL: METSERVICE_ICON
+        //         })
+        //         .setTitle(locationStr + " - " + periodStr)
+        //         .setTimestamp();
+
+        //     let description = "";
+
+        //     while (day < days && day < (i + 1) * 7) {
+        //         const dayData = data.days[day];
+
+        //         const line1 = `${getMetServiceIconEmoji(formatSnakeCase(dayData.forecastWord))} **${day === 0 ? "Today" : dayData.dowTLA}** ${dayData.date} | ${emojis.temperature_high} ${dayData.max}° ${emojis.temperature_low} ${dayData.min}°\n`;
+        //         const line2 = dayData.forecast;
+
+        //         description += line1 + line2 + "\n\n";
+
+        //         day++;
+        //     }
+
+        //     embed.setDescription(description);
+        //     embeds.push(embed);
+        // }
+
+        // await interaction.editReply({ embeds: embeds });
     }
-} as Command
+} as Command;

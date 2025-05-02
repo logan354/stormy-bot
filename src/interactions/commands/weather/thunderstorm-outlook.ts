@@ -80,44 +80,47 @@ export default {
             attachments.push(attachment)
         }
 
-        const actionRow = new ActionRowBuilder<ButtonBuilder>()
-            .addComponents(
-                [
-                    new ButtonBuilder()
-                        .setCustomId("thunderstorm-outlook-previous-button")
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji({ id: "896608983429808129" })
-                        .setDisabled(true),
-                    new ButtonBuilder()
-                        .setCustomId("thunderstorm-outlook-next-button")
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji({ id: "896608983429808129" })
-                ]
-            );
+        if (embeds.length > 1) {
+            const actionRow = new ActionRowBuilder<ButtonBuilder>()
+                .addComponents(
+                    [
+                        new ButtonBuilder()
+                            .setCustomId("thunderstorm-outlook-previous-button")
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji({ id: "896608983429808129" })
+                            .setDisabled(true),
+                        new ButtonBuilder()
+                            .setCustomId("thunderstorm-outlook-next-button")
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji({ id: "896608983429808129" })
+                    ]
+                );
 
-        let currentDay = day;
+            let currentDay = day;
 
-        const response = await interaction.editReply({ embeds: embeds[currentDay - 1], files: [attachments[currentDay - 1]], components: data.outlooks.length > 1 ? [actionRow] : [] });
-        const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 }); // Button collector for 5 minutes
+            const response = await interaction.editReply({ embeds: embeds[currentDay - 1], files: [attachments[currentDay - 1]], components: [actionRow] });
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 }); // Button collector for 5 minutes
 
-        collector.on("collect", async (_interaction) => {
-            if (_interaction.customId === "thunderstorm-outlook-previous-button" || _interaction.customId === "thunderstorm-outlook-next-button") {
-                if (_interaction.id === "thunderstorm-outlook-previous-button") currentDay--;
-                else currentDay++;
+            collector.on("collect", async (_interaction) => {
+                if (_interaction.customId === "thunderstorm-outlook-previous-button" || _interaction.customId === "thunderstorm-outlook-next-button") {
+                    if (_interaction.id === "thunderstorm-outlook-previous-button") currentDay--;
+                    else currentDay++;
 
-                if (currentDay <= 1) actionRow.components[0].setDisabled(true);
-                else actionRow.components[0].setDisabled(false);
+                    if (currentDay <= 1) actionRow.components[0].setDisabled(true);
+                    else actionRow.components[0].setDisabled(false);
 
-                if (currentDay >= data.outlooks.length) actionRow.components[1].setDisabled(true);
-                else actionRow.components[1].setDisabled(false);
+                    if (currentDay >= data.outlooks.length) actionRow.components[1].setDisabled(true);
+                    else actionRow.components[1].setDisabled(false);
 
-                await _interaction.update({ embeds: embeds[currentDay - 1], files: [attachments[currentDay - 1]], components: [actionRow] });
-            }
-        });
+                    await _interaction.update({ embeds: embeds[currentDay - 1], files: [attachments[currentDay - 1]], components: [actionRow] });
+                }
+            });
 
-        collector.on("end", () => {
-            actionRow.components[0].setDisabled(true);
-            actionRow.components[1].setDisabled(true);
-        });
+            collector.on("end", () => {
+                actionRow.components[0].setDisabled(true);
+                actionRow.components[1].setDisabled(true);
+            });
+        }
+        else await interaction.editReply({ embeds: embeds[0], files: [attachments[0]] });
     }
 } as Command;
