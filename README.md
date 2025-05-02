@@ -11,16 +11,16 @@ A MetService bot for Discord. Forecasts, warnings & watches, and much more.
 ### Command Guide
 Format: **name** &lt;required&gt; [optional]
 
-#### Weather
-- **forecast** &lt;location&gt; [interval]
-- **observation** &lt;location&gt;
-- **warnings** 
-- **severe-weather-outlook** [outlook-days]
-- **thunderstorm-outlook** [outlook-days]
-
 #### Utility
 - **ping**
 - **help** [command]
+
+#### Weather
+- **forecast** &lt;location&gt; [interval]
+- **observation** &lt;location&gt;
+- **severe-weather-outlook** [outlook-days]
+- **thunderstorm-outlook** [outlook-days]
+- **warnings**
 
 ## Setup
 ### Prerequisites

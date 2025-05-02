@@ -1,6 +1,6 @@
 const { EmbedBuilder, AttachmentBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { IconType, fetchMetServiceIcon } = require("../util/util");
-const { ForecastPeriodType } = require("../util/constants");
+const { IconType, fetchMetServiceIcon } = require("./util");
+const { ForecastPeriodType } = require("./constants");
 const { htmlToText } = require("html-to-text");
 const emojis = require("../data/emojis.json");
 

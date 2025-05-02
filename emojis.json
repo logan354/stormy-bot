@@ -1,0 +1,80 @@
+{
+    "success": "",
+    "pending": "",
+    "error": "",
+    "permission_error": "",
+    "previous_button": "",
+    "next_button": "",
+    "temperature_high": "",
+    "temperature_low": "",
+    "metservice_icons": [
+        {
+            "name": "fine",
+            "value": ""
+        },
+        {
+            "name": "partly_cloudy",
+            "value": ""
+        },
+        {
+            "name": "cloudy",
+            "value": ""
+        },
+        {
+            "name": "few_showers",
+            "value": ""
+        },
+        {
+            "name": "showers",
+            "value": ""
+        },
+        {
+            "name": "rain",
+            "value": ""
+        },
+        {
+            "name": "drizzle",
+            "value": ""
+        },
+        {
+            "name": "fog",
+            "value": ""
+        },
+        {
+            "name": "snow",
+            "value": ""
+        },
+        {
+            "name": "wind",
+            "value": ""
+        },
+        {
+            "name": "wind_rain",
+            "value": ""
+        },
+        {
+            "name": "thunder",
+            "value": ""
+        },
+        {
+            "name": "hail",
+            "value": ""
+        },
+        {
+            "name": "frost",
+            "value": ""
+        },
+        {
+            "name": "watch",
+            "value": ""
+        },
+        {
+            "name": "orange_warning",
+            "value": ""
+        },
+        {
+            "name": "red_warning",
+            "value": ""
+        }
+    ]
+}
