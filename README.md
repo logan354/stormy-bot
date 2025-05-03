@@ -16,7 +16,7 @@ Format: **name** &lt;required&gt; [optional]
 - **help** [command]
 
 #### Weather
-- **forecast** &lt;location&gt; [interval]
+- **forecast** &lt;location&gt; [period]
 - **observation** &lt;location&gt;
 - **severe-weather-outlook** [outlook-days]
 - **thunderstorm-outlook** [outlook-days]

@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/src/index.js"
   },
-  "author": "Block354",
+  "author": "logan354",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.19.3",
