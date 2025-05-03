@@ -9,11 +9,11 @@ export default {
     category: "Weather",
     data: new SlashCommandBuilder()
         .setName("observation")
-        .setDescription("Displays the latest MetService weather observation for a location.")
+        .setDescription("The current MetService weather observation for a location.")
         .addStringOption(option =>
             option
                 .setName("location")
-                .setDescription("Location (e.g. Auckland).")
+                .setDescription("Location e.g. Auckland.")
                 .setRequired(true)
         ),
     async execute(bot, interaction) {

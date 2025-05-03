@@ -31,17 +31,17 @@ export default {
     category: "Weather",
     data: new SlashCommandBuilder()
         .setName("forecast")
-        .setDescription("The MetService forecast for a given location.")
+        .setDescription("The MetService forecast for a location.")
         .addStringOption(option =>
             option
                 .setName("location")
-                .setDescription("The area for the forecast (e.g. Auckland).")
+                .setDescription("Location e.g. Auckland.")
                 .setRequired(true)
         )
         .addIntegerOption(option =>
             option
                 .setName("period")
-                .setDescription("The period of time the forecast covers.")
+                .setDescription("The time period of the forecast.")
                 .setRequired(false)
                 .addChoices(periodChoices)
         ),
@@ -117,36 +117,5 @@ export default {
         embed.setDescription(description);
 
         await interaction.editReply({ embeds: [embed] });
-
-        // const embeds: EmbedBuilder[] = [];
-
-        // let day = 0;
-        // for (let i = 0; i < Math.ceil(days / 7); i++) {
-        //     const embed = new EmbedBuilder()
-        //         .setAuthor({
-        //             name: "MetService",
-        //             iconURL: METSERVICE_ICON
-        //         })
-        //         .setTitle(locationStr + " - " + periodStr)
-        //         .setTimestamp();
-
-        //     let description = "";
-
-        //     while (day < days && day < (i + 1) * 7) {
-        //         const dayData = data.days[day];
-
-        //         const line1 = `${getMetServiceIconEmoji(formatSnakeCase(dayData.forecastWord))} **${day === 0 ? "Today" : dayData.dowTLA}** ${dayData.date} | ${emojis.temperature_high} ${dayData.max}° ${emojis.temperature_low} ${dayData.min}°\n`;
-        //         const line2 = dayData.forecast;
-
-        //         description += line1 + line2 + "\n\n";
-
-        //         day++;
-        //     }
-
-        //     embed.setDescription(description);
-        //     embeds.push(embed);
-        // }
-
-        // await interaction.editReply({ embeds: embeds });
     }
 } as Command;

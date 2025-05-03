@@ -10,7 +10,7 @@ export default {
     category: "Weather",
     data: new SlashCommandBuilder()
         .setName("thunderstorm-outlook")
-        .setDescription("Displays the MetService Thunderstorm Outlook.")
+        .setDescription("MetService Thunderstorm Outlook.")
         .addIntegerOption(option =>
             option
                 .setName("day")
@@ -87,19 +87,19 @@ export default {
                         new ButtonBuilder()
                             .setCustomId("thunderstorm-outlook-previous-button")
                             .setStyle(ButtonStyle.Secondary)
-                            .setEmoji({ id: "896608983429808129" })
+                            .setEmoji(emojis.previous_button)
                             .setDisabled(true),
                         new ButtonBuilder()
                             .setCustomId("thunderstorm-outlook-next-button")
                             .setStyle(ButtonStyle.Secondary)
-                            .setEmoji({ id: "896608983429808129" })
+                            .setEmoji(emojis.next_button)
                     ]
                 );
 
             let currentDay = day;
 
             const response = await interaction.editReply({ embeds: embeds[currentDay - 1], files: [attachments[currentDay - 1]], components: [actionRow] });
-            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 }); // Button collector for 5 minutes
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 }); // Button collector for 1 minute
 
             collector.on("collect", async (_interaction) => {
                 if (_interaction.customId === "thunderstorm-outlook-previous-button" || _interaction.customId === "thunderstorm-outlook-next-button") {
