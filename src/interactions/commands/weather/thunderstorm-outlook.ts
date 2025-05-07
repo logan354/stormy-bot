@@ -2,7 +2,7 @@ import { AttachmentBuilder, ButtonStyle, ComponentType, PermissionsBitField, Sla
 import { htmlToText } from "html-to-text";
 
 import Command from "../../../structures/Command";
-import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../util/constants";
+import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../utils/constants";
 import emojis from "../../../../emojis.json";
 
 export default {

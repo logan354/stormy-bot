@@ -1,8 +1,8 @@
 import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from "discord.js";
 
 import Command from "../../../structures/Command";
-import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../util/constants";
-import { formatSnakeCase, formatTitleCase, getMetServiceIconEmoji } from "../../../util/util";
+import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../utils/constants";
+import { formatSnakeCase, formatTitleCase, getMetServiceIconEmoji } from "../../../utils/util";
 import emojis from "../../../../emojis.json";
 
 const FORECAST_PERIOD_TYPE = {

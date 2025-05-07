@@ -1,7 +1,7 @@
 import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from "discord.js";
 
 import Command from "../../../structures/Command";
-import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../util/constants";
+import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../utils/constants";
 import emojis from "../../../../emojis.json";
 
 export default {

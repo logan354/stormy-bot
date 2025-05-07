@@ -2,8 +2,8 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuild
 import { xml2json } from "xml-js";
 
 import Command from "../../../structures/Command";
-import { METSERVICE_CAP_RSS_URL, METSERVICE_ICON } from "../../../util/constants";
-import { formatMetServiceDate, getMetServiceIconEmoji } from "../../../util/util";
+import { METSERVICE_CAP_RSS_URL, METSERVICE_ICON } from "../../../utils/constants";
+import { formatMetServiceDate, getMetServiceIconEmoji } from "../../../utils/util";
 import emojis from "../../../../emojis.json";
 
 export default {
