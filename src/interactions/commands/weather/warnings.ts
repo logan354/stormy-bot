@@ -53,6 +53,7 @@ export default {
         const embeds: EmbedBuilder[] = [];
 
         let j = 0;
+        
         for (let i = 0; i < Math.ceil(data.rss.channel.item.length / 7); i++) {
             const embed = new EmbedBuilder()
                 .setAuthor({
@@ -65,14 +66,14 @@ export default {
             let description = "";
 
             while (j < data.rss.channel.item.length && j < (i + 1) * 7) {
-                let _data: any;
+                let itemData: any;
 
                 try {
                     const response = await fetch(data.rss.channel.item[j].link._text);
 
                     if (response.status === 200) {
                         const text = await response.text();
-                        _data = JSON.parse(xml2json(text, { compact: true, spaces: 4 })).alert.info;
+                        itemData = JSON.parse(xml2json(text, { compact: true, spaces: 4 })).alert.info;
                     }
                     else {
                         return await interaction.editReply(emojis.error + " **Error**");
@@ -83,19 +84,19 @@ export default {
                     return await interaction.editReply(emojis.error + " **Error**");
                 }
 
-                let colourCode = null;
+                let colourCode: string = "";
 
-                _data.parameter.forEach((x: any) => {
+                itemData.parameter.forEach((x: any) => {
                     if (x.valueName._text === "ColourCode") colourCode = x.value._text;
                 });
 
-                const effectiveDate = new Date(data.onset._text);
-                const expiresDate = new Date(data.expires._text);
+                const effectiveDate = new Date(itemData.onset._text);
+                const expiresDate = new Date(itemData.expires._text);
 
                 const effectiveDateFormat = formatMetServiceDate(effectiveDate, true, { useNoon: true });
                 const expiresDateFormat = formatMetServiceDate(expiresDate, true, { useNoon: true });
 
-                description += `${getMetServiceIconEmoji(data.headline._text.includes("Watch") ? "watch" : colourCode + "_warning")} **${data.headline._text}**\n**Area:** ${data.area.areaDesc._text}\n**Period:** ${data.headline._text === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}\n\n`;
+                description += `${getMetServiceIconEmoji(itemData.headline._text.includes("Watch") ? "watch" : colourCode.toLowerCase() + "_warning")} **${itemData.headline._text}**\n**Area:** ${itemData.area.areaDesc._text}\n**Period:** ${itemData.headline._text === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}\n\n`;
 
                 j++;
             }
@@ -122,7 +123,7 @@ export default {
 
             let currentEmbed = 1;
 
-            const response = await interaction.editReply({ embeds: [embeds[currentEmbed - 1]], components: data.outlooks.length > 1 ? [actionRow] : [] });
+            const response = await interaction.editReply({ embeds: [embeds[currentEmbed - 1]], components: [actionRow] });
             const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 }); // Button collector for 1 minute
 
             collector.on("collect", async (_interaction) => {
