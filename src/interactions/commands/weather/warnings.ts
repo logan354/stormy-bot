@@ -84,10 +84,10 @@ export default {
                     return await interaction.editReply(emojis.error + " **Error**");
                 }
 
-                let colourCode: string = "";
+                let warningColourCode: string = "";
 
                 itemData.parameter.forEach((x: any) => {
-                    if (x.valueName._text === "ColourCode") colourCode = x.value._text;
+                    if (x.valueName._text === "ColourCode") warningColourCode = x.value._text;
                 });
 
                 const effectiveDate = new Date(itemData.onset._text);
@@ -96,7 +96,12 @@ export default {
                 const effectiveDateFormat = formatMetServiceDate(effectiveDate, true, { useNoon: true });
                 const expiresDateFormat = formatMetServiceDate(expiresDate, true, { useNoon: true });
 
-                description += `${getMetServiceIconEmoji(itemData.headline._text.includes("Watch") ? "watch" : colourCode.toLowerCase() + "_warning")} **${itemData.headline._text}**\n**Area:** ${itemData.area.areaDesc._text}\n**Period:** ${itemData.headline._text === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}\n\n`;
+                const title = `${getMetServiceIconEmoji(itemData.headline._text.toLowerCase().includes("watch") ? "watch" : warningColourCode.toLowerCase() + "_warning")} **${itemData.headline._text}**`;
+                const area = `\n**Area:** ${itemData.area.areaDesc._text}`;
+                const period = `\n**Period:** ${itemData.headline._text === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}`;
+                const forecast = `\n**Forecast:** ${itemData.description._text.split("Impact:")[0]}`;
+
+                description += title + area + period + forecast + "\n\n"
 
                 j++;
             }
