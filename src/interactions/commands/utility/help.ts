@@ -2,113 +2,110 @@ import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from "discord.
 
 import Command from "../../../structures/Command";
 import emojis from "../../../../emojis.json";
+import { formatTitleCase } from "../../../utils/util";
 
 export default {
     name: "help",
     category: "Utility",
     data: new SlashCommandBuilder()
         .setName("help")
-        .setDescription("Helpful information about the bot.")
+        .setDescription("Command guide for one or all commands.")
         .addStringOption(option =>
             option.setName("command")
-                .setDescription("Enter a command.")
+                .setDescription("Command.")
                 .setRequired(false)
         ),
     async execute(bot, interaction) {
-        const textChannel = interaction.channel;
-        const commandOption = interaction.options.getString("command");
+        if (!interaction.channel || !interaction.guild.members.me) throw new Error();
 
-        if (!textChannel || !interaction.guild.members.me) {
-            await interaction.reply({ content: "An error occured while executing this command", ephemeral: true });
-            return;
-        }
+        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(emojis.permission_error + " **I do not have permission to Embed Links in** <#" + interaction.channel.id + ">");
 
-        const botPermissionsFor = textChannel.permissionsFor(interaction.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.UseExternalEmojis)) return interaction.reply(emojis.permission_error + " **I do not have permission to Use External Emojis in** <#" + textChannel.id + ">");
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(emojis.permission_error + " **I do not have permission to Embed Links in** <#" + textChannel.id + ">");
+        const commandOpt = interaction.options.getString("command");
 
-        const applicationCommands = await interaction.guild.commands.fetch();
-
-        if (commandOption) {
-            const command = bot.commands.get(commandOption.toLowerCase());
+        if (commandOpt) {
+            const command = bot.commands.get(commandOpt);
 
             if (!command) {
-                await interaction.reply(emojis.error + " **I could not find that command**");
+                await interaction.editReply(emojis.error + " **I could not find that command**");
                 return;
             }
 
+            await interaction.deferReply();
+
+            const applicationCommands = await interaction.guild.commands.fetch();
+
+            let applicationCommand;
+
+            for (const x of applicationCommands.values()) {
+                if (x.name === commandOpt.toLowerCase()) {
+                    applicationCommand = x;
+                }
+            }
+
+            let commandLink = `</${applicationCommand?.name}:${applicationCommand?.id}>`;
+            let optionsStr = applicationCommand?.options ? applicationCommand?.options.map((x: any) => x.required ? "`<" + x.name + ">`" : "`[" + x.name + "]`") : "";
+
             const embed = new EmbedBuilder()
-                .setColor("Default")
-                .setAuthor({
-                    name: `${command.name.charAt(0).toUpperCase() + command.name.slice(1)} Command`,
-                    iconURL: bot.user.avatarURL() ?? undefined
-                })
+                .setTitle(`${formatTitleCase(command.name.replace("-", " "))} Command`)
                 .setThumbnail(interaction.guild.iconURL())
-                .setDescription(command.data.description)
+                .setDescription(applicationCommand!.description)
                 .setFields(
                     {
                         name: "Category",
                         value: "`" + command.category + "`",
                         inline: true
+                    },
+                    {
+                        name: "Command",
+                        value: `${commandLink} ${optionsStr}`
                     }
                 )
-                .setTimestamp(new Date());
+                .setTimestamp();
 
-            // Add command link to the embed if one exists
-            for (const applicationCommand of applicationCommands.values()) {
-                if (applicationCommand.name === command.name) {
-                    embed.addFields(
-                        {
-                            name: "Command",
-                            value: "</" + applicationCommand.name + ":" + applicationCommand.id + ">",
-                            inline: true
-                        }
-                    );
-
-                    break;
-                }
-            }
-
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
         }
         else {
             await interaction.deferReply();
-            
-            const embed = new EmbedBuilder()
-                .setColor("Default")
-                .setAuthor({
-                    name: "Help Centre",
-                    iconURL: bot.user.avatarURL() ?? undefined
-                })
-                .setThumbnail(interaction.guild.iconURL())
-                .setDescription("**Hello <@" + interaction.user.id + ">, welcome to the Help Centre.**\nBelow is a list of all the commands.")
-                .setTimestamp(new Date());
 
-            // Dynamic category injection (This is bad code but ehhh)
-            const categories: Map<string, Array<Command>> = new Map();
+            const applicationCommands = await interaction.guild.commands.fetch();
 
-            for (const command of bot.commands) {
-                let categoryFound = false;
+            let applicationCommand;
 
-                for (const category of categories) {
-                    if (category[0] === command[1].category) {
-                        category[1].push(command[1]);
-                        categoryFound = true;
-                        break;
-                    }
-                }
-
-                if (!categoryFound) {
-                    categories.set(command[1].category, [command[1]]);
+            for (const x of applicationCommands.values()) {
+                if (x.name === this.name) {
+                    applicationCommand = x;
                 }
             }
 
-            // Loop over completed map
-            for (const category of categories) {
+            let commandLink = `</${applicationCommand?.name}:${applicationCommand?.id}>`;
+            let optionsStr = applicationCommand?.options ? applicationCommand?.options.map((x: any) => x.required ? "`<" + x.name + ">`" : "`[" + x.name + "]`") : "";
+
+            const embed = new EmbedBuilder()
+                .setTitle("Command Guide")
+                .setThumbnail(interaction.guild.iconURL())
+                .setDescription(`**Hello <@${interaction.user.id}>,**\nBelow is a list of all the commands.\nUse ${commandLink} ${optionsStr} for details about each command.`)
+                .setTimestamp();
+
+            const commandsByCategory: Map<string, Array<Command>> = new Map();
+
+            for (const [commandName, command] of bot.commands) {
+                if (commandsByCategory.get(command.category)) {
+                    const commandsArr = commandsByCategory.get(command.category)!
+                    commandsArr.push(command);
+
+                    commandsByCategory.set(command.category, commandsArr);
+                }
+                else {
+                    commandsByCategory.set(command.category, [command]);
+                }
+            }
+
+            for (const [category, command] of commandsByCategory) {
                 embed.addFields(
                     {
-                        name: category[0],
-                        value: category[1].map((x) => "`" + x.name + "`").join(", "),
+                        name: category,
+                        value: command.map((x) => "`" + x.name + "`").join(", "),
                     }
                 )
             }
