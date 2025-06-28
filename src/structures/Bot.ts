@@ -26,7 +26,7 @@ export default class Bot extends Client<true> {
         console.log("Loading event listeners...");
         await this.loadEventListeners();
 
-        await this.login(process.env.DISCORD_BOT_TOKEN);
+        await this.login(process.env.BOT_TOKEN);
     }
 
     private async loadCommands(): Promise<void> {

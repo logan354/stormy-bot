@@ -3,7 +3,7 @@ import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from "discord.
 import Command from "../../../structures/Command";
 import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../utils/constants";
 import { formatSnakeCase, formatTitleCase, getMetServiceIconEmoji } from "../../../utils/util";
-import emojis from "../../../../emojis.json";
+import { emojis } from "../../../../config.json";
 
 const FORECAST_PERIOD_TYPE = {
     FORTY_EIGHT_HOURS: 0,

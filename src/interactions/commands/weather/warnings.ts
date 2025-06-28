@@ -4,7 +4,7 @@ import { xml2json } from "xml-js";
 import Command from "../../../structures/Command";
 import { METSERVICE_CAP_RSS_URL, METSERVICE_ICON } from "../../../utils/constants";
 import { formatMetServiceDate, getMetServiceIconEmoji } from "../../../utils/util";
-import emojis from "../../../../emojis.json";
+import { emojis } from "../../../../config.json";
 
 export default {
     name: "warnings",
