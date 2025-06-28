@@ -1,9 +1,10 @@
+# TypeScript
+dist/
+
 # Node
 node_modules/
 package-lock.json
 
-# TypeScript
-dist/
-
-# Environment Variables
+# Folders/Files
 .env
+config.json
