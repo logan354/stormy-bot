@@ -25,4 +25,4 @@ export const RADAR_LOCATIONS = {
 
 export const METSERVICE_CAP_RSS_URL = "https://alerts.metservice.com/cap/rss";
 
-export const METSERVICE_ICON = "https://www.metservice.com/favicons/favicon.ico";
+export const METSERVICE_ICON = "https://www.metservice.com/assets/favicon-32x32-BHIif5Kl.png";
