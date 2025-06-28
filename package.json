@@ -11,14 +11,14 @@
   "author": "logan354",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.19.3",
-    "dotenv": "^16.5.0",
+    "discord.js": "^14.21.0",
+    "dotenv": "^17.0.0",
     "html-to-text": "^9.0.5",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",
-    "@types/node": "^22.15.3",
+    "@types/node": "^24.0.7",
     "@types/xml-js": "^1.0.0",
     "typescript": "^5.8.3"
   }
