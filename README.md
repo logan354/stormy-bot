@@ -1,13 +1,10 @@
-
 <div align="center">
   <a href="https://github.com/logan354/stormy-bot">
     <img src="assets/Stormy Bot - Profile.jpg" alt="Logo" width="128" height="128">
   </a>
-
-  <h1 style="border-bottom: 0;">Stormy Bot</h1>
 </div>
 
-## About
+# Stormy Bot
 A MetService bot for Discord. Forecasts, warnings & watches, and much more.
 
 ### Features
