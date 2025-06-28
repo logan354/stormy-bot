@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",
     "@types/node": "^22.15.3",
+    "@types/xml-js": "^1.0.0",
     "typescript": "^5.8.3"
   }
 }

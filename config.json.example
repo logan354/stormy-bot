@@ -1,9 +1,9 @@
 {
-    "application_id": "822342435941908480",
+    "application_id": "INSERT_APPLICATION_ID_HERE",
     "emojis": {
-        "success": "<:success:1365137686880456714>",
-        "pending": "<:pending:1365137678424604742>",
-        "error": "<:error:1365137666663907389>",
+        "success": "INSERT_EMOJI_HERE",
+        "pending": "INSERT_EMOJI_HERE",
+        "error": "INSERT_EMOJI_HERE",
         "permission_error": ":no_entry:",
         "previous_button": ":arrow_left:",
         "next_button": ":arrow_right:",
@@ -12,71 +12,71 @@
         "metservice_icons": [
             {
                 "name": "fine",
-                "value": "<:fine:1365137748549439529>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "partly_cloudy",
-                "value": "<:partly_cloudy:1365137794501967943>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "cloudy",
-                "value": "<:cloudy:1365137714571247647>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "few_showers",
-                "value": "<:few_showers:1367817682426138674>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "showers",
-                "value": "<:showers:1365137833987276820>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "rain",
-                "value": "<:rain:1365137819525185556>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "drizzle",
-                "value": "<:drizzle:1365137723068780615>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "fog",
-                "value": "<:fog:1365137765087449199>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "snow",
-                "value": "<:snow:1365137841629298782>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "wind",
-                "value": "<:wind:1365137866874945546>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "wind_rain",
-                "value": "<:wind_rain:1365137882179829770>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "thunder",
-                "value": "<:thunder:1365137849829032106>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "hail",
-                "value": "<:hail:1365137781042581554>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "frost",
-                "value": "<:frost:1365137773065146410>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "watch",
-                "value": "<:watch:1365137858712567918>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "orange_warning",
-                "value": "<:orange_warning:1365137787711393873>"
+                "value": "INSERT_EMOJI_HERE"
             },
             {
                 "name": "red_warning",
-                "value": "<:red_warning:1365137827083321377>"
+                "value": "INSERT_EMOJI_HERE"
             }
         ]
     }

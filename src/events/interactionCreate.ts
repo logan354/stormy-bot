@@ -1,4 +1,5 @@
-import { ChannelType, Events, Interaction } from "discord.js";
+import { Events, Interaction } from "discord.js";
+
 import Bot from "../structures/Bot";
 import Event from "../structures/Event";
 

@@ -12,14 +12,17 @@ export default {
         .setDescription("Command guide for one or all commands.")
         .addStringOption(option =>
             option.setName("command")
-                .setDescription("Command.")
+                .setDescription("The name of the command.")
                 .setRequired(false)
         ),
     async execute(bot, interaction) {
         if (!interaction.channel || !interaction.guild.members.me) throw new Error();
 
         const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(emojis.permission_error + " **I do not have permission to Embed Links in** <#" + interaction.channel.id + ">");
+        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) {
+            interaction.reply(emojis.permission_error + " **I do not have permission to Embed Links in** <#" + interaction.channel.id + ">");
+            return;
+        }
 
         const commandOpt = interaction.options.getString("command");
 

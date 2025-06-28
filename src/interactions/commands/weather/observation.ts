@@ -2,7 +2,7 @@ import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from "discord.
 
 import Command from "../../../structures/Command";
 import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../utils/constants";
-import emojis from "../../../../emojis.json";
+import { emojis } from "../../../../config.json";
 
 export default {
     name: "observation",

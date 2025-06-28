@@ -1,4 +1,4 @@
-import emojis from "../../emojis.json";
+import { emojis } from "../../config.json";
 
 export function getMetServiceIconEmoji(icon: string): string | undefined {
     let emoji;
