@@ -3,9 +3,8 @@
   <a href="https://github.com/logan354/stormy-bot">
     <img src="assets/Stormy Bot - Profile.jpg" alt="Logo" width="128" height="128">
   </a>
-<style>h1 { border-bottom: 0; } </style>
 
-  <h1>Stormy Bot</h1>
+  <h1 style="border-bottom: 0;">Stormy Bot</h1>
 </div>
 
 ## About
