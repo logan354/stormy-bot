@@ -54,7 +54,4 @@ Format: **name** &lt;required&gt; [optional]
 - **thunderstorm-outlook** [outlook-days]
 - **warnings**
 
-## Setup
-### Prerequisites
-### Installation
 ## Contributing
