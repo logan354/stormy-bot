@@ -49,7 +49,7 @@ Format: **name** &lt;required&gt; [optional]
 #### Weather
 - **forecast** &lt;location&gt; [period]
 - **observation** &lt;location&gt;
-- **radar** &lt;radar-location&gt;
+- **rain-radar** &lt;radar-location&gt;
 - **severe-weather-outlook** [outlook-days]
 - **thunderstorm-outlook** [outlook-days]
 - **warnings**
