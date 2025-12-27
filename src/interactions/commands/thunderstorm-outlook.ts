@@ -1,53 +1,49 @@
 import { AttachmentBuilder, ButtonStyle, ComponentType, PermissionsBitField, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, EmbedBuilder } from "discord.js";
 import { htmlToText } from "html-to-text";
 
-import Command from "../../../structures/Command";
-import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../utils/constants";
-import { emojis } from "../../../../config.json";
+import Command from "../../structures/Command";
+import { METSERVICE_EMOJI_URL, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../utils/constants";
+import { emojis } from "../../../config.json";
 
 export default {
     name: "thunderstorm-outlook",
-    category: "Weather",
     data: new SlashCommandBuilder()
         .setName("thunderstorm-outlook")
         .setDescription("MetService Thunderstorm Outlook.")
         .addIntegerOption(option =>
             option
-                .setName("day")
+                .setName("days")
                 .setDescription("The outlook day.")
                 .setMinValue(1)
                 .setMaxValue(4)
                 .setRequired(false)
         ),
     async execute(bot, interaction) {
-        if (!interaction.channel || !interaction.guild.members.me) return new ReferenceError();
-
-        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(emojis.permission_error + " **I do not have permission to Use Embed Links in** <#" + interaction.channel.id + ">");
-
-        const day = interaction.options.getInteger("day") ?? 1;
-
-        const url = METSERVICE_PUBLIC_API_URL + METSERVICE_PUBLIC_API_ENDPOINTS.THUNDERSTORM_OUTLOOK;
-        let data: any;
+        const daysOption = interaction.options.getInteger("days") ?? 1;
 
         await interaction.deferReply();
 
+        let data: any;
+
         try {
-            const response = await fetch(url);
+            const response = await fetch(METSERVICE_PUBLIC_API_URL + METSERVICE_PUBLIC_API_ENDPOINTS.THUNDERSTORM_OUTLOOK);
 
-            if (response.status === 200) {
-                data = await response.json();
-            }
+            if (response.status === 200) data = await response.json();
             else {
-                return await interaction.editReply(emojis.error + " **Error**");
+                await interaction.editReply(emojis.error + " **Error**");
+                return;
             }
         }
-        catch (error) {
-            console.error(error);
-            return await interaction.editReply(emojis.error + " **Error**");
+        catch (e) {
+            console.error(e);
+            await interaction.editReply(emojis.error + " **Error**");
+            return;
         }
 
-        if (day > data.outlooks.length) return await interaction.editReply(emojis.error + " The `day` value must be between `1` and `" + data.outlooks.length + "`");
+        if (daysOption > data.outlooks.length) {
+            await interaction.editReply(emojis.error + " The `day` value must be between `1` and `" + data.outlooks.length + "`");
+            return;
+        }
 
         const embeds: EmbedBuilder[][] = [];
         const attachments: AttachmentBuilder[] = [];
@@ -57,18 +53,16 @@ export default {
             const previousValidToDate = data.outlooks[i - 1] ? data.outlooks[i - 1].validTo : null;
             const validToDate = data.outlooks[i].validTo;
 
-            let section = `**Valid ${previousValidToDate ? "from " + previousValidToDate + " to " + validToDate : "to " + validToDate}**\n` + htmlToText(data.outlooks[i].text);
-
             const attachment = new AttachmentBuilder("https://www.metservice.com" + data.outlooks[i].url)
                 .setName(data.outlooks[i].url.split("/").splice(-1)[0] + ".png");
 
             const embed1 = new EmbedBuilder()
                 .setAuthor({
-                    iconURL: METSERVICE_ICON,
+                    iconURL: METSERVICE_EMOJI_URL,
                     name: "MetService"
                 })
                 .setTitle("Thunderstorm Outlook (" + (i + 1) + "/" + data.outlooks.length + ")")
-                .setDescription(section)
+                .setDescription(`**Valid ${previousValidToDate ? "from " + previousValidToDate + " to " + validToDate : "to " + validToDate}**\n` + htmlToText(data.outlooks[i].text))
                 .setFooter({
                     text: "Issued: " + issuedDate
                 });
@@ -77,7 +71,7 @@ export default {
                 .setImage("attachment://" + attachment.name);
 
             embeds.push([embed1, embed2]);
-            attachments.push(attachment)
+            attachments.push(attachment);
         }
 
         if (embeds.length > 1) {
@@ -85,25 +79,25 @@ export default {
                 .addComponents(
                     [
                         new ButtonBuilder()
-                            .setCustomId("thunderstorm-outlook-previous-button")
+                            .setCustomId("thunderstorm-outlook-previous")
                             .setStyle(ButtonStyle.Secondary)
-                            .setEmoji(emojis.previous_button)
+                            .setEmoji(emojis.previous)
                             .setDisabled(true),
                         new ButtonBuilder()
-                            .setCustomId("thunderstorm-outlook-next-button")
+                            .setCustomId("thunderstorm-outlook-next")
                             .setStyle(ButtonStyle.Secondary)
-                            .setEmoji(emojis.next_button)
+                            .setEmoji(emojis.next)
                     ]
                 );
 
-            let currentDay = day;
+            let currentDay = 1;
 
             const response = await interaction.editReply({ embeds: embeds[currentDay - 1], files: [attachments[currentDay - 1]], components: [actionRow] });
-            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 }); // Button collector for 1 minute
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 });
 
             collector.on("collect", async (_interaction) => {
-                if (_interaction.customId === "thunderstorm-outlook-previous-button" || _interaction.customId === "thunderstorm-outlook-next-button") {
-                    if (_interaction.id === "thunderstorm-outlook-previous-button") currentDay--;
+                if (_interaction.customId === "thunderstorm-outlook-previous" || _interaction.customId === "thunderstorm-outlook-next") {
+                    if (_interaction.id === "thunderstorm-outlook-previous") currentDay--;
                     else currentDay++;
 
                     if (currentDay <= 1) actionRow.components[0].setDisabled(true);

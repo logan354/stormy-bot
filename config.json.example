@@ -1,83 +1,31 @@
 {
-    "application_id": "INSERT_APPLICATION_ID_HERE",
+    "application_id": "",
     "emojis": {
-        "success": "INSERT_EMOJI_HERE",
-        "pending": "INSERT_EMOJI_HERE",
-        "error": "INSERT_EMOJI_HERE",
-        "permission_error": ":no_entry:",
-        "previous_button": ":arrow_left:",
-        "next_button": ":arrow_right:",
-        "temperature_high": ":small_red_triangle:",
-        "temperature_low": ":small_red_triangle_down:",
-        "metservice_icons": [
-            {
-                "name": "fine",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "partly_cloudy",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "cloudy",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "few_showers",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "showers",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "rain",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "drizzle",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "fog",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "snow",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "wind",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "wind_rain",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "thunder",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "hail",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "frost",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "watch",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "orange_warning",
-                "value": "INSERT_EMOJI_HERE"
-            },
-            {
-                "name": "red_warning",
-                "value": "INSERT_EMOJI_HERE"
-            }
-        ]
+        "cloudy": "INSERT EMOJI",
+        "drizzle": "INSERT EMOJI",
+        "error": "INSERT EMOJI",
+        "few_showers": "INSERT EMOJI",
+        "fine": "INSERT EMOJI",
+        "fog": "INSERT EMOJI",
+        "frost": "INSERT EMOJI",
+        "hail": "INSERT EMOJI",
+        "next": "▶️",
+        "orange_warning": "INSERT EMOJI",
+        "partly_cloudy": "INSERT EMOJI",
+        "pending": "INSERT EMOJI",
+        "permission_error": "⛔",
+        "ping": "📶",
+        "previous": "◀️",
+        "rain": "INSERT EMOJI",
+        "red_warning": "INSERT EMOJI",
+        "showers": "INSERT EMOJI",
+        "snow": "INSERT EMOJI",
+        "success": "INSERT EMOJI",
+        "temperature_high": "INSERT EMOJI",
+        "temperature_low": "INSERT EMOJI",
+        "thunder": "INSERT EMOJI",
+        "watch": "INSERT EMOJI",
+        "wind": "INSERT EMOJI",
+        "wind_rain": "INSERT EMOJI"
     }
 }

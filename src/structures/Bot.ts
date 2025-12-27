@@ -1,4 +1,4 @@
-import { Client, ClientEvents, Collection, GatewayIntentBits, REST, Routes } from "discord.js";
+import { ApplicationCommand, Client, ClientEvents, Collection, GatewayIntentBits, REST, Routes } from "discord.js";
 import "dotenv/config";
 import fs from "node:fs";
 import { join } from "node:path";
@@ -9,8 +9,6 @@ import config from "../../config.json";
 export default class Bot extends Client<true> {
     public commands: Collection<string, Command> = new Collection();
 
-    public components: Collection<string, any> = new Collection();
-
     constructor() {
         super({
             intents: [
@@ -20,28 +18,28 @@ export default class Bot extends Client<true> {
     }
 
     public async create(): Promise<void> {
+        // Interactions
+        console.log("Loading interactions...");
+
         console.log("Loading commands...");
         await this.loadCommands();
 
-        console.log("Loading event listeners...");
+        // Events
+        console.log("Loading event listeners...")
         await this.loadEventListeners();
 
-        await this.login(process.env.BOT_TOKEN);
+        await this.login(process.env.BOT_TOKEN)
     }
 
     private async loadCommands(): Promise<void> {
         // Load commands locally
-        const directorys = fs.readdirSync(join(__dirname, "../interactions/commands"));
+        const files = fs.readdirSync(join(__dirname, `../interactions/commands`));
 
-        for (const directory of directorys) {
-            const files = fs.readdirSync(join(__dirname, `../interactions/commands/${directory}`));
+        for (const file of files) {
+            const command = (await import(`../interactions/commands/${file}`)).default.default as Command;
+            this.commands.set(command.name, command);
 
-            for (const file of files) {
-                const command = (await import(`../interactions/commands/${directory}/${file}`)).default.default;
-                this.commands.set(command.name, command);
-
-                console.log(`-> Loaded command ${command.name}`);
-            }
+            console.log(`-> Loaded command ${command.name}`);
         }
 
         // Register commands remotely
@@ -53,7 +51,7 @@ export default class Bot extends Client<true> {
             // The put method is used to fully refresh all commands in the guild with the current set
             const data: any = await rest.put(
                 Routes.applicationCommands(config.application_id),
-                { body: this.commands.map((command) => command.data.toJSON()) }
+                { body: this.commands.map((command) => command.data.toJSON()) },
             );
 
             console.log(`Successfully reloaded ${data.length} application (/) commands.`);
@@ -78,5 +76,14 @@ export default class Bot extends Client<true> {
 
             console.log(`-> Loaded event listener ${event.name}`);
         }
+    }
+
+    public async getApplicationCommands(): Promise<Collection<string, ApplicationCommand>> {
+        return await this.application.commands.fetch();
+    }
+
+    public async getApplicationCommand(name: string): Promise<ApplicationCommand | undefined> {
+        const applicationCommands = await this.getApplicationCommands();
+        return applicationCommands.find((x) => x.name === name);
     }
 }

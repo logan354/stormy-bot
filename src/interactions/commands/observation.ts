@@ -1,12 +1,11 @@
-import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from "discord.js";
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 
-import Command from "../../../structures/Command";
-import { METSERVICE_ICON, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../../utils/constants";
-import { emojis } from "../../../../config.json";
+import Command from "../../structures/Command";
+import { METSERVICE_EMOJI_URL, METSERVICE_PUBLIC_API_ENDPOINTS, METSERVICE_PUBLIC_API_URL } from "../../utils/constants";
+import { emojis } from "../../../config.json";
 
 export default {
     name: "observation",
-    category: "Weather",
     data: new SlashCommandBuilder()
         .setName("observation")
         .setDescription("The current MetService weather observation for a location.")
@@ -17,39 +16,34 @@ export default {
                 .setRequired(true)
         ),
     async execute(bot, interaction) {
-        if (!interaction.channel || !interaction.guild.members.me) return new ReferenceError();
-
-        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(emojis.permission_error + " **I do not have permission to Use Embed Links in** <#" + interaction.channel.id + ">");
-
-        const location = interaction.options.getString("location")!;
-
-        const url = METSERVICE_PUBLIC_API_URL + METSERVICE_PUBLIC_API_ENDPOINTS.LOCAL_OBS + location!.replace(" ", "-");
-        let data: any;
+        const locationOption = interaction.options.getString("location", true);
 
         await interaction.deferReply();
 
-        try {
-            const response = await fetch(url);
+        let data: any;
 
-            if (response.status === 200) {
-                data = await response.json();
-            }
+        try {
+            const response = await fetch(METSERVICE_PUBLIC_API_URL + METSERVICE_PUBLIC_API_ENDPOINTS.LOCAL_OBS + locationOption.replace(" ", "-"));
+
+            if (response.status === 200) data = await response.json();
             else if (response.status === 404) {
-                return await interaction.editReply(emojis.error + " **Invalid/Unknown location**");
+                await interaction.editReply(emojis.error + " **Invalid/Unknown location**");
+                return;
             }
             else {
-                return await interaction.editReply(emojis.error + " **Error**");
+                await interaction.editReply(emojis.error + " **Error**");
+                return;
             }
         }
-        catch (error) {
-            console.error(error);
-            return await interaction.editReply(emojis.error + " **Error**");
+        catch (e) {
+            console.error(e);
+            await interaction.editReply(emojis.error + " **Error**");
+            return;
         }
 
         const embed = new EmbedBuilder()
             .setAuthor({
-                iconURL: METSERVICE_ICON,
+                iconURL: METSERVICE_EMOJI_URL,
                 name: "MetService"
             })
             .setTitle("Current Conditions at " + data.location)
@@ -87,7 +81,8 @@ export default {
             )
             .setFooter({
                 text: "Observed at: " + data.threeHour.dateTime
-            });
+            })
+            .setTimestamp();
 
         await interaction.editReply({ embeds: [embed] });
     }

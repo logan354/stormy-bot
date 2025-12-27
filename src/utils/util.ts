@@ -1,27 +1,5 @@
 import { emojis } from "../../config.json";
 
-export function getMetServiceIconEmoji(icon: string): string | undefined {
-    let emoji;
-
-    for (let i = 0; i < emojis.metservice_icons.length; i++) {
-        if (emojis.metservice_icons[i].name === icon) {
-            emoji = emojis.metservice_icons[i].value;
-            break;
-        }
-        else continue;
-    }
-
-    return emoji;
-}
-
-export function formatTitleCase(str: string): string {
-    return str.toLowerCase().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-}
-
-export function formatSnakeCase(str: string): string {
-    return str.toLowerCase().replace(" ", "_");
-}
-
 /**
  * Formats date into MetService date standard
  * @param date 
@@ -60,4 +38,31 @@ export function formatMetServiceDate(date: Date, useTime: boolean, options?: { u
         return timeFormat + " " + dateFormat;
     }
     else return dateFormat;
+}
+
+export function getMetServiceRadarEndpoint(location: string): string {
+    return `rainRadar${location}_2h_7min_300K`;
+}
+
+export function getMetServiceIconEmoji(key: string): string | undefined {
+     switch (key) {
+        case "fine": return emojis.fine;
+        case "cloudy": return emojis.cloudy;
+        case "partly_cloudy": return emojis.partly_cloudy;
+        case "drizzle": return emojis.drizzle;
+        case "rain": return emojis.rain;
+        case "showers": return emojis.showers;
+        case "few_showers": return emojis.few_showers;
+        case "snow": return emojis.snow;
+        case "fog": return emojis.fog;
+        case "frost": return emojis.frost;
+        case "hail": return emojis.hail;
+        case "wind": return emojis.wind;
+        case "wind_rain": return emojis.wind_rain;
+        case "thunder": return emojis.thunder;
+        case "watch": return emojis.watch;
+        case "orange_warning": return emojis.orange_warning;
+        case "red_warning": return emojis.red_warning;
+        default: return undefined;
+    }
 }

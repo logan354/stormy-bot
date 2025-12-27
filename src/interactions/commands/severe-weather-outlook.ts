@@ -1,23 +1,22 @@
 import { SlashCommandBuilder } from "discord.js";
 
-import Command from "../../../structures/Command";
-import { emojis } from "../../../../config.json";
+import Command from "../../structures/Command";
+import { emojis } from "../../../config.json";
 
 export default {
     name: "severe-weather-outlook",
-    category: "Weather",
     data: new SlashCommandBuilder()
         .setName("severe-weather-outlook")
         .setDescription("MetService Severe Weather Outlook.")
         .addIntegerOption(option =>
             option
-                .setName("day")
+                .setName("days")
                 .setDescription("The outlook day.")
                 .setMinValue(1)
                 .setMaxValue(4)
                 .setRequired(false)
         ),
     async execute(bot, interaction) {
-        await interaction.reply({ content: emojis.error + "Command unavailable", flags: ["Ephemeral"] });
+        await interaction.reply({ content: emojis.error + "Not Currently Supported" });
     }
 } as Command;

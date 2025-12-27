@@ -1,10 +1,10 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { xml2json } from "xml-js";
 
-import Command from "../../../structures/Command";
-import { METSERVICE_CAP_RSS_URL, METSERVICE_ICON } from "../../../utils/constants";
-import { formatMetServiceDate, getMetServiceIconEmoji } from "../../../utils/util";
-import { emojis } from "../../../../config.json";
+import Command from "../../structures/Command";
+import { METSERVICE_CAP_RSS_URL, METSERVICE_EMOJI_URL } from "../../utils/constants";
+import { formatMetServiceDate, getMetServiceIconEmoji } from "../../utils/util";
+import { emojis } from "../../../config.json";
 
 export default {
     name: "warnings",
@@ -13,42 +13,41 @@ export default {
         .setName("warnings")
         .setDescription("The current Watches, Warnings and Advisories for New Zealand issued by MetService."),
     async execute(bot, interaction) {
-        if (!interaction.channel || !interaction.guild.members.me) return new ReferenceError();
-
-        const botPermissionsFor = interaction.channel.permissionsFor(interaction.guild.members.me);
-        if (!botPermissionsFor.has(PermissionsBitField.Flags.EmbedLinks)) return interaction.reply(emojis.permission_error + " **I do not have permission to Use Embed Links in** <#" + interaction.channel.id + ">");
-
-        const url = METSERVICE_CAP_RSS_URL;
-        let data: any;
-
         await interaction.deferReply();
 
+        let data: any;
+
         try {
-            const response = await fetch(url);
+            const response = await fetch(METSERVICE_CAP_RSS_URL);
 
             if (response.status === 200) {
                 const text = await response.text();
                 data = JSON.parse(xml2json(text, { compact: true, spaces: 4 }));
             }
             else {
-                return await interaction.editReply(emojis.error + " **Error**");
+                await interaction.editReply(emojis.error + " **Error**");
+                return;
             }
         }
-        catch (error) {
-            console.error(error);
-            return await interaction.editReply(emojis.error + " **Error**");
+        catch (e) {
+            console.error(e);
+            await interaction.editReply(emojis.error + " **Error**");
+            return;
         }
 
         const embed = new EmbedBuilder()
             .setAuthor({
-                iconURL: METSERVICE_ICON,
+                iconURL: METSERVICE_EMOJI_URL,
                 name: "MetService"
             })
             .setTitle("Warnings & Watches")
             .setDescription("No Weather Warnings or Watches in force.")
             .setTimestamp();
 
-        if (!data.rss.channel.item) return interaction.editReply({ embeds: [embed] });
+        if (!data.rss.channel.item) {
+            await interaction.editReply({ embeds: [embed] });
+            return;
+        }
 
         const embeds: EmbedBuilder[] = [];
 
@@ -58,7 +57,7 @@ export default {
             const embed = new EmbedBuilder()
                 .setAuthor({
                     name: "MetService",
-                    iconURL: METSERVICE_ICON
+                    iconURL: METSERVICE_EMOJI_URL
                 })
                 .setTitle("Warnings & Watches")
                 .setTimestamp();
@@ -76,12 +75,14 @@ export default {
                         itemData = JSON.parse(xml2json(text, { compact: true, spaces: 4 })).alert.info;
                     }
                     else {
-                        return await interaction.editReply(emojis.error + " **Error**");
+                        await interaction.editReply(emojis.error + " **Error**");
+                        return
                     }
                 }
                 catch (error) {
                     console.error(error);
-                    return await interaction.editReply(emojis.error + " **Error**");
+                    await interaction.editReply(emojis.error + " **Error**");
+                    return;
                 }
 
                 let warningColourCode: string = "";
@@ -96,7 +97,9 @@ export default {
                 const effectiveDateFormat = formatMetServiceDate(effectiveDate, true, { useNoon: true });
                 const expiresDateFormat = formatMetServiceDate(expiresDate, true, { useNoon: true });
 
-                const title = `${getMetServiceIconEmoji(itemData.headline._text.toLowerCase().includes("watch") ? "watch" : warningColourCode.toLowerCase() + "_warning")} **${itemData.headline._text}**`;
+                const metserviceIconEmojiKey = warningColourCode.toLowerCase() === "Yellow" ? "watch" : warningColourCode.toLowerCase() + "_warning";
+
+                const title = `${getMetServiceIconEmoji(metserviceIconEmojiKey)} **${itemData.headline._text}**`;
                 const area = `\n**Area:** ${itemData.area.areaDesc._text}`;
                 const period = `\n**Period:** ${itemData.headline._text === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}`;
                 const forecast = `\n**Forecast:** ${itemData.description._text.split("Impact:")[0]}`;
@@ -115,25 +118,25 @@ export default {
                 .addComponents(
                     [
                         new ButtonBuilder()
-                            .setCustomId("warning-previous-button")
+                            .setCustomId("warning-previous")
                             .setStyle(ButtonStyle.Secondary)
-                            .setEmoji(emojis.previous_button)
+                            .setEmoji(emojis.previous)
                             .setDisabled(true),
                         new ButtonBuilder()
-                            .setCustomId("warning-next-button")
+                            .setCustomId("warning-next")
                             .setStyle(ButtonStyle.Secondary)
-                            .setEmoji(emojis.next_button)
+                            .setEmoji(emojis.next)
                     ]
                 );
 
             let currentEmbed = 1;
 
             const response = await interaction.editReply({ embeds: [embeds[currentEmbed - 1]], components: [actionRow] });
-            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 }); // Button collector for 1 minute
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 });
 
             collector.on("collect", async (_interaction) => {
-                if (_interaction.customId === "warning-previous-button" || _interaction.customId === "warning-next-button") {
-                    if (_interaction.id === "warning-previous-button") currentEmbed--;
+                if (_interaction.customId === "warning-previous" || _interaction.customId === "warning-next") {
+                    if (_interaction.id === "warning-previous") currentEmbed--;
                     else currentEmbed++;
 
                     if (currentEmbed <= 1) actionRow.components[0].setDisabled(true);

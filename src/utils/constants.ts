@@ -1,3 +1,5 @@
+import { emojis } from "../../config.json";
+
 export const METSERVICE_PUBLIC_API_URL = "https://metservice.com/publicData/";
 
 export const METSERVICE_PUBLIC_API_ENDPOINTS = {
@@ -7,11 +9,7 @@ export const METSERVICE_PUBLIC_API_ENDPOINTS = {
     THUNDERSTORM_OUTLOOK: "thunderstormOutlook"
 } as const;
 
-export function getMetServiceRadarEndpoint(radarLocation: string): string {
-    return `rainRadar${radarLocation}_2h_7min_300K`;
-}
-
-export const RADAR_LOCATIONS = {
+export const METSERVICE_RADAR_LOCATIONS = {
     NEW_ZEALAND: "NZ",
     AUCKLAND: "Auckland",
     BAY_OF_PLENTY: "BOP",
@@ -25,4 +23,4 @@ export const RADAR_LOCATIONS = {
 
 export const METSERVICE_CAP_RSS_URL = "https://alerts.metservice.com/cap/rss";
 
-export const METSERVICE_ICON = "https://play-lh.googleusercontent.com/UNBPQbc5SNqlD9G_vFQqUE3AP8mQX9qgMZBMUb8Qj4oSjakmLybwummpzk4QW9DjRQ";
+export const METSERVICE_EMOJI_URL = "https://cdn.discordapp.com/emojis/" + emojis.metservice.split(":")[2].replace(">", "");
