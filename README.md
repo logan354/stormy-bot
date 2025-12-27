@@ -16,8 +16,11 @@ A MetService bot for Discord. Forecasts, warnings & watches, and much more.
 
 ### Installation
 1. Create Discord Application
-    - User Scopes: `application.commands` 
-    - Guild Scopes: `application.commands`, `bot`
+    - Installation
+      - User Scopes: `application.commands` 
+      - Guild Scopes: `application.commands`, `bot`
+    - Emojis
+      - Upload `assets/emojis` folder 
 
 2. Configuration Files<br>
     Complete the following files: (remove ".example")
