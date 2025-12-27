@@ -28,7 +28,7 @@ export default {
         const embed = new EmbedBuilder()
             .setTitle("Command Guide")
             .setThumbnail(bot.user.avatarURL())
-            .setDescription(`**Hello <@${interaction.user.id}>,**\nBelow is a list of all the commands.\n*Format: **name** \`<required>\` \`[optional]\`*${commandList}`)
+            .setDescription(`**Hello <@${interaction.user.id}>,**\nBelow is a list of all the commands.\n*Format: **name** \`<required>\` \`[optional]\`\n*${commandList}`)
             .setFooter({
                 text: "v" + version
             })

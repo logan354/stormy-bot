@@ -1,4 +1,4 @@
-import { AttachmentBuilder, ButtonStyle, ComponentType, PermissionsBitField, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, EmbedBuilder } from "discord.js";
+import { AttachmentBuilder, ButtonStyle, ComponentType, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, EmbedBuilder } from "discord.js";
 import { htmlToText } from "html-to-text";
 
 import Command from "../../structures/Command";

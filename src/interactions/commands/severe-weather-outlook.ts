@@ -17,6 +17,6 @@ export default {
                 .setRequired(false)
         ),
     async execute(bot, interaction) {
-        await interaction.reply({ content: emojis.error + "Not Currently Supported" });
+        await interaction.reply({ content: emojis.error + " **Not Currently Supported**" });
     }
 } as Command;
