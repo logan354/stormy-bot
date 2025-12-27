@@ -53,7 +53,7 @@ export default {
 
         let j = 0;
         
-        for (let i = 0; i < Math.ceil(data.rss.channel.item.length / 7); i++) {
+        for (let i = 0; i < Math.ceil(data.rss.channel.item.length / 5); i++) {
             const embed = new EmbedBuilder()
                 .setAuthor({
                     name: "MetService",
@@ -64,7 +64,7 @@ export default {
 
             let description = "";
 
-            while (j < data.rss.channel.item.length && j < (i + 1) * 7) {
+            while (j < data.rss.channel.item.length && j < (i + 1) * 5) {
                 let itemData: any;
 
                 try {
@@ -97,12 +97,12 @@ export default {
                 const effectiveDateFormat = formatMetServiceDate(effectiveDate, true, { useNoon: true });
                 const expiresDateFormat = formatMetServiceDate(expiresDate, true, { useNoon: true });
 
-                const metserviceIconEmojiKey = warningColourCode.toLowerCase() === "Yellow" ? "watch" : warningColourCode.toLowerCase() + "_warning";
+                const metserviceIconEmojiKey = warningColourCode.toLowerCase() === "yellow" ? "watch" : warningColourCode.toLowerCase() + "_warning";
 
                 const title = `${getMetServiceIconEmoji(metserviceIconEmojiKey)} **${itemData.headline._text}**`;
-                const area = `\n**Area:** ${itemData.area.areaDesc._text}`;
+                const area = `\n**Area:** ${itemData.area.areaDesc._text.replaceAll(",", ", ")}`;
                 const period = `\n**Period:** ${itemData.headline._text === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}`;
-                const forecast = `\n**Forecast:** ${itemData.description._text.split("Impact:")[0]}`;
+                const forecast = `\n**Forecast:** ${itemData.description._text}`;
 
                 description += title + area + period + forecast + "\n\n"
 
