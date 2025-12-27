@@ -1,4 +1,4 @@
-import { ButtonInteraction, ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 
 import Bot from "./Bot";
 
