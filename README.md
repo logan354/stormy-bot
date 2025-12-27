@@ -1,10 +1,8 @@
 <div align="center">
-  <a href="https://github.com/logan354/stormy-bot">
-    <img src="assets/Stormy Bot - Profile.jpg" alt="Logo" width="128" height="128">
-  </a>
+    <img src="assets/stormy_bot.jpg" alt="Logo" width="128" height="128">
 </div>
 
-# Stormy Bot
+# Stormy bot
 A MetService bot for Discord. Forecasts, warnings & watches, and much more.
 
 ### Features
@@ -40,18 +38,13 @@ A MetService bot for Discord. Forecasts, warnings & watches, and much more.
     ```
 
 ### Command Guide
-Format: **name** &lt;required&gt; [optional]
+*Format: **name** `<required>` `[optional]`*
 
-#### Utility
+- **forecast** `<location>` `[period]`
+- **help**
+- **observation** `<location>`
 - **ping**
-- **help** [command]
-
-#### Weather
-- **forecast** &lt;location&gt; [period]
-- **observation** &lt;location&gt;
-- **rain-radar** &lt;radar-location&gt;
-- **severe-weather-outlook** [outlook-days]
-- **thunderstorm-outlook** [outlook-days]
+- **rain-radar** `<radar-location>`
+- **severe-weather-outlook** `[days]`
+- **thunderstorm-outlook** `[days]`
 - **warnings**
-
-## Contributing
