@@ -1,7 +1,7 @@
 {
   "name": "stormy-bot",
   "description": "A MetService bot for Discord. Forecasts, warnings & watches, and much more.",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "tsc && node dist/src/index.js",
