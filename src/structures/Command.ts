@@ -4,7 +4,6 @@ import Interaction from "./Interaction";
 import Bot from "./Bot";
 
 interface Command extends Interaction {
-    category: string;
     data: SlashCommandBuilder;
     execute(bot: Bot, interaction: ChatInputCommandInteraction): Promise<void>
 }
