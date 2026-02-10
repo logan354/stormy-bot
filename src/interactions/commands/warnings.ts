@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import { xml2json } from "xml-js";
+import { XMLParser } from "fast-xml-parser";
 
 import Command from "../../structures/Command";
 import { METSERVICE_CAP_RSS_URL, METSERVICE_EMOJI_URL } from "../../utils/constants";
@@ -8,21 +8,20 @@ import { emojis } from "../../../config.json";
 
 export default {
     name: "warnings",
-    category: "Weather",
     data: new SlashCommandBuilder()
         .setName("warnings")
-        .setDescription("The current Watches, Warnings and Advisories for New Zealand issued by MetService."),
+        .setDescription("The current Warnings and Watches for New Zealand issued by MetService."),
     async execute(bot, interaction) {
         await interaction.deferReply();
 
-        let data: any;
+        let data;
 
         try {
             const response = await fetch(METSERVICE_CAP_RSS_URL);
 
-            if (response.status === 200) {
+            if (response.ok) {
                 const text = await response.text();
-                data = JSON.parse(xml2json(text, { compact: true, spaces: 4 }));
+                data = new XMLParser().parse(text);
             }
             else {
                 await interaction.editReply(emojis.error + " **Error**");
@@ -35,16 +34,16 @@ export default {
             return;
         }
 
-        const embed = new EmbedBuilder()
-            .setAuthor({
-                iconURL: METSERVICE_EMOJI_URL,
-                name: "MetService"
-            })
-            .setTitle("Warnings & Watches")
-            .setDescription("No Weather Warnings or Watches in force.")
-            .setTimestamp();
+        if (!data.rss.channel.item.length) {
+            const embed = new EmbedBuilder()
+                .setAuthor({
+                    iconURL: METSERVICE_EMOJI_URL,
+                    name: "MetService"
+                })
+                .setTitle("Warnings & Watches")
+                .setDescription("No Weather Warnings or Watches in force.")
+                .setTimestamp();
 
-        if (!data.rss.channel.item) {
             await interaction.editReply({ embeds: [embed] });
             return;
         }
@@ -52,7 +51,7 @@ export default {
         const embeds: EmbedBuilder[] = [];
 
         let j = 0;
-        
+
         for (let i = 0; i < Math.ceil(data.rss.channel.item.length / 5); i++) {
             const embed = new EmbedBuilder()
                 .setAuthor({
@@ -68,15 +67,15 @@ export default {
                 let itemData: any;
 
                 try {
-                    const response = await fetch(data.rss.channel.item[j].link._text);
+                    const response = await fetch(data.rss.channel.item[j].link);
 
-                    if (response.status === 200) {
+                    if (response.ok) {
                         const text = await response.text();
-                        itemData = JSON.parse(xml2json(text, { compact: true, spaces: 4 })).alert.info;
+                        itemData = new XMLParser().parse(text).alert.info;
                     }
                     else {
                         await interaction.editReply(emojis.error + " **Error**");
-                        return
+                        return;
                     }
                 }
                 catch (error) {
@@ -88,21 +87,21 @@ export default {
                 let warningColourCode: string = "";
 
                 itemData.parameter.forEach((x: any) => {
-                    if (x.valueName._text === "ColourCode") warningColourCode = x.value._text;
+                    if (x.valueName=== "ColourCode") warningColourCode = x.value;
                 });
 
-                const effectiveDate = new Date(itemData.onset._text);
-                const expiresDate = new Date(itemData.expires._text);
+                const effectiveDate = new Date(itemData.onset);
+                const expiresDate = new Date(itemData.expires);
 
                 const effectiveDateFormat = formatMetServiceDate(effectiveDate, true, { useNoon: true });
                 const expiresDateFormat = formatMetServiceDate(expiresDate, true, { useNoon: true });
 
                 const metserviceIconEmojiKey = warningColourCode.toLowerCase() === "yellow" ? "watch" : warningColourCode.toLowerCase() + "_warning";
 
-                const title = `${getMetServiceIconEmoji(metserviceIconEmojiKey)} **${itemData.headline._text}**`;
-                const area = `\n**Area:** ${itemData.area.areaDesc._text.replaceAll(",", ", ")}`;
-                const period = `\n**Period:** ${itemData.headline._text === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}`;
-                const forecast = `\n**Forecast:** ${itemData.description._text}`;
+                const title = `${getMetServiceIconEmoji(metserviceIconEmojiKey)} **${itemData.headline}**`;
+                const area = `\n**Area:** ${itemData.area.areaDesc.replaceAll(",", ", ")}`;
+                const period = `\n**Period:** ${itemData.headline === "Severe Thunderstorm Warning" ? "until " + expiresDateFormat : effectiveDateFormat + " - " + expiresDateFormat}`;
+                const forecast = `\n**Forecast:** ${itemData.description}`;
 
                 description += title + area + period + forecast + "\n\n"
 

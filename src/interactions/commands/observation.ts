@@ -25,7 +25,7 @@ export default {
         try {
             const response = await fetch(METSERVICE_PUBLIC_API_URL + METSERVICE_PUBLIC_API_ENDPOINTS.LOCAL_OBS + locationOption.replace(" ", "-"));
 
-            if (response.status === 200) data = await response.json();
+            if (response.ok) data = await response.json();
             else if (response.status === 404) {
                 await interaction.editReply(emojis.error + " **Invalid/Unknown location**");
                 return;

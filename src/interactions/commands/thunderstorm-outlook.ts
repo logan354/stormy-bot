@@ -28,7 +28,7 @@ export default {
         try {
             const response = await fetch(METSERVICE_PUBLIC_API_URL + METSERVICE_PUBLIC_API_ENDPOINTS.THUNDERSTORM_OUTLOOK);
 
-            if (response.status === 200) data = await response.json();
+            if (response.ok) data = await response.json();
             else {
                 await interaction.editReply(emojis.error + " **Error**");
                 return;
